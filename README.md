@@ -98,6 +98,8 @@ Lionael-Surya/
 
 ## Featured Projects
 
+📋 **[Track build progress on the live Kanban board →](https://github.com/users/suryalionael/projects/4)** — every project below has a linked issue moving across Todo / In Progress / Done as it's built.
+
 | Project | Category | Business Problem | Status |
 |---|---|---|---|
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
