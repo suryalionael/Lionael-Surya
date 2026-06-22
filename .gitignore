@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+credentials.json
+
+# Data (keep repos lightweight — document data sources in README instead)
+*.csv
+*.parquet
+data/raw/
+data/processed/
+
+# dbt
+target/
+dbt_packages/
+logs/
+
+# Node (Apps Script local tooling, if used)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
