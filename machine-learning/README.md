@@ -13,12 +13,9 @@ Predictive models built and evaluated the way a business actually uses them: wit
 
 | Project | Status | Problem | Stack |
 |---|---|---|---|
+| [IDX Stock Signal Scanner](idx-stock-signal-scanner/) | 🚧 In Progress (private source) | Systematic technical screening of IDX-listed stocks | Python, yfinance, pandas, YAML rule engine |
 | [Customer Churn Prediction (Telecom)](customer-churn-prediction-telecom/) | 🔜 Planned | Predict churn to target retention spend | scikit-learn, XGBoost, SHAP, FastAPI |
 | [Retail Demand Forecasting](retail-demand-forecasting/) | 🔜 Planned | Forecast SKU-level demand for inventory planning | Prophet, XGBoost, pandas |
-
-## Related Work In Progress
-
-- **Stock Signal Scanner** — a separate, actively developed repository (`AI Saham Pro`) building a Python-based stock signal scanner using `yfinance` with a modular architecture. Once it reaches a stable release it will be linked here and/or migrated in as a full project entry.
 
 ## Why This Matters for Recruiters
 

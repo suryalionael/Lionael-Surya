@@ -107,7 +107,7 @@ Lionael-Surya/
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) | Machine Learning | Predicting telecom churn to target retention spend | 🔜 Planned |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
-| 📈 [Stock Signal Scanner](https://github.com/suryalionael) *(separate repo: `AI Saham Pro`)* | Machine Learning | Rule/signal-based stock screening with `yfinance` | 🚧 In Progress |
+| 📈 [IDX Stock Signal Scanner](machine-learning/idx-stock-signal-scanner/) | Machine Learning | Systematic technical screening of IDX-listed stocks (source private) | 🚧 In Progress |
 
 ---
 
@@ -197,6 +197,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 | Streaming Clickstream Pipeline | Apache Kafka, Spark Structured Streaming, AWS S3, Python |
 | dbt E-Commerce Analytics Mart | dbt-core, Snowflake/BigQuery/PostgreSQL, SQL, Power BI, GitHub Actions |
 | SaaS Subscription Metrics Model | dbt, SQL, Power BI, cohort-analysis SQL patterns |
+| IDX Stock Signal Scanner | Python, yfinance, pandas, Parquet/SQLite, YAML rule engine *(private source)* |
 | Customer Churn Prediction | Python, scikit-learn, XGBoost, SHAP, FastAPI, Streamlit, Docker |
 | Retail Demand Forecasting | Python, Prophet, XGBoost, pandas, backtesting framework |
 | RAG Financial Report Q&A | Python, LangChain, OpenAI/Claude API, ChromaDB, FastAPI, Streamlit |
