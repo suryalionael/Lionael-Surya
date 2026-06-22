@@ -13,7 +13,7 @@ Predictive models built and evaluated the way a business actually uses them: wit
 
 | Project | Status | Problem | Stack |
 |---|---|---|---|
-| [IDX Stock Signal Scanner](idx-stock-signal-scanner/) | 🚧 In Progress (private source) | Systematic technical screening of IDX-listed stocks | Python, yfinance, pandas, YAML rule engine |
+| [IDX Stock Signal Scanner](idx-stock-signal-scanner/) | ✅ Shipped (private source) | Systematic technical screening of IDX-listed stocks | Python, yfinance, pandas, YAML rule engine |
 | [Customer Churn Prediction (Telecom)](customer-churn-prediction-telecom/) | 🔜 Planned | Predict churn to target retention spend | scikit-learn, XGBoost, SHAP, FastAPI |
 | [Retail Demand Forecasting](retail-demand-forecasting/) | 🔜 Planned | Forecast SKU-level demand for inventory planning | Prophet, XGBoost, pandas |
 

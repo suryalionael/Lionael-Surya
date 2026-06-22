@@ -1,6 +1,6 @@
 # IDX Stock Signal Scanner
 
-**Status:** 🚧 Actively developed — source is in a **private repository** (this folder is a high-level overview only; scoring logic and configuration are intentionally not published).
+**Status:** ✅ Shipped — source is in a **private repository** (this folder is a high-level overview only; scoring logic and configuration are intentionally not published).
 
 ## Business Problem
 
