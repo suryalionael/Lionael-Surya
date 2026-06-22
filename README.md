@@ -101,13 +101,13 @@ Lionael-Surya/
 | Project | Category | Business Problem | Status |
 |---|---|---|---|
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
-| 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ In Progress |
+| 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) | Data Engineering | Automating multi-store sales ingestion into a warehouse | 🔜 Planned |
 | 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | 🔜 Planned |
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) | Machine Learning | Predicting telecom churn to target retention spend | 🔜 Planned |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
-| 📈 [IDX Stock Signal Scanner](machine-learning/idx-stock-signal-scanner/) | Machine Learning | Systematic technical screening of IDX-listed stocks (source private) | 🚧 In Progress |
+| 📈 [IDX Stock Signal Scanner](machine-learning/idx-stock-signal-scanner/) | Machine Learning | Systematic technical screening of IDX-listed stocks (source private) | ✅ Shipped |
 
 ---
 
