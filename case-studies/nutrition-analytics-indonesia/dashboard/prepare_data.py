@@ -94,14 +94,19 @@ def main() -> int:
 
     summary, rankings, spatial_dashboard, lisa = build_snapshot()
 
-    rankings.to_csv(DASHBOARD_DATA_DIR / "npi_rankings.csv", index=False)
+    # JSON, not CSV, for the tabular snapshots: this project's own .gitignore has no
+    # opinion on this, but the portfolio repo this gets copied into blanket-ignores
+    # *.csv (a deliberate "keep repos lightweight" policy) -- using JSON everywhere
+    # keeps one snapshot format that works in both places, rather than special-
+    # casing the portfolio copy's gitignore.
+    rankings.to_json(DASHBOARD_DATA_DIR / "npi_rankings.json", orient="records", indent=2)
     spatial_dashboard.to_file(DASHBOARD_DATA_DIR / "npi_spatial.geojson", driver="GeoJSON")
-    lisa[["province", "local_i", "local_p_sim", "lisa_cluster"]].to_csv(DASHBOARD_DATA_DIR / "lisa_results.csv", index=False)
+    lisa[["province", "local_i", "local_p_sim", "lisa_cluster"]].to_json(DASHBOARD_DATA_DIR / "lisa_results.json", orient="records", indent=2)
     with open(DASHBOARD_DATA_DIR / "summary_stats.json", "w") as f:
         json.dump(summary, f, indent=2)
 
     merged = pd.read_csv(PROCESSED_DIR / "merged_provincial_indicators.csv")
-    merged.to_csv(DASHBOARD_DATA_DIR / "merged_provincial_indicators.csv", index=False)
+    merged.to_json(DASHBOARD_DATA_DIR / "merged_provincial_indicators.json", orient="records", indent=2)
 
     log.info("Wrote dashboard data snapshot to %s", DASHBOARD_DATA_DIR)
     return 0

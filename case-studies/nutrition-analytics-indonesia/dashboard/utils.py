@@ -15,7 +15,7 @@ DATA_DIR = Path(__file__).parent / "data"
 
 @st.cache_data
 def load_rankings() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "npi_rankings.csv")
+    return pd.read_json(DATA_DIR / "npi_rankings.json")
 
 
 @st.cache_data
@@ -25,7 +25,7 @@ def load_spatial() -> gpd.GeoDataFrame:
 
 @st.cache_data
 def load_lisa() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "lisa_results.csv")
+    return pd.read_json(DATA_DIR / "lisa_results.json")
 
 
 @st.cache_data
@@ -36,7 +36,7 @@ def load_summary() -> dict:
 
 @st.cache_data
 def load_merged_indicators() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "merged_provincial_indicators.csv")
+    return pd.read_json(DATA_DIR / "merged_provincial_indicators.json")
 
 
 TIER_COLORS = {"Low": "#2c7bb6", "Medium": "#ffffbf", "High": "#fdae61", "Critical": "#d7191c"}

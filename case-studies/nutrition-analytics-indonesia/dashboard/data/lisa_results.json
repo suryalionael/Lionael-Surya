@@ -1,0 +1,230 @@
+[
+  {
+    "province":"Aceh",
+    "local_i":0.072135783,
+    "local_p_sim":0.205,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Bali",
+    "local_i":0.4799337634,
+    "local_p_sim":0.065,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Banten",
+    "local_i":0.3492388229,
+    "local_p_sim":0.033,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Bengkulu",
+    "local_i":0.1273280251,
+    "local_p_sim":0.289,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Di Yogyakarta",
+    "local_i":0.7306179844,
+    "local_p_sim":0.003,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Dki Jakarta",
+    "local_i":0.9381424375,
+    "local_p_sim":0.019,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Gorontalo",
+    "local_i":0.0178529993,
+    "local_p_sim":0.825,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Jambi",
+    "local_i":0.1210321516,
+    "local_p_sim":0.277,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Jawa Barat",
+    "local_i":0.2838200813,
+    "local_p_sim":0.003,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Jawa Tengah",
+    "local_i":0.3747585929,
+    "local_p_sim":0.003,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Jawa Timur",
+    "local_i":0.3109806982,
+    "local_p_sim":0.055,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Kalimantan Barat",
+    "local_i":-0.0054419192,
+    "local_p_sim":0.109,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Kalimantan Selatan",
+    "local_i":0.2155887949,
+    "local_p_sim":0.277,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Kalimantan Tengah",
+    "local_i":0.1017170931,
+    "local_p_sim":0.481,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Kalimantan Timur",
+    "local_i":0.0934027152,
+    "local_p_sim":0.763,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Kalimantan Utara",
+    "local_i":0.0078312524,
+    "local_p_sim":0.589,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Kep. Bangka Belitung",
+    "local_i":0.4287104149,
+    "local_p_sim":0.009,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Kep. Riau",
+    "local_i":0.3622295587,
+    "local_p_sim":0.225,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Lampung",
+    "local_i":0.1828032588,
+    "local_p_sim":0.027,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Maluku",
+    "local_i":0.0166083918,
+    "local_p_sim":0.077,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Maluku Utara",
+    "local_i":0.0448570327,
+    "local_p_sim":0.393,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Nusa Tenggara Barat",
+    "local_i":0.1053529448,
+    "local_p_sim":0.327,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Nusa Tenggara Timur",
+    "local_i":-0.094271498,
+    "local_p_sim":0.589,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Papua",
+    "local_i":3.559355174,
+    "local_p_sim":0.003,
+    "lisa_cluster":"High-High"
+  },
+  {
+    "province":"Papua Barat",
+    "local_i":0.5485667906,
+    "local_p_sim":0.003,
+    "lisa_cluster":"High-High"
+  },
+  {
+    "province":"Papua Barat Daya",
+    "local_i":1.6202316329,
+    "local_p_sim":0.033,
+    "lisa_cluster":"High-High"
+  },
+  {
+    "province":"Papua Pegunungan",
+    "local_i":4.5496454928,
+    "local_p_sim":0.003,
+    "lisa_cluster":"High-High"
+  },
+  {
+    "province":"Papua Selatan",
+    "local_i":2.9562523869,
+    "local_p_sim":0.003,
+    "lisa_cluster":"High-High"
+  },
+  {
+    "province":"Papua Tengah",
+    "local_i":3.7861404804,
+    "local_p_sim":0.003,
+    "lisa_cluster":"High-High"
+  },
+  {
+    "province":"Riau",
+    "local_i":0.1606641397,
+    "local_p_sim":0.195,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Sulawesi Barat",
+    "local_i":-0.0372950115,
+    "local_p_sim":0.417,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Sulawesi Selatan",
+    "local_i":0.071909671,
+    "local_p_sim":0.729,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Sulawesi Tengah",
+    "local_i":-0.0113890335,
+    "local_p_sim":0.519,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Sulawesi Tenggara",
+    "local_i":0.0075894594,
+    "local_p_sim":0.877,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Sulawesi Utara",
+    "local_i":0.0251947393,
+    "local_p_sim":0.877,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Sumatera Barat",
+    "local_i":0.1550662978,
+    "local_p_sim":0.187,
+    "lisa_cluster":"Not significant"
+  },
+  {
+    "province":"Sumatera Selatan",
+    "local_i":0.2340364411,
+    "local_p_sim":0.025,
+    "lisa_cluster":"Low-Low"
+  },
+  {
+    "province":"Sumatera Utara",
+    "local_i":0.1215496953,
+    "local_p_sim":0.225,
+    "lisa_cluster":"Not significant"
+  }
+]
