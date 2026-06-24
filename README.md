@@ -102,6 +102,7 @@ Lionael-Surya/
 
 | Project | Category | Business Problem | Status |
 |---|---|---|---|
+| 🍚 [Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/) | Case Study | Prioritizing 38 provinces for child-nutrition intervention funding using only real government data | ✅ Shipped |
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) | Data Engineering | Automating multi-store sales ingestion into a warehouse | 🔜 Planned |
@@ -179,15 +180,16 @@ flowchart LR
 Built and reviewed in this order — each project is designed to be demoable on its own within 2–3 minutes:
 
 1. **[CV Generator (GAS)](software-products/cv-generator-gas/)** — already shipped; proves I can ship a real, used tool end-to-end.
-2. **[Flood Risk Datathon Case Study](case-studies/flood-risk-datathon-2026/)** — proves I can work with real, messy data under competition constraints.
-3. **[Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/)** — the highest-signal project for Data Engineer/Analyst roles; demonstrates pipeline thinking.
-4. **[dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/)** — strongest single project for Analytics Engineer roles; dbt is the #1 requested skill in that title.
-5. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — classic, well-understood business ML problem recruiters can evaluate quickly.
-6. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
-7. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
-8. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
+2. **[Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/)** — flagship case study; real government data only, an empirically-validated scoring methodology (a simpler model replaced a more complex one after losing a head-to-head test — shown, not hidden), spatial statistics, and a 6-page Streamlit dashboard with 67 passing tests.
+3. **[Flood Risk Datathon Case Study](case-studies/flood-risk-datathon-2026/)** — proves I can work with real, messy data under competition constraints.
+4. **[Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/)** — the highest-signal project for Data Engineer/Analyst roles; demonstrates pipeline thinking.
+5. **[dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/)** — strongest single project for Analytics Engineer roles; dbt is the #1 requested skill in that title.
+6. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — classic, well-understood business ML problem recruiters can evaluate quickly.
+7. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
+8. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
+9. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
 
-**Why this order:** Analyst/Data Engineer/Analytics Engineer roles get the most co-op postings, so projects 1–4 maximize the number of roles I can credibly apply to early. ML and AI projects (5, 7) differentiate me from other applicants. The capstone (8) is saved for last because it's only convincing once the individual pieces already exist.
+**Why this order:** Analyst/Data Engineer/Analytics Engineer roles get the most co-op postings, so projects 1–5 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped, ahead of the still-planned capstone. ML and AI projects (6, 8) differentiate me from other applicants. The capstone (9) is saved for last because it's only convincing once the individual pieces already exist.
 
 ---
 
@@ -195,6 +197,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 
 | Project | Primary Stack |
 |---|---|
+| Nutrition Priority Index — Indonesia | Python, BPS/Kemenkes/BIG APIs, pandas, scikit-learn (PCA), GeoPandas, PySAL/esda (Moran's I/LISA), Streamlit, pytest, GitHub Actions |
 | Retail Sales ETL Pipeline | Python, Pandas, PostgreSQL, Apache Airflow, Docker, Great Expectations |
 | Streaming Clickstream Pipeline | Apache Kafka, Spark Structured Streaming, AWS S3, Python |
 | dbt E-Commerce Analytics Mart | dbt-core, Snowflake/BigQuery/PostgreSQL, SQL, Power BI, GitHub Actions |

@@ -1,0 +1,82 @@
+# Configuration for src/ingestion/fetch_bps_dataset.py
+#
+# table_id values below were discovered for real via
+#   python -m src.ingestion.discover_bps_vars --search <keyword>
+# and CONFIRMED (not assumed from the label alone) by actually querying
+# list/model/data with each candidate var id and checking that vervar (region)
+# returns 39 province-level rows -- see docs/known_limitations.md "BPS variable
+# discovery log" for the full diagnostic trail. Every var also requires a 'turvar'
+# (sub-breakdown) and 'turtahun' (sub-period) selection -- BPS does not always have
+# a single "total" series, so these are deliberate, documented choices, not defaults.
+#
+# domain 0000 = national domain, which returns province-level vervar rows for these vars.
+
+poverty:
+  source: bps
+  display_name: Poverty Rate
+  domain: "0000"
+  table_id: "192"  # "Persentase Penduduk Miskin (P0) Menurut Provinsi dan Daerah" (Persen)
+  turvar: "434"    # "Jumlah" = urban+rural combined (vs. 432 Perkotaan / 433 Perdesaan)
+  turtahun: "62"   # Semester 2 (September). CONFIRMED via live query that turtahun=63
+                    # ("Tahunan") has zero published values for recent years (2023-2025) --
+                    # only 61 (March) and 62 (September) actually have data. BPS's own press
+                    # releases (e.g. "Persentase Penduduk Miskin September 2024...") use the
+                    # September figure as the year's headline rate, so 62 was chosen over 61.
+  access_method: webapi
+  contract: docs/data_contracts/poverty.yml
+  reference_url: https://www.bps.go.id/indicator/23/192/1/persentase-penduduk-miskin-menurut-provinsi.html
+
+ipm:
+  source: bps
+  display_name: Human Development Index
+  domain: "0000"
+  table_id: "494"  # "[Metode Baru] Indeks Pembangunan Manusia (IPM) menurut Provinsi"
+  turvar: "0"      # no sub-breakdown for this var ("Tidak ada")
+  turtahun: "0"    # no sub-period for this var ("Tahun")
+  access_method: webapi
+  contract: docs/data_contracts/ipm.yml
+  reference_url: https://www.bps.go.id/indicator/26/413/1/-metode-baru-indeks-pembangunan-manusia.html
+
+population:
+  source: bps
+  display_name: Population by Province
+  domain: "0000"
+  table_id: "1886" # "Jumlah Penduduk Hasil Proyeksi Menurut Provinsi dan Jenis Kelamin" (Ribu Jiwa)
+  turvar: "585"    # "Jumlah" = total (both sexes), vs. 583 Laki-Laki / 584 Perempuan
+  turtahun: "0"
+  access_method: webapi
+  contract: docs/data_contracts/population.yml
+  reference_url: https://www.bps.go.id/
+
+education:
+  source: bps
+  display_name: School Participation Rate
+  domain: "0000"
+  table_id: "301"  # "Angka Partisipasi Sekolah (APS) Menurut Provinsi"
+  turvar: "535"    # DECISION (not a guessed id -- a scope choice): APS has no
+                    # all-ages total, only age-group breakdowns (535=7-12, 536=13-15,
+                    # 537=16-18, 538=19-24). 535 (elementary-school age) was chosen as
+                    # the closest match to this project's child-nutrition focus. See
+                    # docs/known_limitations.md -- revisit if Phase 1 needs a different
+                    # age band or all four bands as separate features.
+  turtahun: "0"
+  access_method: webapi
+  contract: docs/data_contracts/education.yml
+  reference_url: https://www.bps.go.id/id/statistics-table/2/MzAxIzI=/angka-partisipasi-sekolah--aps--menurut-provinsi.html
+
+expenditure:
+  source: bps
+  display_name: Household Per-Capita Expenditure
+  domain: "0000"
+  table_id: "416"  # "[Metode Baru] Pengeluaran per Kapita Disesuaikan" (Ribu Rupiah/Orang/Tahun)
+  turvar: "0"
+  turtahun: "0"
+  province_row_filter: true  # IMPORTANT: this var's vervar list mixes province
+                              # aggregate rows (val ending in "00", label wrapped in
+                              # <b></b>) with district/city rows in the same flat list
+                              # (579 entries total: 38 provinces + 541 districts/cities).
+                              # fetch_bps_dataset.py filters to val % 100 == 0 and strips
+                              # the <b> tags to keep only the province-level rows.
+  access_method: webapi
+  contract: docs/data_contracts/expenditure.yml
+  reference_url: https://www.bps.go.id/

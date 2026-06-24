@@ -1,0 +1,12 @@
+dataset: stunting
+required_columns: [province, year, stunting_rate, stunting_category]
+validation:
+  province:
+    unique_count_min: 30
+    unique_count_max: 40
+  year:
+    min: 2018
+    max: 2030
+  stunting_rate:
+    min: 0
+    max: 100

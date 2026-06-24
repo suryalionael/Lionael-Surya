@@ -1,0 +1,31 @@
+# Methodology decision history (each revision visible in git log, not hidden in code):
+#   Phase 2 (docs/phase2_weighting_options.md): hybrid PCA-for-collinearity, equal
+#     top-level weighting.
+#   Phase 3C (docs/phase3_final_methodology_decision.md): empirically compared PCA
+#     against a single-representative-indicator alternative; expenditure_per_capita
+#     alone correlated with real stunting outcomes at least as well as PCA, was more
+#     interpretable, and had zero fitting-related outlier sensitivity. Decision:
+#     promote expenditure-only to primary, retain PCA as a documented sensitivity
+#     benchmark (not deleted -- see pca_benchmark below).
+
+dimension_weights:
+  socioeconomic_vulnerability: 0.5
+  education_access: 0.5
+
+socioeconomic_vulnerability_method:
+  type: single_indicator
+  indicator: expenditure_per_capita
+
+# Retained for ongoing cross-checking (docs/phase3_final_methodology_decision.md),
+# not used for the primary score. src/scoring/npi.py's socioeconomic_columns /
+# socioeconomic_single_indicator parameters can still select this explicitly.
+pca_benchmark:
+  columns: [poverty_rate, ipm, expenditure_per_capita]
+  n_components: 1
+  svd_solver: full   # deterministic -- no randomized solver, per docs/phase2_technical_design.md
+
+# docs/phase3_missing_data_decision.md: when a province is missing a dimension
+# entirely (e.g. education_access has no participation_rate value), renormalize the
+# remaining available dimension weights for that province rather than imputing or
+# excluding it.
+missing_dimension_policy: renormalize

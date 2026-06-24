@@ -1,0 +1,6 @@
+dataset: boundaries
+required_columns: [province_name]
+validation:
+  province_name:
+    unique_count_min: 30
+    unique_count_max: 40

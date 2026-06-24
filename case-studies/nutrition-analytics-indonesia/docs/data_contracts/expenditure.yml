@@ -1,0 +1,12 @@
+dataset: expenditure
+required_columns: [province, year, expenditure_per_capita]
+validation:
+  province:
+    unique_count_min: 30
+    unique_count_max: 40
+  year:
+    min: 2010
+    max: 2030
+  expenditure_per_capita:
+    min: 1
+    max: 50000000
