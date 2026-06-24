@@ -1,0 +1,12 @@
+dataset: ipm
+required_columns: [province, year, ipm]
+validation:
+  province:
+    unique_count_min: 30
+    unique_count_max: 40
+  year:
+    min: 2010
+    max: 2030
+  ipm:
+    min: 0
+    max: 100

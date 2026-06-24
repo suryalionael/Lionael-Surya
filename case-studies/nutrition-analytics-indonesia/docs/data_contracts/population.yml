@@ -1,0 +1,12 @@
+dataset: population
+required_columns: [province, year, population]
+validation:
+  province:
+    unique_count_min: 30
+    unique_count_max: 40
+  year:
+    min: 2010
+    max: 2030
+  population:
+    min: 1
+    max: 60000000

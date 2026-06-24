@@ -1,0 +1,38 @@
+# Display metadata for every dataset in the project, keyed by dataset slug.
+# Reports, the generated inventory, and (later) the dashboard read from here
+# instead of hardcoding display strings.
+
+poverty:
+  display_name: Poverty Rate
+  unit: percent
+  source_name: BPS (Badan Pusat Statistik)
+
+ipm:
+  display_name: Human Development Index
+  unit: index (0-100)
+  source_name: BPS (Badan Pusat Statistik)
+
+population:
+  display_name: Population
+  unit: people
+  source_name: BPS (Badan Pusat Statistik)
+
+education:
+  display_name: School Participation Rate
+  unit: percent
+  source_name: BPS (Badan Pusat Statistik)
+
+expenditure:
+  display_name: Adjusted Per-Capita Expenditure
+  unit: thousand IDR/person/year (PPP-adjusted, IPM-component basis)
+  source_name: BPS (Badan Pusat Statistik)
+
+stunting:
+  display_name: Child Stunting Prevalence
+  unit: percent
+  source_name: Kemenkes / TP2S (dashboard.stunting.go.id)
+
+boundaries:
+  display_name: Province Administrative Boundaries
+  unit: polygon geometry
+  source_name: GADM (derived from BIG official shapefiles)

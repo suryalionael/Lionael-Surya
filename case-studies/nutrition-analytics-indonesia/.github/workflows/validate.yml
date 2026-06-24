@@ -1,0 +1,28 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      # Configure this as a repository secret (Settings > Secrets > Actions) to let
+      # this workflow exercise the BPS-sourced datasets. Without it, BPS fetch steps
+      # fail loudly (by design -- never fabricated) and only stunting/boundaries
+      # (sources that need no key) get validated.
+      BPS_API_KEY: ${{ secrets.BPS_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Fetch real data
+        run: make fetch
+        continue-on-error: true # individual source failures are surfaced by `make validate` below
+      - name: Validate contracts
+        run: make validate

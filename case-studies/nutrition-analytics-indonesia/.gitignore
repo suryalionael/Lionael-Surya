@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Environment / secrets
+.env
+
+# Raw, interim, external data: always re-fetched, never hand-edited or committed
+data/raw/*
+data/interim/*
+data/external/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/external/.gitkeep
+
+# Processed data: revisit in the cleaning-phase plan
+data/processed/*
+!data/processed/.gitkeep
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Pytest
+.pytest_cache/

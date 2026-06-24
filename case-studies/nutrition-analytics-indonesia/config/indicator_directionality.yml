@@ -1,0 +1,25 @@
+# Maps each NPI input indicator to its dimension (docs/phase2_framework_design.md)
+# and its raw directionality, so feature code never hardcodes per-indicator
+# direction assumptions. higher_is_worse / higher_is_better describes the RAW column
+# in data/processed/merged_provincial_indicators.csv before any flipping.
+#
+# stunting_rate / stunting_category / population are intentionally absent: stunting
+# is the outcome layer (reported, never a weighted input -- see framework design),
+# and population is the Reach Modifier (multiplies into a companion metric, never
+# summed into the NPI).
+
+poverty_rate:
+  dimension: socioeconomic_vulnerability
+  directionality: higher_is_worse
+
+ipm:
+  dimension: socioeconomic_vulnerability
+  directionality: higher_is_better
+
+expenditure_per_capita:
+  dimension: socioeconomic_vulnerability
+  directionality: higher_is_better
+
+participation_rate:
+  dimension: education_access
+  directionality: higher_is_better

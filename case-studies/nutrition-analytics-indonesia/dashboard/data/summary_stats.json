@@ -1,0 +1,62 @@
+{
+  "n_provinces": 38,
+  "methodology": {
+    "primary": "expenditure_per_capita (single indicator)",
+    "benchmark": "PCA composite (poverty_rate, ipm, expenditure_per_capita)",
+    "pca_variance_explained": 0.8602835827838794,
+    "pca_loadings": {
+      "poverty_rate": 0.7150648210692321,
+      "ipm": 0.510543337046085,
+      "expenditure_per_capita": 0.47752256770447526
+    }
+  },
+  "outcome_correlation": {
+    "pearson_r_all": 0.6573349515031932,
+    "spearman_r_all": 0.7408462040073112,
+    "pearson_r_full_coverage_only": 0.47973552443363715,
+    "spearman_r_full_coverage_only": 0.6668196322499421
+  },
+  "spatial": {
+    "morans_i": 0.6219661550225437,
+    "morans_i_p_value": 0.001,
+    "morans_i_z_score": 8.501911926126652,
+    "lisa_high_high_count": 6,
+    "lisa_low_low_count": 8
+  },
+  "regional": {
+    "summary": [
+      {
+        "region": "Western",
+        "n": 18,
+        "mean": 0.2627153364143321,
+        "median": 0.2892391089693423,
+        "variance": 0.0063307992147102,
+        "std": 0.07956631960013105
+      },
+      {
+        "region": "Central",
+        "n": 12,
+        "mean": 0.31257162207299044,
+        "median": 0.3163981154569936,
+        "variance": 0.005429708422425519,
+        "std": 0.07368655523516837
+      },
+      {
+        "region": "Eastern",
+        "n": 8,
+        "mean": 0.6708844453105327,
+        "median": 0.7523793452581843,
+        "variance": 0.05754905256427878,
+        "std": 0.23989383602810385
+      }
+    ],
+    "anova_p_value": 2.8103025881760668e-08,
+    "kruskal_p_value": 8.085963793169757e-05
+  },
+  "tier_counts": {
+    "Medium": 20,
+    "High": 9,
+    "Critical": 5,
+    "Low": 4
+  }
+}
