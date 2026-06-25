@@ -7,7 +7,7 @@ against evidence and documented before being published.
 
 [![Tests](https://img.shields.io/badge/tests-67%20passing-brightgreen)]() [![Data](https://img.shields.io/badge/data-100%25%20real-blue)]() [![Status](https://img.shields.io/badge/status-Phase%206%20%E2%80%94%20dashboard%20complete-success)]()
 
-📊 **Dashboard:** not yet deployed to a public URL — run it locally in under a minute (`pip install -r requirements.txt && streamlit run dashboard/Home.py`, no API keys needed) or deploy it via [DEPLOYMENT.md](DEPLOYMENT.md) · 📄 [Executive Summary](docs/executive_summary.md) · 🎯 [Recruiter Guide](docs/recruiter_guide.md) · 🗺️ [Full Roadmap](PROJECT_ROADMAP.md)
+📊 **[Live dashboard →](https://nutrition-analytics-indonesia.streamlit.app)** *(free tier — may take ~30s to wake up on first visit)* · 📄 [Executive Summary](docs/executive_summary.md) · 🎯 [Recruiter Guide](docs/recruiter_guide.md) · 🗺️ [Full Roadmap](PROJECT_ROADMAP.md)
 
 ---
 
@@ -114,6 +114,9 @@ source was found and substituted instead. Full results: [docs/phase5_spatial_res
    documented with what was tried and why, not hidden.
 
 ## 8. Dashboard
+
+**Live: [nutrition-analytics-indonesia.streamlit.app](https://nutrition-analytics-indonesia.streamlit.app)**
+(free tier — sleeps after inactivity, ~30s to wake on first visit).
 
 Interactive Streamlit dashboard, 6 pages: Executive Overview, Priority Ranking
 Explorer (search/filter/sort/CSV export), Interactive Map (NPI / Tier / LISA
