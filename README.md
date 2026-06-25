@@ -102,7 +102,7 @@ Lionael-Surya/
 
 | Project | Category | Business Problem | Status |
 |---|---|---|---|
-| 🍚 [Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/) | Case Study | Prioritizing 38 provinces for child-nutrition intervention funding using only real government data | ✅ Shipped |
+| 🍚 [Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/) ([live demo](https://nutrition-analytics-indonesia.streamlit.app)) | Case Study | Prioritizing 38 provinces for child-nutrition intervention funding using only real government data | ✅ Shipped |
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) | Data Engineering | Automating multi-store sales ingestion into a warehouse | 🔜 Planned |

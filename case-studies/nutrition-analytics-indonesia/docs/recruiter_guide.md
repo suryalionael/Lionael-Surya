@@ -4,10 +4,11 @@ A 5-minute path through this project, organized by what you're evaluating.
 
 ## If you have 2 minutes
 
-1. Read the [Executive Summary](executive_summary.md).
-2. Look at the dashboard screenshots in [README.md](../README.md) or run it
-   yourself: `make install && streamlit run dashboard/Home.py` (uses a committed
-   data snapshot — no API keys needed to view it).
+1. Open the **[live dashboard](https://nutrition-analytics-indonesia.streamlit.app)** (free tier — may take ~30s to wake up on first visit).
+2. Read the [Executive Summary](executive_summary.md).
+
+Prefer to run it locally instead? `make install && streamlit run dashboard/Home.py`
+(uses a committed data snapshot — no API keys needed to view it).
 
 ## If you want to evaluate technical depth
 

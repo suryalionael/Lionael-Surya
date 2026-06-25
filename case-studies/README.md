@@ -6,7 +6,7 @@ Cross-discipline, narrative-driven analyses. Where the other folders show depth 
 
 | Project | Status | Problem | Stack |
 |---|---|---|---|
-| [Nutrition Priority Index — Indonesia](nutrition-analytics-indonesia/) | ✅ Built | Which of 38 Indonesian provinces should be prioritized for child-nutrition interventions, using only real government data | Python, BPS/Kemenkes/BIG APIs, scikit-learn, PySAL/esda (spatial stats), Streamlit |
+| [Nutrition Priority Index — Indonesia](nutrition-analytics-indonesia/) ([live demo](https://nutrition-analytics-indonesia.streamlit.app)) | ✅ Built | Which of 38 Indonesian provinces should be prioritized for child-nutrition interventions, using only real government data | Python, BPS/Kemenkes/BIG APIs, scikit-learn, PySAL/esda (spatial stats), Streamlit |
 | [Flood Risk Prediction — Dicoding Datathon 2026](flood-risk-datathon-2026/) | ✅ Built | Neighborhood-level flood early warning for Jakarta | Python, XGBoost, SHAP, Leaflet.js, Azure Functions |
 | [End-to-End Retail Data Platform](end-to-end-retail-data-platform/) | 🔜 Planned (capstone) | Unify pipeline → warehouse → ML → BI into one platform | Full stack, integrated |
 

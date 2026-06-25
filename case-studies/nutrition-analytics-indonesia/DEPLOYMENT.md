@@ -1,5 +1,11 @@
 # Deployment
 
+**Live now:** [nutrition-analytics-indonesia.streamlit.app](https://nutrition-analytics-indonesia.streamlit.app)
+(Streamlit Community Cloud, free tier — sleeps after inactivity, ~30s to wake
+on first visit; no system `packages.txt` needed, `pyogrio`'s wheels bundle
+GDAL statically). The instructions below describe how this was set up and how
+to redeploy after future changes.
+
 The dashboard reads only from the committed snapshot in `dashboard/data/`
 (built by `dashboard/prepare_data.py` from real, already-validated pipeline
 output). This is a deliberate design choice: **viewing the dashboard never
