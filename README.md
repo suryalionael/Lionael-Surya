@@ -107,7 +107,7 @@ Lionael-Surya/
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) | Data Engineering | Automating multi-store sales ingestion into a warehouse | 🔜 Planned |
 | 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | 🔜 Planned |
-| 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) | Machine Learning | Predicting telecom churn to target retention spend | 🔜 Planned |
+| 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) ([source](https://github.com/suryalionael/Customer-Churn-Prediction)) | Machine Learning | Predicting telecom churn to target retention spend with calibrated probabilities, SHAP explanations, ROI thresholding, FastAPI, Streamlit, and drift monitoring | ✅ Shipped |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
 | 📈 [IDX Stock Signal Scanner](machine-learning/idx-stock-signal-scanner/) | Machine Learning | Systematic technical screening of IDX-listed stocks (source private) | ✅ Shipped |
@@ -184,7 +184,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 3. **[Flood Risk Datathon Case Study](case-studies/flood-risk-datathon-2026/)** — proves I can work with real, messy data under competition constraints.
 4. **[Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/)** — the highest-signal project for Data Engineer/Analyst roles; demonstrates pipeline thinking.
 5. **[dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/)** — strongest single project for Analytics Engineer roles; dbt is the #1 requested skill in that title.
-6. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — classic, well-understood business ML problem recruiters can evaluate quickly.
+6. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — shipped churn ML system with calibration, SHAP explanations, ROI thresholding, FastAPI/Streamlit serving, Docker, tests, and drift monitoring.
 7. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
 8. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
 9. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
@@ -234,7 +234,7 @@ gantt
     Flood Risk Datathon polish       :d3, 2026-07, 1M
 
     section Differentiation
-    Customer Churn Prediction        :m1, after d2, 1M
+    Customer Churn Prediction        :done, m1, 2026-06, 1M
     CI/CD for Data Pipelines         :c1, after m1, 3w
     RAG Financial Report Q&A         :a1, after c1, 1M
 

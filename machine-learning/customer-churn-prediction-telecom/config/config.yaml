@@ -1,0 +1,63 @@
+# Path Configurations
+paths:
+  raw_data: "data/raw/Telco-Customer-Churn.csv"
+  processed_data_dir: "data/processed"
+  models_dir: "models"
+  reports_dir: "reports"
+  figures_dir: "figures"
+  logs_dir: "logs"
+
+# Data Schema configurations
+data:
+  target: "Churn"
+  id_column: "customerID"
+  categorical_features:
+    - "gender"
+    - "SeniorCitizen"  # encoded as 0/1 in raw data, treated as categorical
+    - "Partner"
+    - "Dependents"
+    - "PhoneService"
+    - "MultipleLines"
+    - "InternetService"
+    - "OnlineSecurity"
+    - "OnlineBackup"
+    - "DeviceProtection"
+    - "TechSupport"
+    - "StreamingTV"
+    - "StreamingMovies"
+    - "Contract"
+    - "PaperlessBilling"
+    - "PaymentMethod"
+  numerical_features:
+    - "tenure"
+    - "MonthlyCharges"
+    - "TotalCharges"
+
+# Model Training Parameters
+train:
+  random_state: 42
+  test_size: 0.2
+  n_splits: 5  # Stratified K-Fold
+  optuna_trials: 30
+  models:
+    - "logistic_regression"
+    - "random_forest"
+    - "xgboost"
+    - "lightgbm"
+
+# Calibration configuration
+calibration:
+  method: "sigmoid"  # 'sigmoid' (Platt scaling) or 'isotonic'
+
+# Business Evaluation Parameters
+business:
+  campaign_cost: 20.0       # Cost to target a customer for retention (e.g. outreach/incentive processing)
+  retention_discount: 100.0 # Retention incentive cost (e.g. credit/discount if they accept)
+  retention_rate: 0.60      # Probability that a churn-bound customer will stay if offered retention
+  default_monthly_value: 65.0 # Fallback monthly value if MonthlyCharges not available
+
+# Drift Monitoring Parameters
+drift:
+  n_bins: 10
+  warning_psi_threshold: 0.10
+  drift_psi_threshold: 0.25

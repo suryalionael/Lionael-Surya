@@ -1,0 +1,66 @@
+{
+    "model_comparison": [
+        {
+            "Model": "Logistic Regression",
+            "CV_AUC": 0.846035489572856,
+            "CV_AUC_Std": 0.004578977429383836
+        },
+        {
+            "Model": "Random Forest",
+            "CV_AUC": 0.8253226184648866,
+            "CV_AUC_Std": 0.004240136534086008
+        },
+        {
+            "Model": "XGBoost",
+            "CV_AUC": 0.8199197248806127,
+            "CV_AUC_Std": 0.007911410378576228
+        },
+        {
+            "Model": "LightGBM",
+            "CV_AUC": 0.8365265958116931,
+            "CV_AUC_Std": 0.0045436288442196986
+        }
+    ],
+    "calibration": {
+        "uncalibrated_brier": 0.15963700413703918,
+        "calibrated_brier": 0.13815810144819018,
+        "brier_improvement": 0.021478902688849
+    },
+    "test_metrics": {
+        "accuracy": 0.7975402081362346,
+        "balanced_accuracy": 0.722940797940798,
+        "precision": 0.632,
+        "recall": 0.5642857142857143,
+        "f1_score": 0.5962264150943396,
+        "matthews_correlation_coefficient": 0.46302271825609637,
+        "roc_auc": 0.8467411288839861,
+        "pr_auc": 0.6572089076383241,
+        "threshold": 0.5
+    },
+    "test_business_simulation": {
+        "threshold": 0.5,
+        "confusion_matrix": {
+            "tp": 158,
+            "fp": 92,
+            "fn": 122,
+            "tn": 685
+        },
+        "metrics": {
+            "total_customers": 1057,
+            "actual_churners": 280,
+            "targeted_customers": 250,
+            "retained_customers_estimate": 94.8
+        },
+        "financials": {
+            "baseline_loss": 124266.3,
+            "campaign_outreach_cost": 5000.0,
+            "discount_payout_cost": 18680.0,
+            "total_campaign_cost": 23680.0,
+            "revenue_saved": 44160.659999999996,
+            "opportunity_loss": 50665.2,
+            "net_savings": 20480.659999999996,
+            "roi_percentage": 86.48927364864863
+        }
+    },
+    "optimal_threshold": 0.5
+}

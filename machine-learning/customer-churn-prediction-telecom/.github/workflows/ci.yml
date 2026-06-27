@@ -1,0 +1,40 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+        cache: 'pip'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Linter (Ruff)
+      run: ruff check .
+
+    - name: Check Formatting (Black)
+      run: black --check .
+
+    - name: Run Tests
+      run: |
+        # Download raw data so test integration fits
+        python scripts/download_data.py
+        # Run training to produce artifacts for API and prediction tests
+        python -m src.train
+        # Run pytest
+        pytest tests/ -v
