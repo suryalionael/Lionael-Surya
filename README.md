@@ -105,7 +105,7 @@ Lionael-Surya/
 | 🍚 [Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/) ([live demo](https://nutrition-analytics-indonesia.streamlit.app)) | Case Study | Prioritizing 38 provinces for child-nutrition intervention funding using only real government data | ✅ Shipped |
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
-| 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) | Data Engineering | Automating multi-store sales ingestion into a warehouse | 🔜 Planned |
+| 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) ([source](https://github.com/suryalionael/retail-sales-etl-pipeline)) | Data Engineering | Automating multi-store sales ingestion into a warehouse | ✅ Shipped |
 | 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | 🔜 Planned |
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) ([source](https://github.com/suryalionael/Customer-Churn-Prediction)) | Machine Learning | Predicting telecom churn to target retention spend with calibrated probabilities, SHAP explanations, ROI thresholding, FastAPI, Streamlit, and drift monitoring | ✅ Shipped |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
@@ -229,7 +229,7 @@ gantt
     CV Generator (shipped)           :done, f2, 2026-05, 1M
 
     section Core Data Skills
-    Retail Sales ETL Pipeline        :active, d1, 2026-07, 1M
+    Retail Sales ETL Pipeline        :done, d1, 2026-07, 1M
     dbt E-Commerce Analytics Mart    :d2, after d1, 1M
     Flood Risk Datathon polish       :d3, 2026-07, 1M
 
