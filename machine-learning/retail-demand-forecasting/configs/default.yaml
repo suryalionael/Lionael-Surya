@@ -1,0 +1,75 @@
+# Retail Demand Forecasting Configuration
+
+data:
+  raw_path: "data/raw"
+  interim_path: "data/interim"
+  processed_path: "data/processed"
+  dataset: "online_retail"
+  test_size: 0.2
+  validation_size: 0.1
+  random_state: 42
+
+features:
+  lags: [1, 7, 14, 28, 56]
+  rolling_windows: [7, 14, 28, 56]
+  rolling_stats: ["mean", "median", "std", "min", "max"]
+  use_ema: true
+  use_calendar: true
+
+models:
+  naive:
+    enabled: true
+    seasonality: "yearly"
+    period: 7
+
+  prophet:
+    enabled: true
+    yearly_seasonality: true
+    weekly_seasonality: true
+    daily_seasonality: false
+    seasonality_mode: "multiplicative"
+    changepoint_prior_scale: 0.05
+    seasonality_prior_scale: 10.0
+    holidays_prior_scale: 10.0
+    n_changepoints: 25
+    uncertainty_samples: 1000
+    tune_hyperparameters: false
+    tune_trials: 20
+
+  xgboost:
+    enabled: true
+    n_estimators: 1000
+    max_depth: 6
+    learning_rate: 0.01
+    subsample: 0.8
+    colsample_bytree: 0.8
+    min_child_weight: 1
+    gamma: 0
+    reg_alpha: 0
+    reg_lambda: 1
+    early_stopping_rounds: 50
+    tune_hyperparameters: false
+    tune_trials: 30
+
+evaluation:
+  metrics: ["mae", "rmse", "mape", "smape", "wape", "bias", "forecast_accuracy"]
+  cv_folds: 3
+  cv_step: 30
+  cv_initial: 90
+  cv_horizon: 14
+
+visualization:
+  style: "seaborn-v0_8"
+  dpi: 150
+  figsize: [12, 6]
+  save_figures: true
+  figures_path: "reports/figures"
+
+mlflow:
+  tracking_uri: "mlruns"
+  experiment_name: "retail_demand_forecasting"
+  auto_log: false
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

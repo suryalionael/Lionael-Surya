@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  forecasting:
+    build: .
+    container_name: retail-demand-forecasting
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ./mlruns:/app/mlruns
+      - ./notebooks:/app/notebooks
+    ports:
+      - "8888:8888"
+      - "5000:5000"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    command: python src/run_pipeline.py
+
+  mlflow:
+    build: .
+    container_name: mlflow-tracking
+    volumes:
+      - ./mlruns:/app/mlruns
+    ports:
+      - "5001:5000"
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /app/mlruns
+    profiles:
+      - mlflow
+
+  jupyter:
+    build: .
+    container_name: jupyter-notebook
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+      - ./reports:/app/reports
+      - ./src:/app/src
+    ports:
+      - "8888:8888"
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''
+    profiles:
+      - jupyter
