@@ -8,7 +8,7 @@ Retail investors screening the Indonesia Stock Exchange (IDX) for technical setu
 
 ## What It Does
 
-A modular Python pipeline that pulls historical daily price data for a configurable universe of IDX tickers, computes a set of technical-analysis features (trend, momentum, breakout, volume, volatility), scores each ticker through a configurable rule engine, and classifies results into ranked signal tiers — with a forward-return backtesting module to evaluate signal quality over time.
+A modular Python pipeline that pulls historical daily price data for a configurable universe of IDX tickers, computes a set of technical-analysis features (trend, momentum, breakout, volume, volatility), scores each ticker through a configurable rule engine, and classifies it into one of four ranked signal tiers — **Breakout Candidate**, **Pre-breakout**, **Watchlist**, or **Avoid** — with a penalty-override layer for risk flags (e.g. overbought conditions, low liquidity, data gaps) and a forward-return backtesting module to evaluate signal quality over time.
 
 ## High-Level Architecture
 
@@ -18,18 +18,19 @@ flowchart LR
     B --> C[(Local Data Store)]
     C --> D[Feature Engineering<br/>trend · momentum · breakout · volume · volatility]
     D --> E[Configurable Scoring Engine]
-    E --> F[Signal Classification]
-    F --> G[Daily Ranked Output]
-    F --> H[Forward-Return Backtest]
+    E --> F[Signal Classification<br/>+ penalty override]
+    F --> G[Daily Ranked Output<br/>Parquet · CSV · SQLite]
+    F --> H[Forward-Return Backtest<br/>3D / 5D / 10D windows]
 ```
 
 ## Tech Stack
 
 - **Language:** Python
-- **Data:** `yfinance` for historical OHLCV, with a swappable data-provider interface
+- **Data:** `yfinance` for historical OHLCV, with a swappable data-provider interface (`BaseFetcher`) so the source can change without touching the rest of the pipeline
 - **Storage:** Parquet + SQLite, local-first (no cloud dependency at this stage)
 - **Configuration:** YAML-driven scoring rules — thresholds and weights are tunable without code changes
-- **Evaluation:** Forward-return backtesting (multiple holding-period windows) with hit-rate and drawdown metrics
+- **Evaluation:** Forward-return backtesting across multiple holding-period windows (3D / 5D / 10D) with hit-rate and drawdown metrics
+- **Output:** Ranked daily signal tables (CSV/Parquet), signal history (SQLite), and a Telegram-ready JSON export for alerting
 
 ## Why It's Here (and Why It's Light on Detail)
 
