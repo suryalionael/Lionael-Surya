@@ -15,7 +15,7 @@ Predictive models built and evaluated the way a business actually uses them: wit
 |---|---|---|---|
 | [IDX Stock Signal Scanner](idx-stock-signal-scanner/) | ✅ Shipped (private source) | Systematic technical screening of IDX-listed stocks | Python, yfinance, pandas, YAML rule engine |
 | [Customer Churn Prediction (Telecom)](customer-churn-prediction-telecom/) | ✅ Shipped | Predict churn to target retention spend with calibrated risk scores and ROI-aware targeting | scikit-learn, XGBoost, SHAP, FastAPI, Streamlit, Docker |
-| [Retail Demand Forecasting](retail-demand-forecasting/) | 🔜 Planned | Forecast SKU-level demand for inventory planning | Prophet, XGBoost, pandas |
+| [Retail Demand Forecasting](retail-demand-forecasting/) | ✅ Shipped | Forecast SKU-level demand for inventory planning | Prophet, XGBoost, pandas |
 
 ## Why This Matters for Recruiters
 
