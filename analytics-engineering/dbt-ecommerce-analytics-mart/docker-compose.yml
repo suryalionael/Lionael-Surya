@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: olist_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dbt}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dbt}
+      POSTGRES_DB: ${POSTGRES_DB:-olist}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    # GitHub Actions' default container shared memory (64MB) is too small
+    # once Postgres uses parallel workers on larger aggregations (e.g.
+    # int_customer_lifetime); match that same headroom locally too.
+    shm_size: '1gb'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./seeds/raw/olist:/seeds_raw:ro
+      - ./docker/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dbt} -d ${POSTGRES_DB:-olist}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: olist_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "${PGADMIN_PORT:-8080}:80"
+    depends_on:
+      - postgres
+
+  dbt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: olist_dbt
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: ${POSTGRES_USER:-dbt}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dbt}
+      POSTGRES_DB: ${POSTGRES_DB:-olist}
+      POSTGRES_PORT: 5432
+      DBT_PROFILES_DIR: /usr/app
+    volumes:
+      - .:/usr/app
+    working_dir: /usr/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: ["tail", "-f", "/dev/null"]
+
+volumes:
+  pgdata:

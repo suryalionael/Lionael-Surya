@@ -1,0 +1,25 @@
+.aider*
+
+# dbt
+target/
+dbt_packages/
+dbt_modules/
+logs/
+.user.yml
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# env / secrets
+.env
+profiles/.user.yml
+
+# tooling installed for this project (not part of the dbt project itself)
+kaggle-cli/
+
+# os
+.DS_Store
+.serena/

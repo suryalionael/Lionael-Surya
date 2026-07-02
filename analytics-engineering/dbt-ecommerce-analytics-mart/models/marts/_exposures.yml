@@ -1,0 +1,25 @@
+version: 2
+
+exposures:
+  - name: ecommerce_powerbi_dashboard
+    label: E-Commerce Analytics Dashboard (Power BI)
+    type: dashboard
+    maturity: low
+    # Placeholder: not yet built. Replace with the published report URL once
+    # it exists, and bump `maturity` to `medium`/`high` as it stabilizes.
+    url: https://app.powerbi.com/REPLACE_WITH_REPORT_URL
+    description: >
+      Executive-facing Power BI dashboard covering monthly revenue trends,
+      customer lifetime value, and product performance. Connects to the
+      Postgres `marts` schema only via the native Postgres connector -
+      never to `staging`, `intermediate`, or `raw`. Not yet built; tracked
+      here so the mart's downstream consumer is documented even before the
+      report exists.
+    depends_on:
+      - ref('fct_orders')
+      - ref('dim_products')
+      - ref('dim_customers')
+      - ref('fct_revenue_monthly')
+    owner:
+      name: Lionael
+      email: suryalionael@gmail.com

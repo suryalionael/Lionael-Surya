@@ -1,0 +1,27 @@
+version: 2
+
+tests:
+  - name: order_revenue_consistency
+    description: >
+      Regression guard (error severity). Re-sums price + freight_value
+      directly from stg_order_items, independently of fct_orders, and fails
+      if the per-order total doesn't match fct_orders.revenue exactly. Since
+      both sides come from the same source rows with no aggregation logic
+      in between, any mismatch means a join upstream fanned rows out or
+      dropped them - a pipeline bug, not a real-world data issue.
+    config:
+      tags: ['data_quality', 'revenue']
+
+  - name: customer_spend_accuracy
+    description: >
+      Reconciliation check (warn severity, intentionally non-blocking).
+      Compares dim_customers.lifetime_spend (item price + freight) against
+      what the customer actually paid per olist_order_payments. These are
+      NOT expected to match exactly in real Olist data because
+      payment_value can include installment interest, vouchers, or gift
+      cards that don't map 1:1 onto item price/freight. This test exists to
+      surface that reconciliation gap as a visible, documented signal - not
+      to be silenced. See README "Known Data Quality Findings" for the
+      current baseline (293 customers, ~0.3% of the customer base).
+    config:
+      tags: ['data_quality', 'revenue']

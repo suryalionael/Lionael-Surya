@@ -1,0 +1,32 @@
+version: 2
+
+macros:
+  - name: order_line_revenue
+    description: >
+      The single, canonical revenue formula for the project: price +
+      freight_value. Used by fct_orders (where revenue is first computed)
+      and int_customer_lifetime (where it's summed into lifetime_spend).
+      Exists so the formula is written exactly once - see
+      docs/overview.md#revenue-definition.
+    arguments:
+      - name: price_col
+        type: string
+        description: Name of the price column to reference. Defaults to 'price'.
+      - name: freight_col
+        type: string
+        description: Name of the freight column to reference. Defaults to 'freight_value'.
+
+  - name: test_no_negative_revenue
+    description: >
+      Custom generic test. Fails for any row where the given column is
+      negative. Applied throughout the marts to price, freight_value,
+      revenue, avg_price, lifetime_spend, and total_revenue - anywhere a
+      real (non-synthetic) monetary or count value should never go below
+      zero.
+    arguments:
+      - name: model
+        type: relation
+        description: Injected automatically by dbt - the model the test is applied to.
+      - name: column_name
+        type: string
+        description: Injected automatically by dbt - the column the test is applied to.

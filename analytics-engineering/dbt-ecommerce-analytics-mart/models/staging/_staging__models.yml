@@ -1,0 +1,144 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: >
+      1:1 cleaned mapping of `raw.olist_customers`. No joins, no business logic.
+
+      **Important Olist nuance**: `customer_id` here is scoped to a single order —
+      Olist mints a new `customer_id` every time the same person orders again.
+      `customer_unique_id` is the durable, cross-order identifier for the actual
+      person. Anything measuring "lifetime" behavior (see `dim_customers`) must
+      aggregate on `customer_unique_id`, not `customer_id`.
+    columns:
+      - name: customer_id
+        description: Order-scoped customer key. Unique per row here, but not a stable person-level identifier.
+        data_tests: [unique, not_null]
+      - name: customer_unique_id
+        description: Durable person-level identifier, repeats across orders placed by the same customer.
+        data_tests: [not_null]
+      - name: customer_zip_code_prefix
+        description: First digits of the customer's zip code.
+      - name: customer_city
+        description: Customer city (free text, as provided by Olist).
+      - name: customer_state
+        description: Customer state (2-letter Brazilian state code).
+
+  - name: stg_orders
+    description: 1:1 cleaned mapping of `raw.olist_orders`. No joins, no business logic.
+    columns:
+      - name: order_id
+        description: Primary key of an order.
+        data_tests: [unique, not_null]
+      - name: customer_id
+        description: Order-scoped customer key, see `stg_customers`.
+        data_tests: [not_null]
+      - name: order_status
+        description: Raw order lifecycle status as reported by Olist (e.g. delivered, canceled, shipped).
+      - name: order_purchase_timestamp
+        description: Timestamp the order was placed by the customer.
+      - name: order_approved_at
+        description: Timestamp the order payment was approved.
+      - name: order_delivered_carrier_date
+        description: Timestamp the order was handed to the logistics carrier.
+      - name: order_delivered_customer_date
+        description: Timestamp the order was delivered to the customer.
+      - name: order_estimated_delivery_date
+        description: Delivery date estimate shown to the customer at purchase time.
+
+  - name: stg_order_items
+    description: >
+      1:1 cleaned mapping of `raw.olist_order_items`. Grain is one row per
+      order line (order_id, order_item_id) — i.e. one row per unit purchased.
+      No joins, no business logic.
+    columns:
+      - name: order_id
+        description: FK to `stg_orders.order_id`.
+        data_tests: [not_null]
+      - name: order_item_id
+        description: Sequential line number within the order.
+        data_tests: [not_null]
+      - name: product_id
+        description: FK to `stg_products.product_id`.
+        data_tests: [not_null]
+      - name: seller_id
+        description: Seller who fulfilled this line.
+        data_tests: [not_null]
+      - name: shipping_limit_date
+        description: Deadline for the seller to hand the item to the carrier.
+      - name: price
+        description: Item price paid by the customer, excluding freight.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: freight_value
+        description: Freight (shipping) cost allocated to this order line.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [order_id, order_item_id]
+
+  - name: stg_order_payments
+    description: >
+      1:1 cleaned mapping of `raw.olist_order_payments`. Grain is one row per
+      payment installment/method applied to an order (an order can have
+      multiple payment rows). No joins, no business logic.
+    columns:
+      - name: order_id
+        description: FK to `stg_orders.order_id`.
+        data_tests: [not_null]
+      - name: payment_sequential
+        description: Sequence number for orders paid with multiple payment methods.
+        data_tests: [not_null]
+      - name: payment_type
+        description: Payment method used (e.g. credit_card, boleto, voucher).
+      - name: payment_installments
+        description: Number of installments the payment was split into.
+      - name: payment_value
+        description: Amount paid via this payment row.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [order_id, payment_sequential]
+
+  - name: stg_products
+    description: 1:1 cleaned mapping of `raw.olist_products`. No joins, no business logic.
+    columns:
+      - name: product_id
+        description: Primary key of a product.
+        data_tests: [unique, not_null]
+      - name: product_category_name
+        description: Raw Portuguese product category name as reported by Olist.
+      - name: product_name_length
+        description: Character length of the product name shown in the listing.
+      - name: product_description_length
+        description: Character length of the product description.
+      - name: product_photos_qty
+        description: Number of photos in the product listing.
+      - name: product_weight_g
+        description: Product weight in grams.
+      - name: product_length_cm
+        description: Product length in centimeters.
+      - name: product_height_cm
+        description: Product height in centimeters.
+      - name: product_width_cm
+        description: Product width in centimeters.
+
+  - name: stg_product_category_translation
+    description: 1:1 cleaned mapping of `raw.product_category_name_translation`.
+    columns:
+      - name: product_category_name
+        description: Raw Portuguese category name, joins to `stg_products.product_category_name`.
+        data_tests: [unique, not_null]
+      - name: product_category_name_english
+        description: English translation of the category name.

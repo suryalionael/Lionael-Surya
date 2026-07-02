@@ -1,0 +1,12 @@
+ecommerce_analytics_mart:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5432') | as_number }}"
+      user: "{{ env_var('POSTGRES_USER', 'dbt') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD', 'dbt') }}"
+      dbname: "{{ env_var('POSTGRES_DB', 'olist') }}"
+      schema: dbt
+      threads: 4

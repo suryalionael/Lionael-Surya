@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: '{{ doc("fct_orders") }}'
+    columns:
+      - name: order_id
+        description: FK to the order this line belongs to. Not unique on its own — see the composite grain test below.
+        data_tests: [not_null]
+      - name: order_item_id
+        description: Line number within the order.
+        data_tests: [not_null]
+      - name: customer_id
+        description: Order-scoped customer key (see stg_customers docs). FK to stg_customers.customer_id.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: customer_unique_id
+        description: Durable person-level customer key. FK to dim_customers.customer_id.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: product_id
+        description: FK to dim_products.product_id.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_id
+      - name: order_purchase_timestamp
+        description: Timestamp the order was placed.
+        data_tests: [not_null]
+      - name: price
+        description: Item price, excluding freight.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: freight_value
+        description: Freight cost allocated to this line.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: revenue
+        description: '{{ doc("revenue_definition") }}'
+        data_tests:
+          - not_null
+          - no_negative_revenue
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [order_id, order_item_id]
+
+  - name: dim_products
+    description: '{{ doc("dim_products") }}'
+    columns:
+      - name: product_id
+        description: Primary key of a product.
+        data_tests: [unique, not_null]
+      - name: category_name
+        description: English product category (translated from Olist's raw Portuguese category name).
+        data_tests: [not_null]
+      - name: avg_price
+        description: Average unit price (price column only, excludes freight) across all fct_orders lines for this product.
+        data_tests:
+          - no_negative_revenue
+      - name: total_units_sold
+        description: Count of order-line rows in fct_orders for this product (Olist's order_items grain is one row per unit).
+        data_tests:
+          - no_negative_revenue

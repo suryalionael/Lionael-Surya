@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  dbt:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: dbt
+          POSTGRES_PASSWORD: dbt
+          POSTGRES_DB: olist
+        ports: ["5432:5432"]
+        # --shm-size: GitHub Actions' default service-container shared memory
+        # (64MB) is too small once Postgres decides to use parallel workers
+        # on the larger aggregations (e.g. int_customer_lifetime, ~95k rows
+        # grouped from 112k order lines) - without this, tests against that
+        # model fail with "could not resize shared memory segment".
+        options: >-
+          --shm-size=1gb
+          --health-cmd "pg_isready -U dbt -d olist"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: dbt
+      POSTGRES_PASSWORD: dbt
+      POSTGRES_DB: olist
+      DBT_PROFILES_DIR: ${{ github.workspace }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install psql client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Load real Olist CSVs into Postgres (raw schema)
+        run: |
+          sudo mkdir -p /seeds_raw
+          sudo cp seeds/raw/olist/*.csv /seeds_raw/
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost -U $POSTGRES_USER -d $POSTGRES_DB -f docker/init/01_init_raw.sql
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dbt
+        # Pin dbt-core explicitly, not just dbt-postgres: without this, pip
+        # can resolve a dbt-core pre-release ("Fusion") that doesn't support
+        # the Postgres adapter yet. See README "Lessons learned".
+        run: pip install "dbt-core>=1.8,<1.9" "dbt-postgres>=1.8,<1.9"
+
+      - name: dbt deps
+        run: dbt deps
+
+      - name: dbt build
+        run: dbt build
+
+      - name: dbt docs generate
+        run: dbt docs generate
