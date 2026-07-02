@@ -1,0 +1,117 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Real Olist Brazilian E-Commerce data (Kaggle), bulk-loaded via Postgres
+      COPY from the CSVs cached under seeds/raw/olist. See docker/init/01_init_raw.sql.
+      Column-level descriptions here are intentionally brief (raw meaning
+      only) - the full semantic/business description of each field lives on
+      the corresponding stg_* model in _staging__models.yml, so it isn't
+      duplicated and maintained in two places.
+    schema: raw
+    tables:
+      - name: olist_customers
+        description: One row per order-scoped customer record (see stg_customers docs for the customer_id vs customer_unique_id distinction).
+        columns:
+          - name: customer_id
+            description: Raw order-scoped customer key, minted fresh per order.
+            data_tests: [unique, not_null]
+          - name: customer_unique_id
+            description: Raw durable, cross-order person identifier.
+            data_tests: [not_null]
+          - name: customer_zip_code_prefix
+            description: Raw first digits of the customer's zip code.
+          - name: customer_city
+            description: Raw customer city, free text.
+          - name: customer_state
+            description: Raw customer state, 2-letter Brazilian state code.
+
+      - name: olist_orders
+        description: One row per order.
+        columns:
+          - name: order_id
+            description: Raw primary key of an order.
+            data_tests: [unique, not_null]
+          - name: customer_id
+            description: Raw order-scoped customer key, FK to olist_customers.
+            data_tests: [not_null]
+          - name: order_status
+            description: Raw order lifecycle status string (e.g. delivered, canceled, shipped).
+          - name: order_purchase_timestamp
+            description: Raw timestamp the order was placed.
+          - name: order_approved_at
+            description: Raw timestamp the order payment was approved.
+          - name: order_delivered_carrier_date
+            description: Raw timestamp the order was handed to the carrier.
+          - name: order_delivered_customer_date
+            description: Raw timestamp the order was delivered to the customer.
+          - name: order_estimated_delivery_date
+            description: Raw delivery date estimate shown to the customer at purchase time.
+
+      - name: olist_order_items
+        description: One row per order line (order_id + order_item_id grain).
+        columns:
+          - name: order_id
+            description: Raw FK to olist_orders.
+            data_tests: [not_null]
+          - name: order_item_id
+            description: Raw sequential line number within the order.
+          - name: product_id
+            description: Raw FK to olist_products.
+            data_tests: [not_null]
+          - name: seller_id
+            description: Raw FK to the seller who fulfilled this line.
+          - name: shipping_limit_date
+            description: Raw deadline for the seller to hand the item to the carrier.
+          - name: price
+            description: Raw item price paid by the customer, excluding freight.
+          - name: freight_value
+            description: Raw freight (shipping) cost allocated to this order line.
+
+      - name: olist_order_payments
+        description: One or more payment rows per order.
+        columns:
+          - name: order_id
+            description: Raw FK to olist_orders.
+            data_tests: [not_null]
+          - name: payment_sequential
+            description: Raw sequence number for orders paid with multiple payment methods.
+          - name: payment_type
+            description: Raw payment method (e.g. credit_card, boleto, voucher).
+          - name: payment_installments
+            description: Raw number of installments the payment was split into.
+          - name: payment_value
+            description: Raw amount paid via this payment row.
+
+      - name: olist_products
+        description: One row per product.
+        columns:
+          - name: product_id
+            description: Raw primary key of a product.
+            data_tests: [unique, not_null]
+          - name: product_category_name
+            description: Raw Portuguese product category name.
+          - name: product_name_lenght
+            description: Raw character length of the product name (note - "lenght" is Olist's own misspelling, preserved here as-is since it's the literal source column name; cleaned up to product_name_length in stg_products).
+          - name: product_description_lenght
+            description: Raw character length of the product description (same "lenght" source misspelling as above).
+          - name: product_photos_qty
+            description: Raw number of photos in the product listing.
+          - name: product_weight_g
+            description: Raw product weight in grams.
+          - name: product_length_cm
+            description: Raw product length in centimeters.
+          - name: product_height_cm
+            description: Raw product height in centimeters.
+          - name: product_width_cm
+            description: Raw product width in centimeters.
+
+      - name: product_category_name_translation
+        description: Lookup translating raw Portuguese category names to English.
+        columns:
+          - name: product_category_name
+            description: Raw Portuguese category name, joins to olist_products.product_category_name.
+            data_tests: [unique, not_null]
+          - name: product_category_name_english
+            description: Raw English translation of the category name.

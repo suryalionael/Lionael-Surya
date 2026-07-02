@@ -4,6 +4,8 @@ dbt project turning the real [Olist Brazilian E-Commerce dataset](https://www.ka
 
 **Source code:** https://github.com/suryalionael/dbt-ecommerce-analytics-mart
 
+> This portfolio copy mirrors the full dbt project (models, tests, macros, docs, CI, Docker setup) but excludes the ~120MB raw Olist CSVs under `seeds/raw/olist/` to keep the portfolio repo lightweight. Get them from the [Kaggle dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) or the source repo above before running locally.
+
 ## Project Status
 
 | Area | Status |
@@ -105,6 +107,3 @@ Raw CSVs are bulk-loaded with Postgres `COPY`, not `dbt seed` — `dbt seed` ins
 
 - Build and publish the Power BI dashboard (revenue trend, customer LTV distribution, top product categories) against the exposure already declared in `models/marts/_exposures.yml`.
 - Add screenshots of the dbt docs site and the dashboard once built.
-
----
-Back to [Analytics Engineering](../README.md) · [main portfolio](../../README.md).

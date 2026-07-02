@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: '{{ doc("dim_customers") }}'
+    columns:
+      - name: customer_id
+        description: >
+          Populated from Olist's customer_unique_id (the durable, cross-order
+          person identifier) — NOT the order-scoped customer_id used in raw
+          Olist tables. Join fct_orders to this model on
+          fct_orders.customer_unique_id = dim_customers.customer_id.
+        data_tests: [unique, not_null]
+      - name: first_order_date
+        description: Date of this customer's earliest order across their full history.
+        data_tests: [not_null]
+      - name: last_order_date
+        description: Date of this customer's most recent order across their full history.
+        data_tests: [not_null]
+      - name: lifetime_orders
+        description: Count of distinct orders placed by this customer.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: lifetime_spend
+        description: '{{ doc("lifetime_spend_definition") }}'
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: recency_days
+        description: '{{ doc("recency_days_definition") }}'
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true

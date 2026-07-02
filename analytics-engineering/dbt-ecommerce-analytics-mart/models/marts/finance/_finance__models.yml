@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: fct_revenue_monthly
+    description: '{{ doc("fct_revenue_monthly") }}'
+    columns:
+      - name: month
+        description: First day of the calendar month (order_purchase_timestamp truncated to month).
+        data_tests: [unique, not_null]
+      - name: total_revenue
+        description: '{{ doc("revenue_definition") }}'
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: total_orders
+        description: Count of distinct orders with at least one line purchased in this month.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: active_customers
+        description: '{{ doc("active_customer_definition") }}'
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true

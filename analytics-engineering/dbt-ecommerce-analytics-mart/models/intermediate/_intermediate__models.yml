@@ -1,0 +1,138 @@
+version: 2
+
+models:
+  - name: int_products_enriched
+    description: >
+      Product grain, enriched with the English category translation
+      (falls back to the raw Portuguese name, then 'unknown', if no
+      translation match exists).
+    columns:
+      - name: product_id
+        description: Primary key of a product, FK to stg_products.product_id.
+        data_tests: [unique, not_null]
+      - name: category_name
+        description: English product category name (translated from Olist's raw Portuguese category).
+        data_tests: [not_null]
+      - name: product_weight_g
+        description: Product weight in grams, passed through from stg_products.
+      - name: product_length_cm
+        description: Product length in centimeters, passed through from stg_products.
+      - name: product_height_cm
+        description: Product height in centimeters, passed through from stg_products.
+      - name: product_width_cm
+        description: Product width in centimeters, passed through from stg_products.
+
+  - name: int_order_items_enriched
+    description: >
+      Order-line grain (order_id, order_item_id). Joins order items to their
+      parent order (status, purchase timestamp), the order's customer, and
+      the product's translated category. No KPI calculations — this is the
+      enrichment layer that `fct_orders` is built from almost verbatim.
+    columns:
+      - name: order_id
+        description: FK to stg_orders.order_id.
+        data_tests: [not_null]
+      - name: order_item_id
+        description: Sequential line number within the order.
+        data_tests: [not_null]
+      - name: customer_id
+        description: Order-scoped customer key.
+        data_tests: [not_null]
+      - name: customer_unique_id
+        description: Durable person-level customer key, see `stg_customers`.
+        data_tests: [not_null]
+      - name: product_id
+        description: FK to stg_products.product_id.
+        data_tests: [not_null]
+      - name: category_name
+        description: English product category, from int_products_enriched. Null only if the order item's product_id has no matching product record.
+      - name: seller_id
+        description: Seller who fulfilled this line, passed through from stg_order_items.
+      - name: order_status
+        description: Order lifecycle status at the order this line belongs to (e.g. delivered, canceled, shipped).
+      - name: order_purchase_timestamp
+        description: Timestamp the parent order was placed.
+      - name: price
+        description: Item price paid by the customer, excluding freight.
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: freight_value
+        description: Freight (shipping) cost allocated to this order line.
+        data_tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [order_id, order_item_id]
+
+  - name: int_orders_enriched
+    description: >
+      Order grain. Joins orders to their customer's identifiers and location.
+      No KPI calculations.
+    columns:
+      - name: order_id
+        description: Primary key of an order.
+        data_tests: [unique, not_null]
+      - name: customer_id
+        description: Order-scoped customer key.
+        data_tests: [not_null]
+      - name: customer_unique_id
+        description: Durable person-level customer key, see `stg_customers`.
+        data_tests: [not_null]
+      - name: order_status
+        description: Order lifecycle status (e.g. delivered, canceled, shipped).
+      - name: order_purchase_timestamp
+        description: Timestamp the order was placed by the customer.
+      - name: order_approved_at
+        description: Timestamp the order payment was approved.
+      - name: order_delivered_carrier_date
+        description: Timestamp the order was handed to the logistics carrier.
+      - name: order_delivered_customer_date
+        description: Timestamp the order was delivered to the customer.
+      - name: order_estimated_delivery_date
+        description: Delivery date estimate shown to the customer at purchase time.
+      - name: customer_city
+        description: City of the customer who placed the order.
+      - name: customer_state
+        description: State (2-letter Brazilian code) of the customer who placed the order.
+
+  - name: int_customer_lifetime
+    description: >
+      Customer grain, aggregated on `customer_unique_id` (the durable person
+      identifier — see `stg_customers`), not the order-scoped `customer_id`.
+      This is where lifetime_spend/lifetime_orders/recency are actually
+      calculated; `dim_customers` selects straight from here.
+    columns:
+      - name: customer_unique_id
+        description: Durable, cross-order person identifier - the grain of this model.
+        data_tests: [unique, not_null]
+      - name: first_order_date
+        description: Date of this customer's earliest order.
+        data_tests: [not_null]
+      - name: last_order_date
+        description: Date of this customer's most recent order.
+        data_tests: [not_null]
+      - name: lifetime_orders
+        description: Count of distinct orders placed by this customer.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: lifetime_spend
+        description: '{{ doc("lifetime_spend_definition") }}'
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: recency_days
+        description: '{{ doc("recency_days_definition") }}'
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true

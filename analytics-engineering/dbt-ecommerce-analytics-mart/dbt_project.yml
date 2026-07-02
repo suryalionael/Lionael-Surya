@@ -1,0 +1,63 @@
+name: 'ecommerce_analytics_mart'
+version: '1.0.0'
+config-version: 2
+
+profile: 'ecommerce_analytics_mart'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+seed-paths: ["seed_data"]
+# NOTE: raw Olist CSVs live under seeds/raw/olist per the project's data
+# requirements, but they are NOT loaded via `dbt seed` (100k+ row inserts
+# don't scale that way) - they're bulk-loaded into the `raw` schema via
+# Postgres COPY (docker/init/01_init_raw.sql) and consumed as dbt sources.
+# seed-paths points at an unused directory so `dbt build`/`dbt seed` don't
+# try to auto-load the raw cache as seeds.
+macro-paths: ["macros"]
+docs-paths: ["docs"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Materialization, tags, and meta are set here at the folder level (dbt Labs
+# convention) rather than repeated in every model's config() block, so a
+# layer's config only ever needs to change in one place. Tags cascade and
+# combine down the tree (e.g. everything under marts/finance carries both
+# ["marts"] and ["finance"]). Individual models only get an inline config()
+# when they deliberately deviate from their folder's default.
+models:
+  ecommerce_analytics_mart:
+    +meta:
+      owner: 'analytics-engineering'
+    staging:
+      +materialized: view
+      +schema: staging
+      +tags: ['staging']
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+      +tags: ['intermediate']
+    marts:
+      # Tables, not incremental: Olist is a static historical extract with
+      # no new orders landing daily, and the full dataset is small (~113k
+      # order lines). A full `table` rebuild is simpler to reason about than
+      # incremental logic and costs a couple of seconds - revisit only if
+      # this ever becomes a live, continuously-growing orders feed.
+      +materialized: table
+      +schema: marts
+      +tags: ['marts']
+      core:
+        +tags: ['core']
+        +meta:
+          domain: 'core'
+      customer:
+        +tags: ['customer']
+        +meta:
+          owner: 'customer-analytics'
+          domain: 'customer'
+      finance:
+        +tags: ['finance']
+        +meta:
+          owner: 'finance-analytics'
+          domain: 'finance'
