@@ -106,7 +106,7 @@ Lionael-Surya/
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) ([source](https://github.com/suryalionael/retail-sales-etl-pipeline)) | Data Engineering | Automating multi-store sales ingestion into a warehouse | ✅ Shipped |
-| 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | 🔜 Planned |
+| 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) ([source](https://github.com/suryalionael/dbt-ecommerce-analytics-mart)) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | ✅ Shipped |
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) ([source](https://github.com/suryalionael/Customer-Churn-Prediction)) | Machine Learning | Predicting telecom churn to target retention spend with calibrated probabilities, SHAP explanations, ROI thresholding, FastAPI, Streamlit, and drift monitoring | ✅ Shipped |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
@@ -200,7 +200,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 | Nutrition Priority Index — Indonesia | Python, BPS/Kemenkes/BIG APIs, pandas, scikit-learn (PCA), GeoPandas, PySAL/esda (Moran's I/LISA), Streamlit, pytest, GitHub Actions |
 | Retail Sales ETL Pipeline | Python, Pandas, PostgreSQL, Apache Airflow, Docker, Great Expectations |
 | Streaming Clickstream Pipeline | Apache Kafka, Spark Structured Streaming, AWS S3, Python |
-| dbt E-Commerce Analytics Mart | dbt-core, Snowflake/BigQuery/PostgreSQL, SQL, Power BI, GitHub Actions |
+| dbt E-Commerce Analytics Mart | dbt-core, PostgreSQL, Docker, SQL, Power BI, GitHub Actions |
 | SaaS Subscription Metrics Model | dbt, SQL, Power BI, cohort-analysis SQL patterns |
 | IDX Stock Signal Scanner | Python, yfinance, pandas, Parquet/SQLite, YAML rule engine *(private source)* |
 | Customer Churn Prediction | Python, scikit-learn, XGBoost, SHAP, FastAPI, Streamlit, Docker |

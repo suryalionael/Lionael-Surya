@@ -14,7 +14,7 @@ The layer between raw warehouse data and business trust: transformation, testing
 
 | Project | Status | Problem | Stack |
 |---|---|---|---|
-| [dbt E-Commerce Analytics Mart](dbt-ecommerce-analytics-mart/) | 🔜 Planned | Turn raw order/customer data into trusted, tested metrics | dbt, SQL, Power BI |
+| [dbt E-Commerce Analytics Mart](dbt-ecommerce-analytics-mart/) ([source](https://github.com/suryalionael/dbt-ecommerce-analytics-mart)) | ✅ Shipped | Turn raw order/customer data into trusted, tested metrics | dbt-core, PostgreSQL, Docker, GitHub Actions, Power BI |
 | [SaaS Subscription Metrics Model](saas-subscription-metrics-model/) | 🔜 Planned | Model MRR, churn, LTV for a subscription business | dbt, SQL, Power BI |
 
 ## Why This Matters for Recruiters
