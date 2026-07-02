@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Environment
+.env
+.venv/
+venv/
+env/
+virtualenv/
+*.venv
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+notebooks/.ipynb_checkpoints/
+
+# Data
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/raw/README.md
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Models
+models/*
+!models/.gitkeep
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Reports
+reports/figures/*
+!reports/figures/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Docker
+.docker/
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Kaggle
+kaggle.json
+~/.kaggle/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/
+*.tmp
