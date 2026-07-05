@@ -107,6 +107,7 @@ Lionael-Surya/
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) ([source](https://github.com/suryalionael/retail-sales-etl-pipeline)) | Data Engineering | Automating multi-store sales ingestion into a warehouse | ✅ Shipped |
 | 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) ([source](https://github.com/suryalionael/dbt-ecommerce-analytics-mart)) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | ✅ Shipped |
+| ⚡ [Streaming Clickstream Pipeline](data-engineering/streaming-clickstream-pipeline/) ([source](https://github.com/suryalionael/streaming-clickstream-pipeline)) | Data Engineering | Real-time Kafka → Spark → Delta Lake pipeline with live Streamlit dashboard | ✅ Shipped |
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) ([source](https://github.com/suryalionael/Customer-Churn-Prediction)) | Machine Learning | Predicting telecom churn to target retention spend with calibrated probabilities, SHAP explanations, ROI thresholding, FastAPI, Streamlit, and drift monitoring | ✅ Shipped |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
@@ -183,13 +184,14 @@ Built and reviewed in this order — each project is designed to be demoable on 
 2. **[Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/)** — flagship case study; real government data only, an empirically-validated scoring methodology (a simpler model replaced a more complex one after losing a head-to-head test — shown, not hidden), spatial statistics, and a 6-page Streamlit dashboard with 67 passing tests.
 3. **[Flood Risk Datathon Case Study](case-studies/flood-risk-datathon-2026/)** — proves I can work with real, messy data under competition constraints.
 4. **[Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/)** — the highest-signal project for Data Engineer/Analyst roles; demonstrates pipeline thinking.
-5. **[dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/)** — strongest single project for Analytics Engineer roles; dbt is the #1 requested skill in that title.
-6. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — shipped churn ML system with calibration, SHAP explanations, ROI thresholding, FastAPI/Streamlit serving, Docker, tests, and drift monitoring.
-7. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
-8. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
-9. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
+5. **[Streaming Clickstream Pipeline](data-engineering/streaming-clickstream-pipeline/)** — streaming counterpart to #4; shows Kafka, Spark, Delta Lake, and real-time dashboard skills — a rare combination in student portfolios.
+6. **[dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/)** — strongest single project for Analytics Engineer roles; dbt is the #1 requested skill in that title.
+7. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — shipped churn ML system with calibration, SHAP explanations, ROI thresholding, FastAPI/Streamlit serving, Docker, tests, and drift monitoring.
+8. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
+9. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
+10. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
 
-**Why this order:** Analyst/Data Engineer/Analytics Engineer roles get the most co-op postings, so projects 1–5 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped, ahead of the still-planned capstone. ML and AI projects (6, 8) differentiate me from other applicants. The capstone (9) is saved for last because it's only convincing once the individual pieces already exist.
+**Why this order:** Analyst/Data Engineer/Analytics Engineer roles get the most co-op postings, so projects 1–6 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped, ahead of the still-planned capstone. ML and AI projects (7, 9) differentiate me from other applicants. The capstone (10) is saved for last because it's only convincing once the individual pieces already exist.
 
 ---
 
@@ -199,7 +201,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 |---|---|
 | Nutrition Priority Index — Indonesia | Python, BPS/Kemenkes/BIG APIs, pandas, scikit-learn (PCA), GeoPandas, PySAL/esda (Moran's I/LISA), Streamlit, pytest, GitHub Actions |
 | Retail Sales ETL Pipeline | Python, Pandas, PostgreSQL, Apache Airflow, Docker, Great Expectations |
-| Streaming Clickstream Pipeline | Apache Kafka, Spark Structured Streaming, AWS S3, Python |
+| Streaming Clickstream Pipeline | Apache Kafka, Spark Structured Streaming, Delta Lake, MinIO, DuckDB, Streamlit, Docker, Python |
 | dbt E-Commerce Analytics Mart | dbt-core, PostgreSQL, Docker, SQL, Power BI, GitHub Actions |
 | SaaS Subscription Metrics Model | dbt, SQL, Power BI, cohort-analysis SQL patterns |
 | IDX Stock Signal Scanner | Python, yfinance, pandas, Parquet/SQLite, YAML rule engine *(private source)* |
@@ -230,7 +232,8 @@ gantt
 
     section Core Data Skills
     Retail Sales ETL Pipeline        :done, d1, 2026-07, 1M
-    dbt E-Commerce Analytics Mart    :d2, after d1, 1M
+    Streaming Clickstream Pipeline   :done, d1s, after d1, 1M
+    dbt E-Commerce Analytics Mart    :d2, after d1s, 1M
     Flood Risk Datathon polish       :d3, 2026-07, 1M
 
     section Differentiation
@@ -281,7 +284,7 @@ This is a personal portfolio, but it's built like a real engineering repo:
 
 | Quarter | Goal | Deliverables |
 |---|---|---|
-| **Q1** (Months 1–3) | Establish core data engineering & analytics engineering credibility | Retail ETL pipeline, dbt mart, polished datathon case study |
+| **Q1** (Months 1–3) | Establish core data engineering & analytics engineering credibility | Retail ETL pipeline, streaming clickstream pipeline, dbt mart, polished datathon case study |
 | **Q2** (Months 4–6) | Add ML + cloud/DevOps maturity | Churn prediction model + deployment, CI/CD pipeline, AWS serverless ETL |
 | **Q3** (Months 7–9) | Differentiate with AI engineering, start applying | RAG system, AI support agent, begin internship applications |
 | **Q4** (Months 10–12) | Ship capstone, convert applications to interviews | End-to-end retail data platform, refresh README with metrics/results from real interviews and feedback |
@@ -292,6 +295,6 @@ This is a personal portfolio, but it's built like a real engineering repo:
 
 <div align="center">
 
-*Last updated: June 2026 — this README evolves as projects ship. Star ⭐ this repo to follow progress.*
+*Last updated: July 2026 — this README evolves as projects ship. Star ⭐ this repo to follow progress.*
 
 </div>
