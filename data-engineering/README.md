@@ -16,6 +16,7 @@ Pipelines that move data reliably from messy sources into a warehouse a business
 |---|---|---|---|
 | [Retail Sales ETL Pipeline](retail-sales-etl-pipeline/) | ✅ Done | Automate ingestion of multi-store retail sales into a warehouse | Python, Airflow, PostgreSQL, Docker |
 | [Streaming Clickstream Pipeline](streaming-clickstream-pipeline/) | ✅ Shipped | Real-time e-commerce clickstream ingestion for live dashboards | Kafka, Spark Structured Streaming, Delta Lake, MinIO, DuckDB, Streamlit, Docker |
+| [F1 Analytics Platform](f1-analytics-platform/) | ✅ Shipped | Live F1 race data streaming through medallion architecture to interactive dashboard | Kafka, Spark, Delta Lake, DuckDB, FastAPI, React, Docker |
 
 ## Why This Matters for Recruiters
 

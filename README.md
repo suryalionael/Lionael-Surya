@@ -8,9 +8,9 @@
 Building production-style data systems — from raw pipelines to deployed ML/AI products.
 
 [![Email](https://img.shields.io/badge/Email-suryalionael%40gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:suryalionael@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](#)
-[![Location](https://img.shields.io/badge/Location-Canada-FF0000?style=flat-square&logo=googlemaps&logoColor=white)](#)
-[![Status](https://img.shields.io/badge/Status-Open%20to%20Internships-success?style=flat-square)](#)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/lionaelsurya)
+[![Location](https://img.shields.io/badge/Location-Canada-FF0000?style=flat-square&logo=googlemaps&logoColor=white)]()
+[![Status](https://img.shields.io/badge/Status-Open%20to%20Internships-success?style=flat-square)]()
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=postgresql&logoColor=white)
@@ -29,15 +29,15 @@ Building production-style data systems — from raw pipelines to deployed ML/AI 
 
 ## About This Repository
 
-This repository is the **central hub** for my data and software engineering portfolio. Instead of scattering unrelated projects, every project here is organized by **discipline** and tells a story about a **real business problem**, built the way it would be built on a real data team: versioned, documented, tested, and reproducible.
+**Portfolio of production-style data systems.** Every project is versioned, documented, tested, containerized, and tells a story about a real engineering problem — not a toy dataset.
 
-> No toy datasets dressed up as "projects." Every repo below simulates a real stakeholder, a real decision, and a real system someone could run.
+> Each repo below is something a real team could run, deploy, and maintain.
 
 ---
 
 ## Career Objective
 
-I'm a Data Science student at Seneca Polytechnic (Canada) building toward a full-stack data career: comfortable moving data through a pipeline, modeling it into something a business can trust, training a model on top of it, and shipping all of it as something a non-technical stakeholder can actually use. My goal is a **Data Analyst, Data Engineer, Analytics Engineer, or Data Science internship/co-op** where I can apply production data engineering and analytics skills to real organizational problems, then grow into a full-time Data/ML/AI Engineering role.
+Data Science student at Seneca Polytechnic seeking **Data Engineering / Analytics Engineering / Data Science co-op**. My portfolio demonstrates production-style systems — streaming pipelines, analytical marts, ML models, and LLM applications — built with the same patterns used in industry.
 
 ## Internship Target Roles
 
@@ -108,6 +108,7 @@ Lionael-Surya/
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) ([source](https://github.com/suryalionael/retail-sales-etl-pipeline)) | Data Engineering | Automating multi-store sales ingestion into a warehouse | ✅ Shipped |
 | 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) ([source](https://github.com/suryalionael/dbt-ecommerce-analytics-mart)) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | ✅ Shipped |
 | ⚡ [Streaming Clickstream Pipeline](data-engineering/streaming-clickstream-pipeline/) ([source](https://github.com/suryalionael/streaming-clickstream-pipeline)) | Data Engineering | Real-time Kafka → Spark → Delta Lake pipeline with live Streamlit dashboard | ✅ Shipped |
+| 🏎️ [Real-Time F1 Analytics Platform](data-engineering/f1-analytics-platform/) ([source](https://github.com/lionaelsurya/f1-analytics-platform)) | Data Engineering | Live F1 race data streaming through medallion architecture (Kafka → Spark → Delta → DuckDB → FastAPI → React) with AI race summaries | ✅ Shipped |
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) ([source](https://github.com/suryalionael/Customer-Churn-Prediction)) | Machine Learning | Predicting telecom churn to target retention spend with calibrated probabilities, SHAP explanations, ROI thresholding, FastAPI, Streamlit, and drift monitoring | ✅ Shipped |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
@@ -185,13 +186,14 @@ Built and reviewed in this order — each project is designed to be demoable on 
 3. **[Flood Risk Datathon Case Study](case-studies/flood-risk-datathon-2026/)** — proves I can work with real, messy data under competition constraints.
 4. **[Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/)** — the highest-signal project for Data Engineer/Analyst roles; demonstrates pipeline thinking.
 5. **[Streaming Clickstream Pipeline](data-engineering/streaming-clickstream-pipeline/)** — streaming counterpart to #4; shows Kafka, Spark, Delta Lake, and real-time dashboard skills — a rare combination in student portfolios.
-6. **[dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/)** — strongest single project for Analytics Engineer roles; dbt is the #1 requested skill in that title.
-7. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — shipped churn ML system with calibration, SHAP explanations, ROI thresholding, FastAPI/Streamlit serving, Docker, tests, and drift monitoring.
-8. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
-9. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
-10. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
+6. **[Real-Time F1 Analytics Platform](data-engineering/f1-analytics-platform/)** — flagship streaming project; same pipeline pattern as #5 but with F1 race data, clean Repository/Service/Controller architecture, React+Recharts dashboard, and AI race summaries via a provider-agnostic LLM layer.
+7. **[dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/)** — strongest single project for Analytics Engineer roles; dbt is the #1 requested skill in that title.
+8. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — shipped churn ML system with calibration, SHAP explanations, ROI thresholding, FastAPI/Streamlit serving, Docker, tests, and drift monitoring.
+9. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
+10. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
+11. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
 
-**Why this order:** Analyst/Data Engineer/Analytics Engineer roles get the most co-op postings, so projects 1–6 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped, ahead of the still-planned capstone. ML and AI projects (7, 9) differentiate me from other applicants. The capstone (10) is saved for last because it's only convincing once the individual pieces already exist.
+**Why this order:** Data Engineering / Analytics Engineering roles get the most co-op postings, so projects 1–7 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped. ML and AI projects (8, 10) differentiate me from other applicants. The capstone (11) is saved for last because it's only convincing once the individual pieces already exist.
 
 ---
 
@@ -202,6 +204,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 | Nutrition Priority Index — Indonesia | Python, BPS/Kemenkes/BIG APIs, pandas, scikit-learn (PCA), GeoPandas, PySAL/esda (Moran's I/LISA), Streamlit, pytest, GitHub Actions |
 | Retail Sales ETL Pipeline | Python, Pandas, PostgreSQL, Apache Airflow, Docker, Great Expectations |
 | Streaming Clickstream Pipeline | Apache Kafka, Spark Structured Streaming, Delta Lake, MinIO, DuckDB, Streamlit, Docker, Python |
+| Real-Time F1 Analytics Platform | Apache Kafka, Spark Structured Streaming, Delta Lake, DuckDB, FastAPI, React, TypeScript, Recharts, Docker, OpenAI/Anthropic API |
 | dbt E-Commerce Analytics Mart | dbt-core, PostgreSQL, Docker, SQL, Power BI, GitHub Actions |
 | SaaS Subscription Metrics Model | dbt, SQL, Power BI, cohort-analysis SQL patterns |
 | IDX Stock Signal Scanner | Python, yfinance, pandas, Parquet/SQLite, YAML rule engine *(private source)* |
