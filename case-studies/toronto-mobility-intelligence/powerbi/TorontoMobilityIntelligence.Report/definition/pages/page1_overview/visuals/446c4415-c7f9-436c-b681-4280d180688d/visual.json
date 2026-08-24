@@ -1,0 +1,106 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "446c4415-c7f9-436c-b681-4280d180688d",
+  "position": {
+    "x": 20,
+    "y": 150,
+    "z": 0,
+    "width": 610,
+    "height": 280,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_annual_ksi"
+                    }
+                  },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "v_annual_ksi.year",
+              "nativeQueryRef": "year"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_annual_ksi"
+                    }
+                  },
+                  "Property": "ksi_collision_count"
+                }
+              },
+              "queryRef": "v_annual_ksi.ksi_collision_count",
+              "nativeQueryRef": "ksi_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_annual_ksi"
+                    }
+                  },
+                  "Property": "fatal_collision_count"
+                }
+              },
+              "queryRef": "v_annual_ksi.fatal_collision_count",
+              "nativeQueryRef": "fatal_collision_count"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Annual KSI & Fatal Collision Trend (2026 is a partial year)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,88 @@
+/// Highest-observed KSI collision counts at signalized intersections matched within the approved 20m radius (~44.7% of citywide KSI collisions). Grain: one row per intersection. See sql/analytics/05_intersections/010_intersection_ksi_ranking.sql.
+table v_intersection_risk
+	lineageTag: 3cff1d92-85c0-47e1-b613-903973bc9a2c
+
+	column px
+		isKey
+		dataType: int64
+		formatString: 0
+		sourceColumn: px
+		summarizeBy: none
+		lineageTag: 059ead5c-0582-4c4d-93ed-266a58fe008d
+
+	column main_street
+		dataType: string
+		sourceColumn: main_street
+		summarizeBy: none
+		lineageTag: fd01a2c6-a1b4-4311-97c0-d9cee5004659
+
+	column side1_street
+		dataType: string
+		sourceColumn: side1_street
+		summarizeBy: none
+		lineageTag: c95ae30c-edd0-4653-8297-d83008bc2476
+
+	column side2_street
+		dataType: string
+		sourceColumn: side2_street
+		summarizeBy: none
+		lineageTag: 009cfb7c-8f22-4b01-aebc-27f337fe9bd7
+
+	column matched_ksi_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: matched_ksi_collision_count
+		summarizeBy: sum
+		lineageTag: 6d1c1d4a-e430-4214-8579-62e69c4b85d2
+
+	column fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: fatal_collision_count
+		summarizeBy: sum
+		lineageTag: f7e62d8b-32ac-459f-86ea-04658242ffca
+
+	column pedestrian_involved_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: pedestrian_involved_count
+		summarizeBy: sum
+		lineageTag: c870e703-cab5-4e96-9d9c-d6535aad3ad7
+
+	column cyclist_involved_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: cyclist_involved_count
+		summarizeBy: sum
+		lineageTag: 546d005b-611d-42a0-8298-0920929a23b3
+
+	column rank_by_observed_count
+		dataType: int64
+		sourceColumn: rank_by_observed_count
+		summarizeBy: none
+		lineageTag: 8dca66ed-f80d-49fb-ad90-01653829c8c9
+
+	column latitude
+		dataType: double
+		formatString: 0.000000
+		sourceColumn: latitude
+		summarizeBy: none
+		lineageTag: a35cf47f-aef5-4972-85e1-90fbcd661521
+
+	column longitude
+		dataType: double
+		formatString: 0.000000
+		sourceColumn: longitude
+		summarizeBy: none
+		lineageTag: 7b52a434-c13d-4aa5-a645-192732e6d6b6
+
+	partition v_intersection_risk = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="v_intersection_risk"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

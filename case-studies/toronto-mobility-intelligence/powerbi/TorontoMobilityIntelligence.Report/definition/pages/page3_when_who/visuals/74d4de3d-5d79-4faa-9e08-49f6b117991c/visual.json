@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "74d4de3d-5d79-4faa-9e08-49f6b117991c",
+  "position": {
+    "x": 650,
+    "y": 450,
+    "z": 0,
+    "width": 610,
+    "height": 260,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_severity_by_road_user_type"
+                    }
+                  },
+                  "Property": "category"
+                }
+              },
+              "queryRef": "v_severity_by_road_user_type.category",
+              "nativeQueryRef": "category"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_severity_by_road_user_type"
+                    }
+                  },
+                  "Property": "fatal_share_pct"
+                }
+              },
+              "queryRef": "v_severity_by_road_user_type.fatal_share_pct",
+              "nativeQueryRef": "fatal_share_pct"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Severity Mix by Road-User Type (all-time, not mutually exclusive)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

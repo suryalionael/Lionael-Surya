@@ -1,0 +1,27 @@
+/// Exactly 2 relationships in this model -- both 1:1 (both sides carry a genuine one-row-per-key
+/// grain), matching docs/POWER_BI_SPEC.md S1.2. No relationship touches dim_date -- v_annual_ksi
+/// and v_road_user_involvement are pre-aggregated to year grain independently in SQL and were
+/// never related to dim_date, by design (docs/POWER_BI_SPEC.md S6.1's Year-slicer-scope note).
+///
+/// Both relationships below are set bidirectional -- the only 2 in this model, each a
+/// deliberate, documented exception to the "avoid bidirectional" default, not an oversight:
+/// each pair is two same-grain sibling views (one row per year; one row per intersection)
+/// that the report design (docs/POWER_BI_SPEC.md S1.2, S3.3/S3.5) intends to cross-filter from
+/// either side -- e.g. a Year slicer built from v_annual_ksi must also filter
+/// v_road_user_involvement's Page 3 visuals, and clicking an intersection on the Page 2 map
+/// (v_intersection_risk) should filter the exposure ranking table (v_intersection_exposure)
+/// below it, and vice versa.
+
+relationship 470f2986-dac2-4ab2-9175-9ef082634d89
+	fromCardinality: one
+	toCardinality: one
+	crossFilteringBehavior: bothDirections
+	fromColumn: v_road_user_involvement.year
+	toColumn: v_annual_ksi.year
+
+relationship 5820bdaa-d4c4-45f3-bf01-70dbdab3fe20
+	fromCardinality: one
+	toCardinality: one
+	crossFilteringBehavior: bothDirections
+	fromColumn: v_intersection_exposure.px
+	toColumn: v_intersection_risk.px

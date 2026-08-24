@@ -1,0 +1,27 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/1.2.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY24SU10",
+      "type": "SharedResources"
+    }
+  },
+  "layoutOptimization": "None",
+  "publicCustomVisuals": [],
+  "resourcePackages": [
+    {
+      "name": "TorontoMobilityTheme",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "TorontoMobilityTheme.json",
+          "path": "TorontoMobilityTheme.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true
+  }
+}

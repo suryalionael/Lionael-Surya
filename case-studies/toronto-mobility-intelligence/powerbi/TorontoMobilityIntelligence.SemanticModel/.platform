@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "TorontoMobilityIntelligence"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "44757b20-b809-4938-96d6-f8d21dd9a6c8"
+  }
+}

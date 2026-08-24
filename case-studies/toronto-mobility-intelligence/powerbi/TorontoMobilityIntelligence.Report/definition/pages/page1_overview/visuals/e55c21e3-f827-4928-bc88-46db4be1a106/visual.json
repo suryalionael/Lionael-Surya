@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "e55c21e3-f827-4928-bc88-46db4be1a106",
+  "position": {
+    "x": 20,
+    "y": 450,
+    "z": 0,
+    "width": 1240,
+    "height": 40,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Raw collision counts by neighbourhood -- land-area-normalized density is on Page 2. See Page 4 for full methodology.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+/// KSI collision count and fatal share by calendar month (12 rows), all years combined. See sql/analytics/01_temporal/060_v_collision_monthly_pattern.sql.
+table v_collision_monthly_pattern
+	lineageTag: c0601864-f48a-4996-acfd-f6225057d05f
+
+	column month
+		dataType: int64
+		formatString: 0
+		sourceColumn: month
+		summarizeBy: none
+		lineageTag: 8853a810-75f2-4c7a-b59f-a87c38c21ebf
+
+	column month_name
+		dataType: string
+		sourceColumn: month_name
+		summarizeBy: none
+		lineageTag: ede548c0-6a6b-4568-8c6a-3f4e8aff1dfa
+
+	column ksi_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ksi_collision_count
+		summarizeBy: sum
+		lineageTag: 7757901d-22e1-4076-84fb-192205c794cb
+
+	column fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: fatal_collision_count
+		summarizeBy: sum
+		lineageTag: 2d0b6926-df90-486c-b842-e49a24fd527a
+
+	column fatal_share_pct
+		dataType: double
+		formatString: 0.00
+		sourceColumn: fatal_share_pct
+		summarizeBy: none
+		lineageTag: 58e61e15-5311-4c1c-ac9b-13a455c78d01
+
+	column month_year_coverage
+		dataType: int64
+		formatString: 0
+		sourceColumn: month_year_coverage
+		summarizeBy: none
+		lineageTag: fe128c28-4130-41dd-b1af-2598cbf3c8d7
+
+	partition v_collision_monthly_pattern = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="v_collision_monthly_pattern"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

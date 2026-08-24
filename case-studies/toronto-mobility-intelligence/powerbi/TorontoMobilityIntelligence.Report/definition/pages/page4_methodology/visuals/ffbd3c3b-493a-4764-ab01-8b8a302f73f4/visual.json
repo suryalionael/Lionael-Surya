@@ -1,0 +1,133 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "ffbd3c3b-493a-4764-ab01-8b8a302f73f4",
+  "position": {
+    "x": 20,
+    "y": 1365,
+    "z": 0,
+    "width": 1240,
+    "height": 160,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ingestion_log"
+                    }
+                  },
+                  "Property": "dataset_name"
+                }
+              },
+              "queryRef": "ingestion_log.dataset_name",
+              "nativeQueryRef": "dataset_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ingestion_log"
+                    }
+                  },
+                  "Property": "resource_name"
+                }
+              },
+              "queryRef": "ingestion_log.resource_name",
+              "nativeQueryRef": "resource_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ingestion_log"
+                    }
+                  },
+                  "Property": "city_last_refreshed"
+                }
+              },
+              "queryRef": "ingestion_log.city_last_refreshed",
+              "nativeQueryRef": "city_last_refreshed"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ingestion_log"
+                    }
+                  },
+                  "Property": "downloaded_at"
+                }
+              },
+              "queryRef": "ingestion_log.downloaded_at",
+              "nativeQueryRef": "downloaded_at"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ingestion_log"
+                    }
+                  },
+                  "Property": "row_count_loaded"
+                }
+              },
+              "queryRef": "ingestion_log.row_count_loaded",
+              "nativeQueryRef": "row_count_loaded"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ingestion_log"
+                  }
+                },
+                "Property": "downloaded_at"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Ingestion Log'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

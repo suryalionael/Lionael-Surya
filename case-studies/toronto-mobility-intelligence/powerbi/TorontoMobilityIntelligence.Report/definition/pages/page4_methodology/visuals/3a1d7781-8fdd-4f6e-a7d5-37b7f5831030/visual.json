@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "3a1d7781-8fdd-4f6e-a7d5-37b7f5831030",
+  "position": {
+    "x": 20,
+    "y": 865,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "6. Data Quality Considerations",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "road_class completeness dropped from under 3% NULL (2013-2023) to 28-62% NULL (2024-2026), likely reflecting KSI's documented verification lag (fatalities 1-2 weeks, serious injuries 2-3 months) rather than a genuine data problem -- not yet confirmed against a later re-ingestion. See sql/analytics/07_quality/ and docs/ANALYTICAL_FINDINGS.md.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

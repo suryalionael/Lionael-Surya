@@ -1,0 +1,42 @@
+/// Citywide (all-time) fatal share by road-user category: pedestrian, cyclist, motorcyclist, vehicle-occupants-only, and the citywide total. Grain: one row per category (5 rows). Added in Phase 5 -- see docs/DECISION_LOG.md for why. See sql/analytics/02_severity/030_v_severity_by_road_user_type.sql.
+table v_severity_by_road_user_type
+	lineageTag: 5b7b8775-089e-495e-913e-5bb119ef24d9
+
+	column category
+		isKey
+		dataType: string
+		sourceColumn: category
+		summarizeBy: none
+		lineageTag: 519ae9bb-77c6-4ccc-b83f-f3d98b38c278
+
+	column ksi_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ksi_collision_count
+		summarizeBy: sum
+		lineageTag: 8cdd79ea-02f4-4f68-acb6-b1632858687f
+
+	column fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: fatal_collision_count
+		summarizeBy: sum
+		lineageTag: a83521d2-3e62-43b4-b7da-b169c1cdfbef
+
+	column fatal_share_pct
+		dataType: double
+		formatString: 0.00
+		sourceColumn: fatal_share_pct
+		summarizeBy: none
+		lineageTag: 6ae1800c-93e3-4baa-b9b7-f43b8aad226f
+
+	partition v_severity_by_road_user_type = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="v_severity_by_road_user_type"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

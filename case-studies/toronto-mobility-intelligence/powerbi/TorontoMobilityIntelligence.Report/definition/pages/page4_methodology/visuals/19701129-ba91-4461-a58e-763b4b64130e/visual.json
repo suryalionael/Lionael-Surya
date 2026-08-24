@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "19701129-ba91-4461-a58e-763b4b64130e",
+  "position": {
+    "x": 20,
+    "y": 1175,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 8
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "8. Important Interpretation Warnings",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "NEVER describe the Page 2 exposure metric as a historical/annual rate. NEVER describe pedestrian_collision_count / cyclist_collision_count as a count of people -- they count COLLISIONS involving that road-user type (see docs/DECISION_LOG.md's Phase 3 entry on the collision-level-flag finding). NEVER describe raw neighbourhood collision counts as \"risk\" without the density-normalized figure alongside it.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

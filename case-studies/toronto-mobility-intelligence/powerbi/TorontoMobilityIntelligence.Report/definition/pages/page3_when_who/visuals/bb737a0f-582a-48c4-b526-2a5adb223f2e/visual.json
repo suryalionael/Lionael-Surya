@@ -1,0 +1,105 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "bb737a0f-582a-48c4-b526-2a5adb223f2e",
+  "position": {
+    "x": 20,
+    "y": 175,
+    "z": 0,
+    "width": 1240,
+    "height": 260,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_collision_hour_weekday"
+                    }
+                  },
+                  "Property": "day_name"
+                }
+              },
+              "queryRef": "v_collision_hour_weekday.day_name",
+              "nativeQueryRef": "day_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_collision_hour_weekday"
+                    }
+                  },
+                  "Property": "hour_of_day"
+                }
+              },
+              "queryRef": "v_collision_hour_weekday.hour_of_day",
+              "nativeQueryRef": "hour_of_day"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_collision_hour_weekday"
+                    }
+                  },
+                  "Property": "ksi_collision_count"
+                }
+              },
+              "queryRef": "v_collision_hour_weekday.ksi_collision_count",
+              "nativeQueryRef": "ksi_collision_count"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "v_collision_hour_weekday"
+                  }
+                },
+                "Property": "ksi_collision_count"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Hour x Weekday KSI Collision Count'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

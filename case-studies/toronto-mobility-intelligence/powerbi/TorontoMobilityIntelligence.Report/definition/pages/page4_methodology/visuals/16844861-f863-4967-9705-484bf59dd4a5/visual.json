@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "16844861-f863-4967-9705-484bf59dd4a5",
+  "position": {
+    "x": 20,
+    "y": 90,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "1. Data Sources",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Four official City of Toronto Open Data datasets: Motor Vehicle Collisions (KSI), Traffic Volumes - Multimodal TMC, Traffic Signals Tabular, and Neighbourhoods. See docs/DATASET_RESEARCH.md for the full evaluation of 13 datasets considered.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

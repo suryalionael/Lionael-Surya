@@ -1,0 +1,120 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "e6b41ca0-9d7c-43d7-b447-160daa433cfb",
+  "position": {
+    "x": 650,
+    "y": 150,
+    "z": 0,
+    "width": 610,
+    "height": 280,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_road_user_involvement"
+                    }
+                  },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "v_road_user_involvement.year",
+              "nativeQueryRef": "year"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_road_user_involvement"
+                    }
+                  },
+                  "Property": "ped_collision_count"
+                }
+              },
+              "queryRef": "v_road_user_involvement.ped_collision_count",
+              "nativeQueryRef": "ped_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_road_user_involvement"
+                    }
+                  },
+                  "Property": "cyclist_collision_count"
+                }
+              },
+              "queryRef": "v_road_user_involvement.cyclist_collision_count",
+              "nativeQueryRef": "cyclist_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_road_user_involvement"
+                    }
+                  },
+                  "Property": "motorcyclist_collision_count"
+                }
+              },
+              "queryRef": "v_road_user_involvement.motorcyclist_collision_count",
+              "nativeQueryRef": "motorcyclist_collision_count"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Road-User Involvement Trend (collisions involving each type, not person counts)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

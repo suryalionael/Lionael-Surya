@@ -1,0 +1,120 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "eb4a0173-c494-40d4-bb82-ce25a7846c24",
+  "position": {
+    "x": 20,
+    "y": 725,
+    "z": 0,
+    "width": 1240,
+    "height": 260,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_road_user_involvement"
+                    }
+                  },
+                  "Property": "year"
+                }
+              },
+              "queryRef": "v_road_user_involvement.year",
+              "nativeQueryRef": "year"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Pedestrian Fatal Share %"
+                }
+              },
+              "queryRef": "_Measures.Pedestrian Fatal Share %",
+              "nativeQueryRef": "Pedestrian Fatal Share %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Cyclist Fatal Share %"
+                }
+              },
+              "queryRef": "_Measures.Cyclist Fatal Share %",
+              "nativeQueryRef": "Cyclist Fatal Share %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Motorcyclist Fatal Share %"
+                }
+              },
+              "queryRef": "_Measures.Motorcyclist Fatal Share %",
+              "nativeQueryRef": "Motorcyclist Fatal Share %"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Road-User Severity Trend (fatal share within each type's own involvement, by year)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

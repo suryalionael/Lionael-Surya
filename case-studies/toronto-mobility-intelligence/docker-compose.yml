@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: tmi_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-toronto_mobility}
+      POSTGRES_USER: ${POSTGRES_USER:-tmi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tmi_dev_password}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql:/sql:ro
+      - ./data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tmi} -d ${POSTGRES_DB:-toronto_mobility}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

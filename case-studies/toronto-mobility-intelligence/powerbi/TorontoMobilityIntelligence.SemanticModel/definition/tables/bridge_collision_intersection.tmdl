@@ -1,0 +1,75 @@
+/// Spatial nearest-neighbor match result: one row per distinct collision, matched/unmatched status, distance, and the 20m radius used. See docs/DATA_MODEL.md S2 and S3.7.
+table bridge_collision_intersection
+	lineageTag: ca523cac-b10f-408b-bee9-7af5b3ff3b3f
+
+	column collision_id
+		isKey
+		dataType: string
+		sourceColumn: collision_id
+		summarizeBy: none
+		lineageTag: 52e55bd1-5091-46b4-b40e-f80a405a355c
+
+	column collision_lat
+		dataType: double
+		formatString: 0.000000
+		sourceColumn: collision_lat
+		summarizeBy: none
+		lineageTag: 0f5e5691-b2ad-45c8-ad2f-3e89450f2854
+
+	column collision_lon
+		dataType: double
+		formatString: 0.000000
+		sourceColumn: collision_lon
+		summarizeBy: none
+		lineageTag: 634b0bbe-a27d-4ed3-b2ca-b7bc3228d4a5
+
+	column intersection_key
+		dataType: int64
+		formatString: 0
+		sourceColumn: intersection_key
+		summarizeBy: none
+		isHidden
+		lineageTag: 46458555-a33b-499a-8225-32e8c6f7f5ad
+
+	column matched_px
+		dataType: int64
+		formatString: 0
+		sourceColumn: matched_px
+		summarizeBy: none
+		lineageTag: 2895d98d-a8ac-4744-a69c-9fd5bf5cf8ec
+
+	column match_distance_m
+		dataType: double
+		sourceColumn: match_distance_m
+		summarizeBy: none
+		lineageTag: b0d3d38c-73d5-426e-b9a2-2d67da6510d2
+
+	column match_status
+		dataType: string
+		sourceColumn: match_status
+		summarizeBy: none
+		lineageTag: 83ed1eab-74f1-4777-a132-b29f0aafbd32
+
+	column match_radius_m_used
+		dataType: double
+		sourceColumn: match_radius_m_used
+		summarizeBy: none
+		lineageTag: e3768f19-3552-41dc-9281-42c39613f0de
+
+	column matched_at
+		dataType: dateTime
+		formatString: General Date
+		sourceColumn: matched_at
+		summarizeBy: none
+		lineageTag: a6d87d2b-06f3-4e3e-9e2a-310961938120
+
+	partition bridge_collision_intersection = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="bridge_collision_intersection"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "8822d7fc-c851-46d1-bce3-a1864584bc50",
+  "position": {
+    "x": 20,
+    "y": 495,
+    "z": 0,
+    "width": 1240,
+    "height": 205,
+    "tabOrder": 8
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "area_name"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.area_name",
+              "nativeQueryRef": "area_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "ksi_collision_count"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.ksi_collision_count",
+              "nativeQueryRef": "ksi_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "fatal_collision_count"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.fatal_collision_count",
+              "nativeQueryRef": "fatal_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "fatal_share_pct"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.fatal_share_pct",
+              "nativeQueryRef": "fatal_share_pct"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "v_neighbourhood_ksi"
+                  }
+                },
+                "Property": "ksi_collision_count"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Neighbourhood Overview -- Raw KSI Count (top 15; see Page 2 for density-normalized view)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
