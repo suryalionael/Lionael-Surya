@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "353a78c1-ff19-46e0-a1e0-2b40ef30b831",
+  "position": {
+    "x": 20,
+    "y": 245,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "2. KSI Definition",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\"KSI\" = Killed or Seriously Injured. This dataset is SEVERITY-FILTERED -- it contains only collisions where at least one person was killed or seriously injured, not all collisions. Findings here describe the KSI subset only, never \"all collisions.\"",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

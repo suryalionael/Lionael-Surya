@@ -1,0 +1,168 @@
+/// Home table for every DAX measure in this model. No imported data of its own (a standard
+/// Power BI "measures table" pattern: a single hidden placeholder column via a calculated
+/// `{1}` partition) -- keeps every KPI/measure formula in one place instead of scattered
+/// across the 12 data tables, and keeps every formula grep-able against
+/// docs/POWER_BI_SPEC.md's documented definitions.
+table _Measures
+	lineageTag: 0b17cfae-c096-479b-b6cd-ec6a154eaa6f
+
+	/// docs/POWER_BI_SPEC.md S2.1 KPI 1. All-time sum -- v_annual_ksi is already year grain.
+	measure 'Total KSI Collisions' = SUM(v_annual_ksi[ksi_collision_count])
+		formatString: #,0
+		lineageTag: 304afd94-e73b-4afb-af06-27d17ea20e67
+		displayFolder: Page 1 KPIs
+
+	/// docs/POWER_BI_SPEC.md S2.1 KPI 2.
+	measure 'Total Fatal Collisions' = SUM(v_annual_ksi[fatal_collision_count])
+		formatString: #,0
+		lineageTag: 9b062b6b-d815-4a67-958a-28c4c4cbc529
+		displayFolder: Page 1 KPIs
+
+	/// docs/POWER_BI_SPEC.md S2.1 KPI 3. Recomputed as a ratio of the two sums above, NOT an
+	/// average of v_annual_ksi[fatal_share_pct] -- averaging pre-computed yearly percentages
+	/// would weight small and large years equally, which is wrong (documented explicitly in
+	/// the spec to prevent exactly this mistake).
+	measure 'Fatal Share %' = DIVIDE([Total Fatal Collisions], [Total KSI Collisions])
+		formatString: 0.0%
+		lineageTag: e1398170-9657-49ca-9683-a9ab7351f253
+		displayFolder: Page 1 KPIs
+
+	/// docs/POWER_BI_SPEC.md S2.1 KPI 4. Labeled "Pedestrian OR Cyclist" deliberately -- a
+	/// collision involving both would be counted once in each sum, so this is not a clean
+	/// mutually-exclusive breakdown (see the KPI's own spec note).
+	measure 'Pedestrian or Cyclist Involvement %' =
+			DIVIDE(
+				SUM(v_road_user_involvement[ped_collision_count]) + SUM(v_road_user_involvement[cyclist_collision_count]),
+				SUM(v_road_user_involvement[ksi_collision_count])
+			)
+		formatString: 0.0%
+		lineageTag: f5455590-59cc-4d3a-ac71-b794d0e39af3
+		displayFolder: Page 1 KPIs
+
+	/// docs/POWER_BI_SPEC.md S2.1 KPI 5, part 1/3. The single most important honesty check in
+	/// the dashboard -- see docs/DASHBOARD_STORY.md's Page 1 section.
+	measure 'Spatially Matched Collisions' = CALCULATE(COUNTROWS(bridge_collision_intersection), bridge_collision_intersection[match_status] = "matched")
+		formatString: #,0
+		lineageTag: 879798d7-989c-4f69-8d2c-7b051c0bf24f
+		displayFolder: Page 1 KPIs
+
+	measure 'Total Bridge Collisions' = COUNTROWS(bridge_collision_intersection)
+		formatString: #,0
+		lineageTag: e136cc34-c670-4e23-a6a9-54332ce6cf2a
+		displayFolder: Page 1 KPIs
+
+	measure 'Spatially Matched %' = DIVIDE([Spatially Matched Collisions], [Total Bridge Collisions])
+		formatString: 0.0%
+		lineageTag: 8c4fe2c4-d6ff-4378-b3b5-76cd3139d117
+		displayFolder: Page 1 KPIs
+
+	/// docs/POWER_BI_SPEC.md S4.1 KPI 1, count half. The (day_name, hour_of_day) pair itself
+	/// is 'Peak Hour Label' below -- kept as two measures because a card visual showing "100
+	/// collisions at Friday 18:00" needs both the number and the label as separate fields.
+	measure 'Peak Hour Collision Count' = MAX(v_collision_hour_weekday[ksi_collision_count])
+		formatString: #,0
+		lineageTag: 41ac4f93-786f-4cb8-9c16-77aa10275265
+		displayFolder: Page 3 KPIs
+
+	/// docs/POWER_BI_SPEC.md S4.1 KPI 1, label half. TOPN 1 by count, tie-break arbitrarily on
+	/// hour_of_day for determinism (no tie is expected at the top of this dataset, but a
+	/// measure should not be non-deterministic if the underlying data ever changes).
+	measure 'Peak Hour Label' =
+			VAR TopRow =
+				TOPN(
+					1,
+					v_collision_hour_weekday,
+					v_collision_hour_weekday[ksi_collision_count], DESC,
+					v_collision_hour_weekday[hour_of_day], ASC
+				)
+			RETURN
+				CONCATENATEX(TopRow, v_collision_hour_weekday[day_name] & " " & FORMAT(v_collision_hour_weekday[hour_of_day], "00") & ":00")
+		lineageTag: d132a56a-ded5-47a4-89e2-34f6fe00bc94
+		displayFolder: Page 3 KPIs
+
+	/// docs/POWER_BI_SPEC.md S4.1 KPI 2.
+	measure 'Highest Fatal Share Season' =
+			VAR TopRow = TOPN(1, v_collision_seasonal_pattern, v_collision_seasonal_pattern[fatal_share_pct], DESC)
+			RETURN
+				CONCATENATEX(TopRow, v_collision_seasonal_pattern[season])
+		lineageTag: ad50b7d7-9bde-4ae7-9535-3124f2dace59
+		displayFolder: Page 3 KPIs
+
+	/// docs/POWER_BI_SPEC.md S4.1 KPI 3, min half. A per-year VRU share is computed inside the
+	/// iterator (not read from a stored column -- v_road_user_involvement has no such column),
+	/// then reduced with MINX. Deliberately a range (Min-Max), not a single average, because
+	/// ANALYTICAL_FINDINGS.md found no sustained trend -- a single number would misrepresent an
+	/// oscillating pattern as a stable one.
+	measure 'VRU Share % Min' =
+			MINX(
+				v_road_user_involvement,
+				DIVIDE(v_road_user_involvement[ped_collision_count] + v_road_user_involvement[cyclist_collision_count], v_road_user_involvement[ksi_collision_count])
+			)
+		formatString: 0.0%
+		lineageTag: 3238a854-a212-4011-8a2b-d1518007694a
+		displayFolder: Page 3 KPIs
+
+	measure 'VRU Share % Max' =
+			MAXX(
+				v_road_user_involvement,
+				DIVIDE(v_road_user_involvement[ped_collision_count] + v_road_user_involvement[cyclist_collision_count], v_road_user_involvement[ksi_collision_count])
+			)
+		formatString: 0.0%
+		lineageTag: 9ce0287b-b819-411f-8403-bc304caa54aa
+		displayFolder: Page 3 KPIs
+
+	/// docs/POWER_BI_SPEC.md S4.1 KPI 3, single-card display variant -- a text measure so the
+	/// range reads as one KPI card ("49.2% - 63.6%") instead of needing two separate cards.
+	measure 'VRU Share % Range Label' = FORMAT([VRU Share % Min], "0.0%") & " - " & FORMAT([VRU Share % Max], "0.0%")
+		lineageTag: f45fb7fc-43d3-4556-bdf4-ca63368fcb7c
+		displayFolder: Page 3 KPIs
+
+	/// docs/POWER_BI_SPEC.md S4.4. Per-year fatal share within each road-user type's own
+	/// involvement -- distinct from v_severity_by_road_user_type's ALL-TIME breakdown (that
+	/// one needs no measure, it's already at the right grain as plain columns).
+	measure 'Pedestrian Fatal Share %' = DIVIDE(SUM(v_road_user_involvement[ped_fatal_collision_count]), SUM(v_road_user_involvement[ped_collision_count]))
+		formatString: 0.0%
+		lineageTag: 196b9413-890d-4735-95b3-9da4585ddb15
+		displayFolder: Page 3 - Road User Severity Trend
+
+	measure 'Cyclist Fatal Share %' = DIVIDE(SUM(v_road_user_involvement[cyclist_fatal_collision_count]), SUM(v_road_user_involvement[cyclist_collision_count]))
+		formatString: 0.0%
+		lineageTag: c4708316-ab72-4e5b-8cdc-cbdd3d27516d
+		displayFolder: Page 3 - Road User Severity Trend
+
+	measure 'Motorcyclist Fatal Share %' = DIVIDE(SUM(v_road_user_involvement[motorcyclist_fatal_collision_count]), SUM(v_road_user_involvement[motorcyclist_collision_count]))
+		formatString: 0.0%
+		lineageTag: 9f6ee500-9a8a-4650-b331-73d1ec82829a
+		displayFolder: Page 3 - Road User Severity Trend
+
+	/// docs/POWER_BI_SPEC.md S3.2. Row-context measure for the neighbourhood ranking table --
+	/// MAX() over the two rank columns works correctly per-row inside a table/matrix visual
+	/// (each row is its own filter context), surfacing exactly the West Humber-Clairville-style
+	/// contrast (#1 raw -> #120 density = a swing of 119) as a sortable column.
+	measure 'Neighbourhood Rank Swing' = ABS(MAX(v_neighbourhood_ksi[rank_by_raw_count]) - MAX(v_neighbourhood_ksi[rank_by_density]))
+		formatString: #,0
+		lineageTag: f0978ad1-e9b4-4730-9278-902585f1cceb
+		displayFolder: Page 2 - Where
+
+	/// docs/POWER_BI_SPEC.md S8. Page 4's "data as of" panel -- the most recent load per
+	/// dataset, so a viewer can see exactly how current the underlying data is without leaving
+	/// the dashboard.
+	measure 'Data As Of (Most Recent Load)' = FORMAT(MAX(ingestion_log[downloaded_at]), "yyyy-mm-dd hh:mm") & " UTC"
+		lineageTag: 7f492f47-e98f-4c6c-a5e4-4025d76ae940
+		displayFolder: Page 4 - Methodology
+
+	partition _Measures = calculated
+		mode: import
+		source = ```
+				{1}
+				```
+
+	annotation PBI_ResultType = Table
+
+	column Value1
+		isHidden
+		formatString: 0
+		lineageTag: 6c9f5b34-1e75-4c8b-9a2b-2f3a4f9d1e07
+		summarizeBy: none
+		isDataTypeInferred
+		dataType: int64

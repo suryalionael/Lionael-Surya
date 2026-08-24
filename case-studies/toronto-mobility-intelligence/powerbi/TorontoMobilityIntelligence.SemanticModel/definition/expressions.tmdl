@@ -1,0 +1,17 @@
+/// PostgreSQL host:port. Defaults to this project's local dev value (docker-compose.yml /
+/// .env POSTGRES_PORT=5433). Edit via Transform Data > Manage Parameters in Power BI Desktop
+/// -- no M code changes needed to point at a different environment.
+expression PGServer = "localhost:5433" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: b7f5d26b-604b-4671-9886-1dbf88be709f
+
+	annotation PBI_ResultType = Text
+
+	annotation PBI_NavigationStepName = Navigation
+
+/// PostgreSQL database name (docker-compose.yml / .env POSTGRES_DB=toronto_mobility).
+expression PGDatabase = "toronto_mobility" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 27a44143-e9c0-4322-bdf2-192a9ce68352
+
+	annotation PBI_ResultType = Text
+
+	annotation PBI_NavigationStepName = Navigation

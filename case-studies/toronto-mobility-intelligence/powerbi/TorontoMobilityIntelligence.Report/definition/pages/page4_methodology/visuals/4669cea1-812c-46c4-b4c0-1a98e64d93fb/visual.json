@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "4669cea1-812c-46c4-b4c0-1a98e64d93fb",
+  "position": {
+    "x": 20,
+    "y": 555,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "4. Spatial Matching Methodology",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Collisions are matched to the nearest signalized intersection within a 20-meter radius, a threshold derived empirically from the real distance distribution between 7,586 geocoded collisions and 2,550 signals (docs/DATA_MODEL.md S2) -- not an arbitrary choice. Approximately 44.7% of KSI collisions match; the rest are legitimately midblock or unsignalized.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

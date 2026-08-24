@@ -1,0 +1,161 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "780295a9-ce18-4837-9d87-6a27c2cbb3fe",
+  "position": {
+    "x": 20,
+    "y": 725,
+    "z": 0,
+    "width": 1240,
+    "height": 260,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_exposure"
+                    }
+                  },
+                  "Property": "main_street"
+                }
+              },
+              "queryRef": "v_intersection_exposure.main_street",
+              "nativeQueryRef": "main_street"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_exposure"
+                    }
+                  },
+                  "Property": "side1_street"
+                }
+              },
+              "queryRef": "v_intersection_exposure.side1_street",
+              "nativeQueryRef": "side1_street"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_exposure"
+                    }
+                  },
+                  "Property": "matched_ksi_collisions_2021_2025"
+                }
+              },
+              "queryRef": "v_intersection_exposure.matched_ksi_collisions_2021_2025",
+              "nativeQueryRef": "matched_ksi_collisions_2021_2025"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_exposure"
+                    }
+                  },
+                  "Property": "traffic_count_date"
+                }
+              },
+              "queryRef": "v_intersection_exposure.traffic_count_date",
+              "nativeQueryRef": "traffic_count_date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_exposure"
+                    }
+                  },
+                  "Property": "count_recency_years"
+                }
+              },
+              "queryRef": "v_intersection_exposure.count_recency_years",
+              "nativeQueryRef": "count_recency_years"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_exposure"
+                    }
+                  },
+                  "Property": "total_movements"
+                }
+              },
+              "queryRef": "v_intersection_exposure.total_movements",
+              "nativeQueryRef": "total_movements"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_exposure"
+                    }
+                  },
+                  "Property": "collisions_per_10k_movements"
+                }
+              },
+              "queryRef": "v_intersection_exposure.collisions_per_10k_movements",
+              "nativeQueryRef": "collisions_per_10k_movements"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "v_intersection_exposure"
+                  }
+                },
+                "Property": "collisions_per_10k_movements"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Relative Exposure -- Collisions per 10,000 Movements (recency-reliable intersections only)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

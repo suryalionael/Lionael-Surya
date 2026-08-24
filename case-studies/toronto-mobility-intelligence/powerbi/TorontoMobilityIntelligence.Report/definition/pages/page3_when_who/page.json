@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
+  "name": "page3_when_who",
+  "displayName": "3. When & Who",
+  "width": 1280,
+  "height": 1010,
+  "displayOption": "FitToPage"
+}

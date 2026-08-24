@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "404a6605-e19e-4260-bcee-002cc126d45b",
+  "position": {
+    "x": 20,
+    "y": 450,
+    "z": 0,
+    "width": 610,
+    "height": 260,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_collision_monthly_pattern"
+                    }
+                  },
+                  "Property": "month_name"
+                }
+              },
+              "queryRef": "v_collision_monthly_pattern.month_name",
+              "nativeQueryRef": "month_name"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_collision_monthly_pattern"
+                    }
+                  },
+                  "Property": "ksi_collision_count"
+                }
+              },
+              "queryRef": "v_collision_monthly_pattern.ksi_collision_count",
+              "nativeQueryRef": "ksi_collision_count"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Monthly Pattern (all years combined)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+/// KSI collision count and fatal share by season (4 rows), with winter-road-condition coincidence share. See sql/analytics/01_temporal/050_v_collision_seasonal_pattern.sql.
+table v_collision_seasonal_pattern
+	lineageTag: faa0880a-754d-4f06-948f-d7dbc34809fc
+
+	column season
+		dataType: string
+		sourceColumn: season
+		summarizeBy: none
+		lineageTag: b972b224-7686-448d-a1f8-c52015c012e5
+
+	column ksi_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ksi_collision_count
+		summarizeBy: sum
+		lineageTag: 722f1872-7075-490a-b68b-477e07d5a49e
+
+	column fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: fatal_collision_count
+		summarizeBy: sum
+		lineageTag: 86198e14-dac8-402f-868c-27a325b03d50
+
+	column fatal_share_pct
+		dataType: double
+		formatString: 0.00
+		sourceColumn: fatal_share_pct
+		summarizeBy: none
+		lineageTag: 4dbadf2f-1085-446b-a386-32c48a5caf0e
+
+	column winter_condition_share_pct
+		dataType: double
+		formatString: 0.00
+		sourceColumn: winter_condition_share_pct
+		summarizeBy: none
+		lineageTag: a97adeb2-e56e-4ceb-9f2b-76605ef6e240
+
+	partition v_collision_seasonal_pattern = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="v_collision_seasonal_pattern"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

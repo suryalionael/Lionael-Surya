@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "2012b9b0-efc1-463f-aeee-4bb9a78f616d",
+  "position": {
+    "x": 20,
+    "y": 140,
+    "z": 0,
+    "width": 1240,
+    "height": 30,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Hour x Weekday collision count (168 cells, all years combined) -- convert to a Matrix visual with conditional-formatted background color for the true heatmap; see BUILD_GUIDE.md.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "9pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

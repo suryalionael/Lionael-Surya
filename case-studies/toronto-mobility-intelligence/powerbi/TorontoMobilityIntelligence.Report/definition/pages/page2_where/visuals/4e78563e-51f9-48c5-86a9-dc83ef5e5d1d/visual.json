@@ -1,0 +1,147 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "4e78563e-51f9-48c5-86a9-dc83ef5e5d1d",
+  "position": {
+    "x": 20,
+    "y": 375,
+    "z": 0,
+    "width": 610,
+    "height": 300,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_risk"
+                    }
+                  },
+                  "Property": "main_street"
+                }
+              },
+              "queryRef": "v_intersection_risk.main_street",
+              "nativeQueryRef": "main_street"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_risk"
+                    }
+                  },
+                  "Property": "side1_street"
+                }
+              },
+              "queryRef": "v_intersection_risk.side1_street",
+              "nativeQueryRef": "side1_street"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_risk"
+                    }
+                  },
+                  "Property": "matched_ksi_collision_count"
+                }
+              },
+              "queryRef": "v_intersection_risk.matched_ksi_collision_count",
+              "nativeQueryRef": "matched_ksi_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_risk"
+                    }
+                  },
+                  "Property": "fatal_collision_count"
+                }
+              },
+              "queryRef": "v_intersection_risk.fatal_collision_count",
+              "nativeQueryRef": "fatal_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_risk"
+                    }
+                  },
+                  "Property": "pedestrian_involved_count"
+                }
+              },
+              "queryRef": "v_intersection_risk.pedestrian_involved_count",
+              "nativeQueryRef": "pedestrian_involved_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_intersection_risk"
+                    }
+                  },
+                  "Property": "cyclist_involved_count"
+                }
+              },
+              "queryRef": "v_intersection_risk.cyclist_involved_count",
+              "nativeQueryRef": "cyclist_involved_count"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "v_intersection_risk"
+                  }
+                },
+                "Property": "matched_ksi_collision_count"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Intersection Hotspots -- Highest OBSERVED Count (matched collisions only, ~44.7% of citywide KSI)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

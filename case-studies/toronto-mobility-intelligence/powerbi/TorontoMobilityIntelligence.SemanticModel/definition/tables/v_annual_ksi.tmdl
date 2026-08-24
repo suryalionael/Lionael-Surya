@@ -1,0 +1,56 @@
+/// Annual KSI collision trend, fatal share, year-over-year change. Grain: one row per year 2006-2026. See sql/analytics/01_temporal/010_annual_ksi_trend.sql.
+table v_annual_ksi
+	lineageTag: 0a20dddf-0d92-42fe-8bd5-08b0e9f15342
+
+	column year
+		isKey
+		dataType: int64
+		formatString: 0
+		sourceColumn: year
+		summarizeBy: none
+		lineageTag: e9332042-2b8d-42e5-8502-4439776b2047
+
+	column ksi_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ksi_collision_count
+		summarizeBy: sum
+		lineageTag: aab1b9f8-aa62-428e-9baa-ed50828f4c34
+
+	column fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: fatal_collision_count
+		summarizeBy: sum
+		lineageTag: 0a69aa59-5633-4267-9cf3-0348b77b1f20
+
+	column fatal_share_pct
+		dataType: double
+		formatString: 0.00
+		sourceColumn: fatal_share_pct
+		summarizeBy: none
+		lineageTag: a60fff68-ad3e-487a-989c-b0b5795e2b13
+
+	column yoy_ksi_change_pct
+		dataType: double
+		formatString: 0.00
+		sourceColumn: yoy_ksi_change_pct
+		summarizeBy: none
+		lineageTag: be27e1dd-1383-448d-9edd-ea63c5beaeb4
+
+	column is_current_year_partial
+		dataType: boolean
+		sourceColumn: is_current_year_partial
+		summarizeBy: none
+		lineageTag: 4409cf7c-691c-4f21-9db5-147232a44cb6
+
+	partition v_annual_ksi = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="v_annual_ksi"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

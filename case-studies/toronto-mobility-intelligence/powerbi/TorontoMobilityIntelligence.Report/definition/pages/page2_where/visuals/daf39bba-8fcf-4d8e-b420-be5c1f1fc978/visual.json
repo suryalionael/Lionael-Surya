@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "daf39bba-8fcf-4d8e-b420-be5c1f1fc978",
+  "position": {
+    "x": 20,
+    "y": 690,
+    "z": 0,
+    "width": 1240,
+    "height": 30,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "CROSS-SECTIONAL SNAPSHOT, NOT a historical trend. Numerator spans 2021-2025; denominator is a single day's traffic count (see count_recency_years). Never describe this as 'the 2023 rate.'",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "9pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

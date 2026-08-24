@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "a6ab2f52-dcdd-47be-855f-9a30bb94deaa",
+  "position": {
+    "x": 20,
+    "y": 710,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "5. Traffic Exposure Methodology",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "The Page 2 relative-exposure metric is a CROSS-SECTIONAL snapshot: recent collisions (2021-2025) divided by a single day's most recent traffic count. It is explicitly NOT a historical rate, because TMC traffic counts are not temporally aligned with collision history (docs/DATA_MODEL.md S1) -- a same-year volume denominator does not exist for most intersection-years.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

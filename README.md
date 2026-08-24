@@ -103,6 +103,7 @@ Lionael-Surya/
 | Project | Category | Business Problem | Status |
 |---|---|---|---|
 | 🍚 [Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/) ([live demo](https://nutrition-analytics-indonesia.streamlit.app)) | Case Study | Prioritizing 38 provinces for child-nutrition intervention funding using only real government data | ✅ Shipped |
+| 🚦 [Toronto Mobility Intelligence](case-studies/toronto-mobility-intelligence/) | Case Study | Where Toronto's collision-safety risk is actually concentrated, using official Open Data, PostGIS spatial matching, and Power BI | ✅ Shipped |
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) ([source](https://github.com/suryalionael/retail-sales-etl-pipeline)) | Data Engineering | Automating multi-store sales ingestion into a warehouse | ✅ Shipped |
@@ -191,9 +192,10 @@ Built and reviewed in this order — each project is designed to be demoable on 
 8. **[Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/)** — shipped churn ML system with calibration, SHAP explanations, ROI thresholding, FastAPI/Streamlit serving, Docker, tests, and drift monitoring.
 9. **[CI/CD for Data Pipelines](cloud-devops/cicd-data-pipeline-deployment/)** — signals engineering maturity beyond notebooks.
 10. **[RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/)** — differentiator; most student portfolios don't have a working LLM system.
-11. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
+11. **[Toronto Mobility Intelligence](case-studies/toronto-mobility-intelligence/)** — full PostgreSQL + PostGIS data platform on real government collision data; reproducible ETL, empirically-derived spatial matching, 91 passing tests, and a Power BI dashboard consuming a governed SQL analytics layer end-to-end.
+12. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
 
-**Why this order:** Data Engineering / Analytics Engineering roles get the most co-op postings, so projects 1–7 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped. ML and AI projects (8, 10) differentiate me from other applicants. The capstone (11) is saved for last because it's only convincing once the individual pieces already exist.
+**Why this order:** Data Engineering / Analytics Engineering roles get the most co-op postings, so projects 1–7 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped. ML and AI projects (8, 10) differentiate me from other applicants. The capstone (12) is saved for last because it's only convincing once the individual pieces already exist.
 
 ---
 
@@ -217,6 +219,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 | CI/CD for Data Pipelines | GitHub Actions, Docker, AWS ECR/ECS, Terraform |
 | Serverless ETL (AWS Lambda) | AWS Lambda, S3, Glue, Athena, boto3 |
 | Flood Risk Datathon | Python, pandas, scikit-learn, geospatial libraries, matplotlib/seaborn |
+| Toronto Mobility Intelligence | PostgreSQL, PostGIS, SQL, Python, Docker, Power BI, pytest |
 | End-to-End Retail Data Platform | Full stack above, integrated |
 
 ---

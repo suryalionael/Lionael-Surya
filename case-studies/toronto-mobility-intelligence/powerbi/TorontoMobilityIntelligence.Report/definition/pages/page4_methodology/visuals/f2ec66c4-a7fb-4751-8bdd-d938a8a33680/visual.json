@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "f2ec66c4-a7fb-4751-8bdd-d938a8a33680",
+  "position": {
+    "x": 20,
+    "y": 400,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "3. Database Architecture",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Power BI -> PostgreSQL analytics schema views -> clean schema -> staging schema -> Toronto Open Data (CKAN API). Power BI never connects to raw CSV files or the staging/clean schemas directly -- see docs/POWER_BI_SPEC.md S1.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

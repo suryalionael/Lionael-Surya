@@ -1,0 +1,74 @@
+/// Cross-sectional collisions-per-10,000-movements using each intersection's single most recent traffic count. NOT a historical rate. Grain: one row per intersection with volume data. See sql/analytics/06_exposure/010_intersection_relative_exposure.sql.
+table v_intersection_exposure
+	lineageTag: 5f30cb6d-93a2-4637-8430-cc0365720126
+
+	column px
+		isKey
+		dataType: int64
+		formatString: 0
+		sourceColumn: px
+		summarizeBy: none
+		lineageTag: 24476ac6-d113-4090-8fe5-7e7bc7dd6957
+
+	column main_street
+		dataType: string
+		sourceColumn: main_street
+		summarizeBy: none
+		lineageTag: fef3c299-a525-4a67-89a6-7febe53dd3ed
+
+	column side1_street
+		dataType: string
+		sourceColumn: side1_street
+		summarizeBy: none
+		lineageTag: 8da371c3-21ea-4f89-83e8-3d9abd38b69a
+
+	column matched_ksi_collisions_2021_2025
+		dataType: int64
+		formatString: #,0
+		sourceColumn: matched_ksi_collisions_2021_2025
+		summarizeBy: sum
+		lineageTag: c8ed30d6-0db2-4905-98dc-a907532b7668
+
+	column traffic_count_date
+		dataType: dateTime
+		formatString: General Date
+		sourceColumn: traffic_count_date
+		summarizeBy: none
+		lineageTag: 4c987905-ec4d-4328-a0ea-616e7ff8df5b
+
+	column count_recency_years
+		dataType: int64
+		formatString: 0
+		sourceColumn: count_recency_years
+		summarizeBy: none
+		lineageTag: fcc76b5c-90bb-4276-9b5b-0094aaadf14c
+
+	column total_movements
+		dataType: int64
+		formatString: #,0
+		sourceColumn: total_movements
+		summarizeBy: sum
+		lineageTag: e0fd30b3-471a-4f28-a3f2-0e26218273ba
+
+	column collisions_per_10k_movements
+		dataType: double
+		sourceColumn: collisions_per_10k_movements
+		summarizeBy: none
+		lineageTag: 2f0fd7fe-bfcc-4821-8a7d-8342794f39b3
+
+	column recency_reliable
+		dataType: boolean
+		sourceColumn: recency_reliable
+		summarizeBy: none
+		lineageTag: 469e2457-b051-4c19-a134-017379ff68ea
+
+	partition v_intersection_exposure = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="v_intersection_exposure"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

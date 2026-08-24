@@ -1,0 +1,92 @@
+/// Pedestrian/cyclist/motorcyclist collision-involvement and person-level counts by year, with per-type fatal counts. Grain: one row per year. See sql/analytics/03_road_users/010_road_user_involvement_trend.sql.
+table v_road_user_involvement
+	lineageTag: 41a84781-0561-4c5a-9761-37f92db3a646
+
+	column year
+		isKey
+		dataType: int64
+		formatString: 0
+		sourceColumn: year
+		summarizeBy: none
+		lineageTag: c4230551-9aee-4a1e-b9c2-90b5c91bc1d9
+
+	column ped_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ped_collision_count
+		summarizeBy: sum
+		lineageTag: c8ca0618-e618-4073-9e89-98d0cafe4f6c
+
+	column ped_person_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ped_person_count
+		summarizeBy: sum
+		lineageTag: 2272bb99-adf9-4c9c-a346-cc57b8aec60d
+
+	column cyclist_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: cyclist_collision_count
+		summarizeBy: sum
+		lineageTag: a78c60c7-4abf-4aef-a55b-3c7d7eccb57d
+
+	column cyclist_person_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: cyclist_person_count
+		summarizeBy: sum
+		lineageTag: a05df908-a260-4df9-baeb-476956c13255
+
+	column motorcyclist_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: motorcyclist_collision_count
+		summarizeBy: sum
+		lineageTag: 27aa3e64-8bcb-480a-b96c-96a60baa5638
+
+	column motorcyclist_person_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: motorcyclist_person_count
+		summarizeBy: sum
+		lineageTag: 0b39aee5-d34e-45d1-9af0-f2535a063e53
+
+	column ksi_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ksi_collision_count
+		summarizeBy: sum
+		lineageTag: b80d3f82-efca-4a5f-92b8-272bd687fbd3
+
+	column ped_fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: ped_fatal_collision_count
+		summarizeBy: sum
+		lineageTag: 762e108c-04db-4544-abd9-53307958bcb1
+
+	column cyclist_fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: cyclist_fatal_collision_count
+		summarizeBy: sum
+		lineageTag: b5936f4a-8c4b-4277-add7-212947933580
+
+	column motorcyclist_fatal_collision_count
+		dataType: int64
+		formatString: #,0
+		sourceColumn: motorcyclist_fatal_collision_count
+		summarizeBy: sum
+		lineageTag: 7ac3564b-313d-438f-bc22-efe85c88904b
+
+	partition v_road_user_involvement = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="v_road_user_involvement"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

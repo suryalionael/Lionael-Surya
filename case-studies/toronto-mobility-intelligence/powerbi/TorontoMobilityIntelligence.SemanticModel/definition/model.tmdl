@@ -1,0 +1,26 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+
+annotation PBI_QueryOrder = ["v_annual_ksi","v_road_user_involvement","v_neighbourhood_ksi","v_intersection_risk","v_intersection_exposure","v_collision_hour_weekday","v_collision_seasonal_pattern","v_collision_monthly_pattern","v_severity_by_road_user_type","bridge_collision_intersection","dim_date","ingestion_log"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table v_annual_ksi
+ref table v_road_user_involvement
+ref table v_neighbourhood_ksi
+ref table v_intersection_risk
+ref table v_intersection_exposure
+ref table v_collision_hour_weekday
+ref table v_collision_seasonal_pattern
+ref table v_collision_monthly_pattern
+ref table v_severity_by_road_user_type
+ref table bridge_collision_intersection
+ref table dim_date
+ref table ingestion_log
+ref table _Measures
+
+ref expression PGServer
+ref expression PGDatabase

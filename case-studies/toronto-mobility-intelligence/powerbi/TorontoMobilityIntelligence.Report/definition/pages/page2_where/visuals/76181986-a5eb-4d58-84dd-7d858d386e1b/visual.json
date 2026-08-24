@@ -1,0 +1,147 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "76181986-a5eb-4d58-84dd-7d858d386e1b",
+  "position": {
+    "x": 650,
+    "y": 60,
+    "z": 0,
+    "width": 610,
+    "height": 300,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "area_name"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.area_name",
+              "nativeQueryRef": "area_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "ksi_collision_count"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.ksi_collision_count",
+              "nativeQueryRef": "ksi_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "rank_by_raw_count"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.rank_by_raw_count",
+              "nativeQueryRef": "rank_by_raw_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "ksi_density_per_km2"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.ksi_density_per_km2",
+              "nativeQueryRef": "ksi_density_per_km2"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "rank_by_density"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.rank_by_density",
+              "nativeQueryRef": "rank_by_density"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "area_km2"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.area_km2",
+              "nativeQueryRef": "area_km2"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "v_neighbourhood_ksi"
+                  }
+                },
+                "Property": "ksi_collision_count"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Raw Count vs. Density Ranking (sort by any column -- e.g. West Humber-Clairville: #1 raw, #120 density)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

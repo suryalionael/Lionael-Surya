@@ -1,0 +1,833 @@
+<meta charset="utf-8">
+<title>Toronto Mobility Intelligence — Dashboard Prototype</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --surface-raised: #ffffff;
+    --ink: #0b0b0b;
+    --ink-secondary: #52514e;
+    --ink-muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+
+    --accent: #2a78d6;
+    --accent-soft: #cde2fb;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --series-4: #eda100;
+
+    --good: #0ca30c;
+    --warning: #b4691f;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+
+    --seq-100: #cde2fb; --seq-200: #9ec5f4; --seq-300: #6da7ec; --seq-400: #3987e5;
+    --seq-500: #256abf; --seq-600: #184f95; --seq-700: #0d366b;
+
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(11,11,11,0.04), 0 1px 8px rgba(11,11,11,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --surface-raised: #222221;
+      --ink: #ffffff;
+      --ink-secondary: #c3c2b7;
+      --ink-muted: #898781;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --border: rgba(255,255,255,0.10);
+      --accent: #3987e5;
+      --accent-soft: #184f95;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --series-4: #c98500;
+      --good: #0ca30c;
+      --warning: #fab219;
+      --serious: #ec835a;
+      --critical: #e66767;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 8px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-raised: #222221;
+    --ink: #ffffff;
+    --ink-secondary: #c3c2b7;
+    --ink-muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255,255,255,0.10);
+    --accent: #3987e5;
+    --accent-soft: #184f95;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #e66767;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 8px rgba(0,0,0,0.3);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100%; }
+  a { color: var(--accent); }
+
+  .app { display: flex; flex-direction: column; min-height: 100vh; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+  }
+  .topbar-inner {
+    max-width: 1320px; margin: 0 auto;
+    display: flex; align-items: center; gap: 24px;
+    padding: 14px 0 0;
+    flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: baseline; gap: 10px; margin-right: auto; }
+  .brand-mark { font-size: 20px; line-height: 1; }
+  .brand-title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand-sub { font-size: 12px; color: var(--ink-muted); }
+  .data-chip {
+    font-size: 11.5px; color: var(--ink-secondary);
+    background: var(--page); border: 1px solid var(--border);
+    border-radius: 999px; padding: 5px 11px;
+    display: inline-flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+  }
+  .data-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+
+  .tabs { display: flex; gap: 4px; max-width: 1320px; margin: 10px auto 0; padding: 0 0; }
+  .tab {
+    appearance: none; border: none; background: none; cursor: pointer;
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-secondary);
+    padding: 10px 16px; border-bottom: 2px solid transparent;
+    border-radius: 6px 6px 0 0;
+  }
+  .tab:hover { color: var(--ink); background: var(--page); }
+  .tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  main { flex: 1; }
+  .page { max-width: 1320px; margin: 0 auto; padding: 22px 20px 60px; }
+  .page[hidden] { display: none; }
+
+  .page-lede { font-size: 13px; color: var(--ink-secondary); margin: 0 0 18px; max-width: 68ch; }
+  .page-lede strong { color: var(--ink); }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .kpi-card {
+    background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px; box-shadow: var(--shadow);
+  }
+  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); font-weight: 600; margin-bottom: 6px; }
+  .kpi-value { font-size: 27px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .kpi-value.critical { color: var(--critical); }
+  .kpi-note { font-size: 11px; color: var(--ink-muted); margin-top: 4px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 16px 18px; margin-bottom: 14px;
+  }
+  .panel-title { font-size: 13px; font-weight: 700; margin: 0 0 2px; }
+  .panel-caption { font-size: 11.5px; color: var(--ink-muted); margin: 0 0 12px; max-width: 80ch; }
+  .panel-caption.warn {
+    color: var(--warning); font-weight: 600; background: color-mix(in srgb, var(--warning) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent);
+    border-radius: 6px; padding: 7px 10px; display: flex; gap: 6px; align-items: flex-start;
+  }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-secondary); margin: 6px 0 2px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  svg.chart { width: 100%; height: auto; overflow: visible; font-family: inherit; }
+  .axis-label { font-size: 10px; fill: var(--ink-muted); }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .baseline { stroke: var(--axis); stroke-width: 1; }
+
+  .tooltip {
+    position: fixed; pointer-events: none; z-index: 100;
+    background: var(--ink); color: var(--page);
+    font-size: 11.5px; padding: 7px 10px; border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    max-width: 240px; opacity: 0; transition: opacity 0.08s ease;
+    line-height: 1.4;
+  }
+  .tooltip.show { opacity: 1; }
+  .tooltip b { font-weight: 700; }
+
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.data-table th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--ink-muted); font-weight: 600; padding: 6px 10px; border-bottom: 1px solid var(--grid);
+    cursor: pointer; white-space: nowrap; user-select: none;
+  }
+  table.data-table th:hover { color: var(--ink); }
+  table.data-table th.num, table.data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.data-table td { padding: 6px 10px; border-bottom: 1px solid var(--grid); color: var(--ink-secondary); }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table tr:hover td { background: var(--page); color: var(--ink); }
+  .table-wrap { overflow-x: auto; }
+  .rank-badge {
+    display: inline-block; min-width: 22px; text-align: center; font-size: 11px; font-weight: 700;
+    color: var(--ink-secondary); background: var(--page); border-radius: 5px; padding: 1px 5px;
+  }
+
+  .heatmap-cell { cursor: default; }
+  .heatmap-row-label { font-size: 10.5px; fill: var(--ink-secondary); }
+  .heatmap-col-label { font-size: 9.5px; fill: var(--ink-muted); }
+
+  .meth-section { margin-bottom: 22px; }
+  .meth-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 6px; background: var(--accent-soft); color: var(--accent);
+    font-size: 12px; font-weight: 700; margin-right: 8px; flex-shrink: 0;
+  }
+  .meth-heading { display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 700; margin: 0 0 6px; }
+  .meth-body { font-size: 13px; line-height: 1.6; color: var(--ink-secondary); margin: 0; max-width: 82ch; }
+  .meth-body code { background: var(--page); border-radius: 4px; padding: 1px 5px; font-size: 12px; }
+  .meth-warning-box {
+    background: color-mix(in srgb, var(--critical) 8%, var(--surface-raised));
+    border: 1px solid color-mix(in srgb, var(--critical) 35%, transparent);
+    border-radius: var(--radius); padding: 14px 16px; margin-top: 18px;
+  }
+  .meth-warning-box .meth-heading { color: var(--critical); }
+  .meth-warning-box ul { margin: 6px 0 0; padding-left: 20px; font-size: 13px; color: var(--ink-secondary); line-height: 1.7; }
+
+  .footer-note { font-size: 11px; color: var(--ink-muted); text-align: center; padding: 24px 20px 40px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">🚦</span>
+        <span class="brand-title">Toronto Mobility Intelligence</span>
+        <span class="brand-sub">Power BI dashboard prototype — Phase 5</span>
+      </div>
+      <span class="data-chip"><span class="dot"></span> Live data snapshot, 2026-08-23</span>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Dashboard pages">
+      <button class="tab" role="tab" data-page="page1" aria-selected="true">1 · Overview</button>
+      <button class="tab" role="tab" data-page="page2" aria-selected="false">2 · Where</button>
+      <button class="tab" role="tab" data-page="page3" aria-selected="false">3 · When &amp; Who</button>
+      <button class="tab" role="tab" data-page="page4" aria-selected="false">4 · Methodology</button>
+    </div>
+  </div>
+
+  <main>
+    <section class="page" id="page1"></section>
+    <section class="page" id="page2" hidden></section>
+    <section class="page" id="page3" hidden></section>
+    <section class="page" id="page4" hidden></section>
+  </main>
+
+  <div class="footer-note">
+    Prototype for design review only — not the production Power BI report. Data sourced live from the project's PostgreSQL <code>analytics</code> schema on 2026-08-23. See <code>docs/POWER_BI_SPEC.md</code> and <code>docs/DASHBOARD_STORY.md</code>.
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script id="dashboard-data" type="application/json">{"v_annual_ksi":[{"year":2006,"ksi_collision_count":481,"fatal_collision_count":57,"fatal_share_pct":11.85,"yoy_ksi_change_pct":null,"is_current_year_partial":false},{"year":2007,"ksi_collision_count":453,"fatal_collision_count":47,"fatal_share_pct":10.38,"yoy_ksi_change_pct":-5.82,"is_current_year_partial":false},{"year":2008,"ksi_collision_count":417,"fatal_collision_count":51,"fatal_share_pct":12.23,"yoy_ksi_change_pct":-7.95,"is_current_year_partial":false},{"year":2009,"ksi_collision_count":438,"fatal_collision_count":45,"fatal_share_pct":10.27,"yoy_ksi_change_pct":5.04,"is_current_year_partial":false},{"year":2010,"ksi_collision_count":400,"fatal_collision_count":42,"fatal_share_pct":10.5,"yoy_ksi_change_pct":-8.68,"is_current_year_partial":false},{"year":2011,"ksi_collision_count":400,"fatal_collision_count":35,"fatal_share_pct":8.75,"yoy_ksi_change_pct":0.0,"is_current_year_partial":false},{"year":2012,"ksi_collision_count":453,"fatal_collision_count":44,"fatal_share_pct":9.71,"yoy_ksi_change_pct":13.25,"is_current_year_partial":false},{"year":2013,"ksi_collision_count":431,"fatal_collision_count":63,"fatal_share_pct":14.62,"yoy_ksi_change_pct":-4.86,"is_current_year_partial":false},{"year":2014,"ksi_collision_count":350,"fatal_collision_count":51,"fatal_share_pct":14.57,"yoy_ksi_change_pct":-18.79,"is_current_year_partial":false},{"year":2015,"ksi_collision_count":350,"fatal_collision_count":65,"fatal_share_pct":18.57,"yoy_ksi_change_pct":0.0,"is_current_year_partial":false},{"year":2016,"ksi_collision_count":386,"fatal_collision_count":76,"fatal_share_pct":19.69,"yoy_ksi_change_pct":10.29,"is_current_year_partial":false},{"year":2017,"ksi_collision_count":392,"fatal_collision_count":62,"fatal_share_pct":15.82,"yoy_ksi_change_pct":1.55,"is_current_year_partial":false},{"year":2018,"ksi_collision_count":422,"fatal_collision_count":66,"fatal_share_pct":15.64,"yoy_ksi_change_pct":7.65,"is_current_year_partial":false},{"year":2019,"ksi_collision_count":366,"fatal_collision_count":63,"fatal_share_pct":17.21,"yoy_ksi_change_pct":-13.27,"is_current_year_partial":false},{"year":2020,"ksi_collision_count":269,"fatal_collision_count":40,"fatal_share_pct":14.87,"yoy_ksi_change_pct":-26.5,"is_current_year_partial":false},{"year":2021,"ksi_collision_count":270,"fatal_collision_count":58,"fatal_share_pct":21.48,"yoy_ksi_change_pct":0.37,"is_current_year_partial":false},{"year":2022,"ksi_collision_count":290,"fatal_collision_count":48,"fatal_share_pct":16.55,"yoy_ksi_change_pct":7.41,"is_current_year_partial":false},{"year":2023,"ksi_collision_count":332,"fatal_collision_count":43,"fatal_share_pct":12.95,"yoy_ksi_change_pct":14.48,"is_current_year_partial":false},{"year":2024,"ksi_collision_count":296,"fatal_collision_count":46,"fatal_share_pct":15.54,"yoy_ksi_change_pct":-10.84,"is_current_year_partial":false},{"year":2025,"ksi_collision_count":255,"fatal_collision_count":34,"fatal_share_pct":13.33,"yoy_ksi_change_pct":-13.85,"is_current_year_partial":false},{"year":2026,"ksi_collision_count":127,"fatal_collision_count":25,"fatal_share_pct":19.69,"yoy_ksi_change_pct":-50.2,"is_current_year_partial":true}],"v_road_user_involvement":[{"year":2006,"ped_collision_count":213,"ped_person_count":228,"cyclist_collision_count":54,"cyclist_person_count":54,"motorcyclist_collision_count":33,"motorcyclist_person_count":35,"ksi_collision_count":481,"ped_fatal_collision_count":30,"cyclist_fatal_collision_count":3,"motorcyclist_fatal_collision_count":6},{"year":2007,"ped_collision_count":186,"ped_person_count":202,"cyclist_collision_count":40,"cyclist_person_count":40,"motorcyclist_collision_count":25,"motorcyclist_person_count":26,"ksi_collision_count":453,"ped_fatal_collision_count":22,"cyclist_fatal_collision_count":3,"motorcyclist_fatal_collision_count":4},{"year":2008,"ped_collision_count":183,"ped_person_count":197,"cyclist_collision_count":41,"cyclist_person_count":41,"motorcyclist_collision_count":29,"motorcyclist_person_count":31,"ksi_collision_count":417,"ped_fatal_collision_count":26,"cyclist_fatal_collision_count":2,"motorcyclist_fatal_collision_count":3},{"year":2009,"ped_collision_count":201,"ped_person_count":212,"cyclist_collision_count":43,"cyclist_person_count":43,"motorcyclist_collision_count":37,"motorcyclist_person_count":37,"ksi_collision_count":438,"ped_fatal_collision_count":31,"cyclist_fatal_collision_count":1,"motorcyclist_fatal_collision_count":1},{"year":2010,"ped_collision_count":181,"ped_person_count":197,"cyclist_collision_count":42,"cyclist_person_count":42,"motorcyclist_collision_count":41,"motorcyclist_person_count":43,"ksi_collision_count":400,"ped_fatal_collision_count":20,"cyclist_fatal_collision_count":2,"motorcyclist_fatal_collision_count":1},{"year":2011,"ped_collision_count":186,"ped_person_count":195,"cyclist_collision_count":52,"cyclist_person_count":53,"motorcyclist_collision_count":39,"motorcyclist_person_count":41,"ksi_collision_count":400,"ped_fatal_collision_count":18,"cyclist_fatal_collision_count":2,"motorcyclist_fatal_collision_count":2},{"year":2012,"ped_collision_count":201,"ped_person_count":208,"cyclist_collision_count":72,"cyclist_person_count":72,"motorcyclist_collision_count":50,"motorcyclist_person_count":51,"ksi_collision_count":453,"ped_fatal_collision_count":24,"cyclist_fatal_collision_count":3,"motorcyclist_fatal_collision_count":6},{"year":2013,"ped_collision_count":205,"ped_person_count":228,"cyclist_collision_count":66,"cyclist_person_count":66,"motorcyclist_collision_count":46,"motorcyclist_person_count":52,"ksi_collision_count":431,"ped_fatal_collision_count":42,"cyclist_fatal_collision_count":4,"motorcyclist_fatal_collision_count":7},{"year":2014,"ped_collision_count":146,"ped_person_count":153,"cyclist_collision_count":45,"cyclist_person_count":45,"motorcyclist_collision_count":40,"motorcyclist_person_count":41,"ksi_collision_count":350,"ped_fatal_collision_count":32,"cyclist_fatal_collision_count":3,"motorcyclist_fatal_collision_count":3},{"year":2015,"ped_collision_count":143,"ped_person_count":161,"cyclist_collision_count":51,"cyclist_person_count":51,"motorcyclist_collision_count":39,"motorcyclist_person_count":44,"ksi_collision_count":350,"ped_fatal_collision_count":39,"cyclist_fatal_collision_count":4,"motorcyclist_fatal_collision_count":7},{"year":2016,"ped_collision_count":171,"ped_person_count":185,"cyclist_collision_count":41,"cyclist_person_count":41,"motorcyclist_collision_count":55,"motorcyclist_person_count":58,"ksi_collision_count":386,"ped_fatal_collision_count":44,"cyclist_fatal_collision_count":1,"motorcyclist_fatal_collision_count":6},{"year":2017,"ped_collision_count":167,"ped_person_count":182,"cyclist_collision_count":55,"cyclist_person_count":56,"motorcyclist_collision_count":46,"motorcyclist_person_count":51,"ksi_collision_count":392,"ped_fatal_collision_count":36,"cyclist_fatal_collision_count":4,"motorcyclist_fatal_collision_count":4},{"year":2018,"ped_collision_count":208,"ped_person_count":218,"cyclist_collision_count":44,"cyclist_person_count":46,"motorcyclist_collision_count":51,"motorcyclist_person_count":55,"ksi_collision_count":422,"ped_fatal_collision_count":41,"cyclist_fatal_collision_count":4,"motorcyclist_fatal_collision_count":9},{"year":2019,"ped_collision_count":170,"ped_person_count":186,"cyclist_collision_count":46,"cyclist_person_count":47,"motorcyclist_collision_count":50,"motorcyclist_person_count":56,"ksi_collision_count":366,"ped_fatal_collision_count":38,"cyclist_fatal_collision_count":1,"motorcyclist_fatal_collision_count":7},{"year":2020,"ped_collision_count":123,"ped_person_count":135,"cyclist_collision_count":33,"cyclist_person_count":33,"motorcyclist_collision_count":47,"motorcyclist_person_count":50,"ksi_collision_count":269,"ped_fatal_collision_count":21,"cyclist_fatal_collision_count":4,"motorcyclist_fatal_collision_count":9},{"year":2021,"ped_collision_count":115,"ped_person_count":127,"cyclist_collision_count":21,"cyclist_person_count":21,"motorcyclist_collision_count":46,"motorcyclist_person_count":52,"ksi_collision_count":270,"ped_fatal_collision_count":27,"cyclist_fatal_collision_count":1,"motorcyclist_fatal_collision_count":12},{"year":2022,"ped_collision_count":112,"ped_person_count":121,"cyclist_collision_count":37,"cyclist_person_count":40,"motorcyclist_collision_count":50,"motorcyclist_person_count":53,"ksi_collision_count":290,"ped_fatal_collision_count":21,"cyclist_fatal_collision_count":2,"motorcyclist_fatal_collision_count":10},{"year":2023,"ped_collision_count":166,"ped_person_count":177,"cyclist_collision_count":47,"cyclist_person_count":49,"motorcyclist_collision_count":46,"motorcyclist_person_count":48,"ksi_collision_count":332,"ped_fatal_collision_count":28,"cyclist_fatal_collision_count":1,"motorcyclist_fatal_collision_count":5},{"year":2024,"ped_collision_count":136,"ped_person_count":148,"cyclist_collision_count":45,"cyclist_person_count":48,"motorcyclist_collision_count":38,"motorcyclist_person_count":42,"ksi_collision_count":296,"ped_fatal_collision_count":23,"cyclist_fatal_collision_count":7,"motorcyclist_fatal_collision_count":4},{"year":2025,"ped_collision_count":111,"ped_person_count":117,"cyclist_collision_count":34,"cyclist_person_count":35,"motorcyclist_collision_count":32,"motorcyclist_person_count":34,"ksi_collision_count":255,"ped_fatal_collision_count":18,"cyclist_fatal_collision_count":1,"motorcyclist_fatal_collision_count":4},{"year":2026,"ped_collision_count":62,"ped_person_count":69,"cyclist_collision_count":12,"cyclist_person_count":13,"motorcyclist_collision_count":16,"motorcyclist_person_count":17,"ksi_collision_count":127,"ped_fatal_collision_count":13,"cyclist_fatal_collision_count":1,"motorcyclist_fatal_collision_count":7}],"v_neighbourhood_ksi":[{"area_name":"West Humber-Clairville","area_id":2502213,"ksi_collision_count":235,"fatal_collision_count":37,"fatal_share_pct":15.74,"area_km2":30.16,"ksi_density_per_km2":7.79,"rank_by_raw_count":1,"rank_by_density":120,"pedestrian_collision_count":82,"cyclist_collision_count":6},{"area_name":"South Riverdale","area_id":2502281,"ksi_collision_count":150,"fatal_collision_count":13,"fatal_share_pct":8.67,"area_km2":11.034,"ksi_density_per_km2":13.59,"rank_by_raw_count":2,"rank_by_density":66,"pedestrian_collision_count":64,"cyclist_collision_count":30},{"area_name":"Yonge-Bay Corridor","area_id":2502362,"ksi_collision_count":136,"fatal_collision_count":9,"fatal_share_pct":6.62,"area_km2":1.119,"ksi_density_per_km2":121.52,"rank_by_raw_count":3,"rank_by_density":1,"pedestrian_collision_count":73,"cyclist_collision_count":35},{"area_name":"Wexford/Maryvale","area_id":2502297,"ksi_collision_count":131,"fatal_collision_count":28,"fatal_share_pct":21.37,"area_km2":10.268,"ksi_density_per_km2":12.76,"rank_by_raw_count":4,"rank_by_density":73,"pedestrian_collision_count":59,"cyclist_collision_count":8},{"area_name":"St Lawrence-East Bayfront-The Islands","area_id":2502327,"ksi_collision_count":120,"fatal_collision_count":15,"fatal_share_pct":12.5,"area_km2":11.318,"ksi_density_per_km2":10.6,"rank_by_raw_count":5,"rank_by_density":91,"pedestrian_collision_count":46,"cyclist_collision_count":16},{"area_name":"Moss Park","area_id":2502284,"ksi_collision_count":117,"fatal_collision_count":14,"fatal_share_pct":11.97,"area_km2":1.397,"ksi_density_per_km2":83.73,"rank_by_raw_count":6,"rank_by_density":4,"pedestrian_collision_count":61,"cyclist_collision_count":19},{"area_name":"South Parkdale","area_id":2502264,"ksi_collision_count":115,"fatal_collision_count":26,"fatal_share_pct":22.61,"area_km2":2.288,"ksi_density_per_km2":50.26,"rank_by_raw_count":7,"rank_by_density":9,"pedestrian_collision_count":46,"cyclist_collision_count":13},{"area_name":"Kensington-Chinatown","area_id":2502286,"ksi_collision_count":112,"fatal_collision_count":14,"fatal_share_pct":12.5,"area_km2":1.535,"ksi_density_per_km2":72.95,"rank_by_raw_count":8,"rank_by_density":5,"pedestrian_collision_count":62,"cyclist_collision_count":31},{"area_name":"Clairlea-Birchmount","area_id":2502298,"ksi_collision_count":106,"fatal_collision_count":21,"fatal_share_pct":19.81,"area_km2":7.4,"ksi_density_per_km2":14.32,"rank_by_raw_count":9,"rank_by_density":61,"pedestrian_collision_count":53,"cyclist_collision_count":10},{"area_name":"Annex","area_id":2502304,"ksi_collision_count":105,"fatal_collision_count":9,"fatal_share_pct":8.57,"area_km2":2.791,"ksi_density_per_km2":37.62,"rank_by_raw_count":10,"rank_by_density":14,"pedestrian_collision_count":52,"cyclist_collision_count":26},{"area_name":"Etobicoke City Centre","area_id":2502320,"ksi_collision_count":100,"fatal_collision_count":17,"fatal_share_pct":17.0,"area_km2":10.139,"ksi_density_per_km2":9.86,"rank_by_raw_count":11,"rank_by_density":102,"pedestrian_collision_count":38,"cyclist_collision_count":7},{"area_name":"York University Heights","area_id":2502241,"ksi_collision_count":99,"fatal_collision_count":15,"fatal_share_pct":15.15,"area_km2":13.252,"ksi_density_per_km2":7.47,"rank_by_raw_count":12,"rank_by_density":127,"pedestrian_collision_count":50,"cyclist_collision_count":7},{"area_name":"Wellington Place","area_id":2502325,"ksi_collision_count":98,"fatal_collision_count":5,"fatal_share_pct":5.1,"area_km2":0.98,"ksi_density_per_km2":100.0,"rank_by_raw_count":13,"rank_by_density":3,"pedestrian_collision_count":50,"cyclist_collision_count":29},{"area_name":"Milliken","area_id":2502337,"ksi_collision_count":97,"fatal_collision_count":15,"fatal_share_pct":15.46,"area_km2":9.481,"ksi_density_per_km2":10.23,"rank_by_raw_count":14,"rank_by_density":98,"pedestrian_collision_count":49,"cyclist_collision_count":15},{"area_name":"Downtown Yonge East","area_id":2502329,"ksi_collision_count":88,"fatal_collision_count":7,"fatal_share_pct":7.95,"area_km2":0.809,"ksi_density_per_km2":108.8,"rank_by_raw_count":15,"rank_by_density":2,"pedestrian_collision_count":50,"cyclist_collision_count":18},{"area_name":"Morningside Heights","area_id":2502348,"ksi_collision_count":87,"fatal_collision_count":13,"fatal_share_pct":14.94,"area_km2":28.963,"ksi_density_per_km2":3.0,"rank_by_raw_count":16,"rank_by_density":157,"pedestrian_collision_count":20,"cyclist_collision_count":1},{"area_name":"Tam O'Shanter-Sullivan","area_id":2502296,"ksi_collision_count":86,"fatal_collision_count":17,"fatal_share_pct":19.77,"area_km2":5.424,"ksi_density_per_km2":15.86,"rank_by_raw_count":17,"rank_by_density":55,"pedestrian_collision_count":42,"cyclist_collision_count":10},{"area_name":"Mimico-Queensway","area_id":2502321,"ksi_collision_count":85,"fatal_collision_count":11,"fatal_share_pct":12.94,"area_km2":5.483,"ksi_density_per_km2":15.5,"rank_by_raw_count":18,"rank_by_density":57,"pedestrian_collision_count":22,"cyclist_collision_count":10},{"area_name":"Woburn North","area_id":2502346,"ksi_collision_count":81,"fatal_collision_count":6,"fatal_share_pct":7.41,"area_km2":6.301,"ksi_density_per_km2":12.85,"rank_by_raw_count":19,"rank_by_density":72,"pedestrian_collision_count":31,"cyclist_collision_count":5},{"area_name":"Harbourfront-CityPlace","area_id":2502326,"ksi_collision_count":78,"fatal_collision_count":3,"fatal_share_pct":3.85,"area_km2":1.139,"ksi_density_per_km2":68.49,"rank_by_raw_count":20,"rank_by_density":6,"pedestrian_collision_count":34,"cyclist_collision_count":15},{"area_name":"Agincourt North","area_id":2502336,"ksi_collision_count":76,"fatal_collision_count":11,"fatal_share_pct":14.47,"area_km2":7.264,"ksi_density_per_km2":10.46,"rank_by_raw_count":21,"rank_by_density":95,"pedestrian_collision_count":33,"cyclist_collision_count":5},{"area_name":"Banbury-Don Mills","area_id":2502256,"ksi_collision_count":74,"fatal_collision_count":11,"fatal_share_pct":14.86,"area_km2":10.045,"ksi_density_per_km2":7.37,"rank_by_raw_count":22,"rank_by_density":129,"pedestrian_collision_count":24,"cyclist_collision_count":6},{"area_name":"Agincourt South-Malvern West","area_id":2502335,"ksi_collision_count":73,"fatal_collision_count":14,"fatal_share_pct":19.18,"area_km2":7.876,"ksi_density_per_km2":9.27,"rank_by_raw_count":23,"rank_by_density":108,"pedestrian_collision_count":35,"cyclist_collision_count":4},{"area_name":"West Hill","area_id":2502341,"ksi_collision_count":73,"fatal_collision_count":10,"fatal_share_pct":13.7,"area_km2":9.628,"ksi_density_per_km2":7.58,"rank_by_raw_count":23,"rank_by_density":125,"pedestrian_collision_count":43,"cyclist_collision_count":8},{"area_name":"Glenfield-Jane Heights","area_id":2502240,"ksi_collision_count":71,"fatal_collision_count":9,"fatal_share_pct":12.68,"area_km2":5.153,"ksi_density_per_km2":13.78,"rank_by_raw_count":25,"rank_by_density":64,"pedestrian_collision_count":37,"cyclist_collision_count":4},{"area_name":"Kennedy Park","area_id":2502332,"ksi_collision_count":70,"fatal_collision_count":11,"fatal_share_pct":15.71,"area_km2":3.582,"ksi_density_per_km2":19.54,"rank_by_raw_count":26,"rank_by_density":42,"pedestrian_collision_count":38,"cyclist_collision_count":4},{"area_name":"Golfdale-Cedarbrae-Woburn","area_id":2502345,"ksi_collision_count":69,"fatal_collision_count":11,"fatal_share_pct":15.94,"area_km2":6.037,"ksi_density_per_km2":11.43,"rank_by_raw_count":27,"rank_by_density":80,"pedestrian_collision_count":29,"cyclist_collision_count":2},{"area_name":"Downsview","area_id":2502359,"ksi_collision_count":69,"fatal_collision_count":11,"fatal_share_pct":15.94,"area_km2":8.286,"ksi_density_per_km2":8.33,"rank_by_raw_count":27,"rank_by_density":118,"pedestrian_collision_count":25,"cyclist_collision_count":5},{"area_name":"Rockcliffe-Smythe","area_id":2502290,"ksi_collision_count":69,"fatal_collision_count":9,"fatal_share_pct":13.04,"area_km2":5.073,"ksi_density_per_km2":13.6,"rank_by_raw_count":27,"rank_by_density":65,"pedestrian_collision_count":30,"cyclist_collision_count":6},{"area_name":"High Park-Swansea","area_id":2502266,"ksi_collision_count":66,"fatal_collision_count":8,"fatal_share_pct":12.12,"area_km2":5.36,"ksi_density_per_km2":12.31,"rank_by_raw_count":30,"rank_by_density":77,"pedestrian_collision_count":27,"cyclist_collision_count":8},{"area_name":"Steeles","area_id":2502295,"ksi_collision_count":65,"fatal_collision_count":19,"fatal_share_pct":29.23,"area_km2":4.563,"ksi_density_per_km2":14.25,"rank_by_raw_count":31,"rank_by_density":62,"pedestrian_collision_count":35,"cyclist_collision_count":5},{"area_name":"Keelesdale-Eglinton West","area_id":2502289,"ksi_collision_count":64,"fatal_collision_count":8,"fatal_share_pct":12.5,"area_km2":1.751,"ksi_density_per_km2":36.54,"rank_by_raw_count":32,"rank_by_density":16,"pedestrian_collision_count":20,"cyclist_collision_count":10},{"area_name":"Dorset Park","area_id":2502334,"ksi_collision_count":64,"fatal_collision_count":12,"fatal_share_pct":18.75,"area_km2":6.014,"ksi_density_per_km2":10.64,"rank_by_raw_count":32,"rank_by_density":89,"pedestrian_collision_count":28,"cyclist_collision_count":2},{"area_name":"Oakdale-Beverley Heights","area_id":2502358,"ksi_collision_count":63,"fatal_collision_count":11,"fatal_share_pct":17.46,"area_km2":6.688,"ksi_density_per_km2":9.42,"rank_by_raw_count":34,"rank_by_density":106,"pedestrian_collision_count":27,"cyclist_collision_count":6},{"area_name":"Stonegate-Queensway","area_id":2502227,"ksi_collision_count":61,"fatal_collision_count":6,"fatal_share_pct":9.84,"area_km2":7.949,"ksi_density_per_km2":7.67,"rank_by_raw_count":35,"rank_by_density":124,"pedestrian_collision_count":24,"cyclist_collision_count":4},{"area_name":"Clanton Park","area_id":2502247,"ksi_collision_count":61,"fatal_collision_count":16,"fatal_share_pct":26.23,"area_km2":4.168,"ksi_density_per_km2":14.64,"rank_by_raw_count":35,"rank_by_density":60,"pedestrian_collision_count":30,"cyclist_collision_count":6},{"area_name":"Brookhaven-Amesbury","area_id":2502244,"ksi_collision_count":60,"fatal_collision_count":6,"fatal_share_pct":10.0,"area_km2":3.509,"ksi_density_per_km2":17.1,"rank_by_raw_count":37,"rank_by_density":49,"pedestrian_collision_count":20,"cyclist_collision_count":4},{"area_name":"Birchcliffe-Cliffside","area_id":2502330,"ksi_collision_count":60,"fatal_collision_count":11,"fatal_share_pct":18.33,"area_km2":6.011,"ksi_density_per_km2":9.98,"rank_by_raw_count":37,"rank_by_density":99,"pedestrian_collision_count":31,"cyclist_collision_count":9},{"area_name":"Mount Olive-Silverstone-Jamestown","area_id":2502214,"ksi_collision_count":60,"fatal_collision_count":9,"fatal_share_pct":15.0,"area_km2":4.64,"ksi_density_per_km2":12.93,"rank_by_raw_count":37,"rank_by_density":71,"pedestrian_collision_count":25,"cyclist_collision_count":3},{"area_name":"Malvern East","area_id":2502350,"ksi_collision_count":59,"fatal_collision_count":14,"fatal_share_pct":23.73,"area_km2":4.834,"ksi_density_per_km2":12.21,"rank_by_raw_count":40,"rank_by_density":78,"pedestrian_collision_count":26,"cyclist_collision_count":1},{"area_name":"Junction-Wallace Emerson","area_id":2502363,"ksi_collision_count":58,"fatal_collision_count":3,"fatal_share_pct":5.17,"area_km2":2.224,"ksi_density_per_km2":26.08,"rank_by_raw_count":41,"rank_by_density":24,"pedestrian_collision_count":20,"cyclist_collision_count":11},{"area_name":"Bedford Park-Nortown","area_id":2502253,"ksi_collision_count":58,"fatal_collision_count":9,"fatal_share_pct":15.52,"area_km2":5.521,"ksi_density_per_km2":10.51,"rank_by_raw_count":41,"rank_by_density":92,"pedestrian_collision_count":35,"cyclist_collision_count":3},{"area_name":"Humber Summit","area_id":2502209,"ksi_collision_count":56,"fatal_collision_count":11,"fatal_share_pct":19.64,"area_km2":7.971,"ksi_density_per_km2":7.03,"rank_by_raw_count":43,"rank_by_density":135,"pedestrian_collision_count":25,"cyclist_collision_count":3},{"area_name":"Junction Area","area_id":2502300,"ksi_collision_count":56,"fatal_collision_count":6,"fatal_share_pct":10.71,"area_km2":2.633,"ksi_density_per_km2":21.27,"rank_by_raw_count":43,"rank_by_density":36,"pedestrian_collision_count":22,"cyclist_collision_count":8},{"area_name":"Eglinton East","area_id":2502342,"ksi_collision_count":56,"fatal_collision_count":14,"fatal_share_pct":25.0,"area_km2":3.224,"ksi_density_per_km2":17.37,"rank_by_raw_count":43,"rank_by_density":47,"pedestrian_collision_count":29,"cyclist_collision_count":0},{"area_name":"Old East York","area_id":2502269,"ksi_collision_count":56,"fatal_collision_count":7,"fatal_share_pct":12.5,"area_km2":2.351,"ksi_density_per_km2":23.82,"rank_by_raw_count":43,"rank_by_density":32,"pedestrian_collision_count":23,"cyclist_collision_count":5},{"area_name":"Don Valley Village","area_id":2502260,"ksi_collision_count":56,"fatal_collision_count":9,"fatal_share_pct":16.07,"area_km2":4.214,"ksi_density_per_km2":13.29,"rank_by_raw_count":43,"rank_by_density":68,"pedestrian_collision_count":29,"cyclist_collision_count":3},{"area_name":"Trinity-Bellwoods","area_id":2502261,"ksi_collision_count":55,"fatal_collision_count":8,"fatal_share_pct":14.55,"area_km2":1.73,"ksi_density_per_km2":31.79,"rank_by_raw_count":48,"rank_by_density":21,"pedestrian_collision_count":23,"cyclist_collision_count":20},{"area_name":"Yorkdale-Glen Park","area_id":2502245,"ksi_collision_count":55,"fatal_collision_count":10,"fatal_share_pct":18.18,"area_km2":6.041,"ksi_density_per_km2":9.1,"rank_by_raw_count":48,"rank_by_density":110,"pedestrian_collision_count":28,"cyclist_collision_count":3},{"area_name":"Newtonbrook East","area_id":2502233,"ksi_collision_count":54,"fatal_collision_count":8,"fatal_share_pct":14.81,"area_km2":4.086,"ksi_density_per_km2":13.21,"rank_by_raw_count":50,"rank_by_density":69,"pedestrian_collision_count":27,"cyclist_collision_count":5},{"area_name":"East End-Danforth","area_id":2502273,"ksi_collision_count":54,"fatal_collision_count":2,"fatal_share_pct":3.7,"area_km2":2.64,"ksi_density_per_km2":20.46,"rank_by_raw_count":50,"rank_by_density":40,"pedestrian_collision_count":28,"cyclist_collision_count":8},{"area_name":"Newtonbrook West","area_id":2502250,"ksi_collision_count":53,"fatal_collision_count":9,"fatal_share_pct":16.98,"area_km2":4.698,"ksi_density_per_km2":11.28,"rank_by_raw_count":52,"rank_by_density":82,"pedestrian_collision_count":29,"cyclist_collision_count":3},{"area_name":"Oakwood Village","area_id":2502315,"ksi_collision_count":53,"fatal_collision_count":6,"fatal_share_pct":11.32,"area_km2":2.22,"ksi_density_per_km2":23.87,"rank_by_raw_count":52,"rank_by_density":31,"pedestrian_collision_count":30,"cyclist_collision_count":8},{"area_name":"Little Portugal","area_id":2502263,"ksi_collision_count":52,"fatal_collision_count":6,"fatal_share_pct":11.54,"area_km2":1.217,"ksi_density_per_km2":42.73,"rank_by_raw_count":54,"rank_by_density":13,"pedestrian_collision_count":19,"cyclist_collision_count":20},{"area_name":"Fort York-Liberty Village","area_id":2502324,"ksi_collision_count":51,"fatal_collision_count":7,"fatal_share_pct":13.73,"area_km2":2.34,"ksi_density_per_km2":21.79,"rank_by_raw_count":55,"rank_by_density":33,"pedestrian_collision_count":10,"cyclist_collision_count":6},{"area_name":"Weston","area_id":2502292,"ksi_collision_count":50,"fatal_collision_count":3,"fatal_share_pct":6.0,"area_km2":2.567,"ksi_density_per_km2":19.48,"rank_by_raw_count":56,"rank_by_density":43,"pedestrian_collision_count":28,"cyclist_collision_count":4},{"area_name":"Dufferin Grove","area_id":2502262,"ksi_collision_count":50,"fatal_collision_count":7,"fatal_share_pct":14.0,"area_km2":1.388,"ksi_density_per_km2":36.01,"rank_by_raw_count":56,"rank_by_density":17,"pedestrian_collision_count":18,"cyclist_collision_count":22},{"area_name":"Rosedale-Moore Park","area_id":2502307,"ksi_collision_count":50,"fatal_collision_count":12,"fatal_share_pct":24.0,"area_km2":4.663,"ksi_density_per_km2":10.72,"rank_by_raw_count":56,"rank_by_density":87,"pedestrian_collision_count":19,"cyclist_collision_count":10},{"area_name":"Wychwood","area_id":2502303,"ksi_collision_count":50,"fatal_collision_count":5,"fatal_share_pct":10.0,"area_km2":1.683,"ksi_density_per_km2":29.71,"rank_by_raw_count":56,"rank_by_density":22,"pedestrian_collision_count":24,"cyclist_collision_count":17},{"area_name":"Bendale-Glen Andrew","area_id":2502360,"ksi_collision_count":49,"fatal_collision_count":6,"fatal_share_pct":12.24,"area_km2":4.915,"ksi_density_per_km2":9.97,"rank_by_raw_count":60,"rank_by_density":100,"pedestrian_collision_count":17,"cyclist_collision_count":1},{"area_name":"University","area_id":2502287,"ksi_collision_count":48,"fatal_collision_count":4,"fatal_share_pct":8.33,"area_km2":1.406,"ksi_density_per_km2":34.15,"rank_by_raw_count":61,"rank_by_density":18,"pedestrian_collision_count":17,"cyclist_collision_count":20},{"area_name":"Cabbagetown-South St.James Town","area_id":2502282,"ksi_collision_count":48,"fatal_collision_count":7,"fatal_share_pct":14.58,"area_km2":1.418,"ksi_density_per_km2":33.84,"rank_by_raw_count":61,"rank_by_density":19,"pedestrian_collision_count":18,"cyclist_collision_count":12},{"area_name":"Corso Italia-Davenport","area_id":2502302,"ksi_collision_count":47,"fatal_collision_count":4,"fatal_share_pct":8.51,"area_km2":1.89,"ksi_density_per_km2":24.87,"rank_by_raw_count":63,"rank_by_density":27,"pedestrian_collision_count":25,"cyclist_collision_count":6},{"area_name":"The Beaches","area_id":2502274,"ksi_collision_count":47,"fatal_collision_count":5,"fatal_share_pct":10.64,"area_km2":3.597,"ksi_density_per_km2":13.07,"rank_by_raw_count":63,"rank_by_density":70,"pedestrian_collision_count":20,"cyclist_collision_count":12},{"area_name":"Flemingdon Park","area_id":2502258,"ksi_collision_count":46,"fatal_collision_count":5,"fatal_share_pct":10.87,"area_km2":2.474,"ksi_density_per_km2":18.59,"rank_by_raw_count":65,"rank_by_density":46,"pedestrian_collision_count":19,"cyclist_collision_count":4},{"area_name":"Islington","area_id":2502319,"ksi_collision_count":45,"fatal_collision_count":6,"fatal_share_pct":13.33,"area_km2":6.108,"ksi_density_per_km2":7.37,"rank_by_raw_count":66,"rank_by_density":128,"pedestrian_collision_count":17,"cyclist_collision_count":3},{"area_name":"West Queen West","area_id":2502323,"ksi_collision_count":45,"fatal_collision_count":1,"fatal_share_pct":2.22,"area_km2":0.902,"ksi_density_per_km2":49.88,"rank_by_raw_count":66,"rank_by_density":10,"pedestrian_collision_count":22,"cyclist_collision_count":11},{"area_name":"North Riverdale","area_id":2502279,"ksi_collision_count":44,"fatal_collision_count":7,"fatal_share_pct":15.91,"area_km2":1.787,"ksi_density_per_km2":24.63,"rank_by_raw_count":68,"rank_by_density":29,"pedestrian_collision_count":17,"cyclist_collision_count":9},{"area_name":"Bathurst Manor","area_id":2502248,"ksi_collision_count":44,"fatal_collision_count":4,"fatal_share_pct":9.09,"area_km2":4.762,"ksi_density_per_km2":9.24,"rank_by_raw_count":68,"rank_by_density":109,"pedestrian_collision_count":17,"cyclist_collision_count":0},{"area_name":"Willowridge-Martingrove-Richview","area_id":2502219,"ksi_collision_count":43,"fatal_collision_count":6,"fatal_share_pct":13.95,"area_km2":5.52,"ksi_density_per_km2":7.79,"rank_by_raw_count":70,"rank_by_density":121,"pedestrian_collision_count":15,"cyclist_collision_count":2},{"area_name":"Kingsview Village-The Westway","area_id":2502218,"ksi_collision_count":43,"fatal_collision_count":7,"fatal_share_pct":16.28,"area_km2":5.066,"ksi_density_per_km2":8.49,"rank_by_raw_count":70,"rank_by_density":116,"pedestrian_collision_count":12,"cyclist_collision_count":3},{"area_name":"Cliffcrest","area_id":2502331,"ksi_collision_count":43,"fatal_collision_count":11,"fatal_share_pct":25.58,"area_km2":7.193,"ksi_density_per_km2":5.98,"rank_by_raw_count":70,"rank_by_density":138,"pedestrian_collision_count":22,"cyclist_collision_count":6},{"area_name":"Humbermede","area_id":2502210,"ksi_collision_count":43,"fatal_collision_count":8,"fatal_share_pct":18.6,"area_km2":4.424,"ksi_density_per_km2":9.72,"rank_by_raw_count":70,"rank_by_density":104,"pedestrian_collision_count":21,"cyclist_collision_count":4},{"area_name":"Eringate-Centennial-West Deane","area_id":2502223,"ksi_collision_count":43,"fatal_collision_count":4,"fatal_share_pct":9.3,"area_km2":8.65,"ksi_density_per_km2":4.97,"rank_by_raw_count":70,"rank_by_density":145,"pedestrian_collision_count":10,"cyclist_collision_count":2},{"area_name":"Leaside-Bennington","area_id":2502238,"ksi_collision_count":41,"fatal_collision_count":7,"fatal_share_pct":17.07,"area_km2":4.787,"ksi_density_per_km2":8.57,"rank_by_raw_count":75,"rank_by_density":115,"pedestrian_collision_count":14,"cyclist_collision_count":6},{"area_name":"East L'Amoreaux","area_id":2502352,"ksi_collision_count":41,"fatal_collision_count":7,"fatal_share_pct":17.07,"area_km2":3.696,"ksi_density_per_km2":11.09,"rank_by_raw_count":75,"rank_by_density":86,"pedestrian_collision_count":20,"cyclist_collision_count":0},{"area_name":"Victoria Village","area_id":2502257,"ksi_collision_count":41,"fatal_collision_count":11,"fatal_share_pct":26.83,"area_km2":4.757,"ksi_density_per_km2":8.62,"rank_by_raw_count":75,"rank_by_density":114,"pedestrian_collision_count":17,"cyclist_collision_count":2},{"area_name":"Bayview Village","area_id":2502234,"ksi_collision_count":40,"fatal_collision_count":7,"fatal_share_pct":17.5,"area_km2":5.161,"ksi_density_per_km2":7.75,"rank_by_raw_count":78,"rank_by_density":122,"pedestrian_collision_count":19,"cyclist_collision_count":3},{"area_name":"Malvern West","area_id":2502349,"ksi_collision_count":40,"fatal_collision_count":7,"fatal_share_pct":17.5,"area_km2":4.031,"ksi_density_per_km2":9.92,"rank_by_raw_count":78,"rank_by_density":101,"pedestrian_collision_count":24,"cyclist_collision_count":1},{"area_name":"Bendale South","area_id":2502318,"ksi_collision_count":39,"fatal_collision_count":11,"fatal_share_pct":28.21,"area_km2":2.544,"ksi_density_per_km2":15.33,"rank_by_raw_count":80,"rank_by_density":58,"pedestrian_collision_count":20,"cyclist_collision_count":3},{"area_name":"Lansing-Westgate","area_id":2502252,"ksi_collision_count":39,"fatal_collision_count":2,"fatal_share_pct":5.13,"area_km2":5.348,"ksi_density_per_km2":7.29,"rank_by_raw_count":80,"rank_by_density":130,"pedestrian_collision_count":26,"cyclist_collision_count":1},{"area_name":"Edenbridge-Humber Valley","area_id":2502221,"ksi_collision_count":39,"fatal_collision_count":3,"fatal_share_pct":7.69,"area_km2":5.514,"ksi_density_per_km2":7.07,"rank_by_raw_count":80,"rank_by_density":133,"pedestrian_collision_count":10,"cyclist_collision_count":5},{"area_name":"Mount Pleasant East","area_id":2502308,"ksi_collision_count":39,"fatal_collision_count":5,"fatal_share_pct":12.82,"area_km2":3.095,"ksi_density_per_km2":12.6,"rank_by_raw_count":80,"rank_by_density":75,"pedestrian_collision_count":19,"cyclist_collision_count":3},{"area_name":"West Rouge","area_id":2502347,"ksi_collision_count":38,"fatal_collision_count":7,"fatal_share_pct":18.42,"area_km2":8.585,"ksi_density_per_km2":4.43,"rank_by_raw_count":84,"rank_by_density":153,"pedestrian_collision_count":10,"cyclist_collision_count":7},{"area_name":"Roncesvalles","area_id":2502265,"ksi_collision_count":38,"fatal_collision_count":7,"fatal_share_pct":18.42,"area_km2":1.505,"ksi_density_per_km2":25.25,"rank_by_raw_count":84,"rank_by_density":25,"pedestrian_collision_count":23,"cyclist_collision_count":8},{"area_name":"Black Creek","area_id":2502212,"ksi_collision_count":37,"fatal_collision_count":5,"fatal_share_pct":13.51,"area_km2":3.455,"ksi_density_per_km2":10.71,"rank_by_raw_count":86,"rank_by_density":88,"pedestrian_collision_count":20,"cyclist_collision_count":4},{"area_name":"Broadview North","area_id":2502239,"ksi_collision_count":36,"fatal_collision_count":5,"fatal_share_pct":13.89,"area_km2":1.747,"ksi_density_per_km2":20.61,"rank_by_raw_count":87,"rank_by_density":39,"pedestrian_collision_count":10,"cyclist_collision_count":4},{"area_name":"Palmerston-Little Italy","area_id":2502288,"ksi_collision_count":36,"fatal_collision_count":0,"fatal_share_pct":0.0,"area_km2":1.436,"ksi_density_per_km2":25.07,"rank_by_raw_count":87,"rank_by_density":26,"pedestrian_collision_count":16,"cyclist_collision_count":11},{"area_name":"Weston-Pelham Park","area_id":2502301,"ksi_collision_count":36,"fatal_collision_count":2,"fatal_share_pct":5.56,"area_km2":1.457,"ksi_density_per_km2":24.72,"rank_by_raw_count":87,"rank_by_density":28,"pedestrian_collision_count":21,"cyclist_collision_count":4},{"area_name":"Greenwood-Coxwell","area_id":2502276,"ksi_collision_count":36,"fatal_collision_count":5,"fatal_share_pct":13.89,"area_km2":1.676,"ksi_density_per_km2":21.48,"rank_by_raw_count":87,"rank_by_density":34,"pedestrian_collision_count":17,"cyclist_collision_count":6},{"area_name":"Casa Loma","area_id":2502305,"ksi_collision_count":36,"fatal_collision_count":2,"fatal_share_pct":5.56,"area_km2":1.923,"ksi_density_per_km2":18.72,"rank_by_raw_count":87,"rank_by_density":44,"pedestrian_collision_count":19,"cyclist_collision_count":8},{"area_name":"L'Amoreaux West","area_id":2502351,"ksi_collision_count":36,"fatal_collision_count":6,"fatal_share_pct":16.67,"area_km2":3.462,"ksi_density_per_km2":10.4,"rank_by_raw_count":87,"rank_by_density":96,"pedestrian_collision_count":22,"cyclist_collision_count":1},{"area_name":"New Toronto","area_id":2502228,"ksi_collision_count":36,"fatal_collision_count":9,"fatal_share_pct":25.0,"area_km2":3.485,"ksi_density_per_km2":10.33,"rank_by_raw_count":87,"rank_by_density":97,"pedestrian_collision_count":15,"cyclist_collision_count":5},{"area_name":"Pelmo Park-Humberlea","area_id":2502211,"ksi_collision_count":36,"fatal_collision_count":3,"fatal_share_pct":8.33,"area_km2":4.278,"ksi_density_per_km2":8.41,"rank_by_raw_count":87,"rank_by_density":117,"pedestrian_collision_count":8,"cyclist_collision_count":3},{"area_name":"Alderwood","area_id":2502230,"ksi_collision_count":35,"fatal_collision_count":4,"fatal_share_pct":11.43,"area_km2":4.981,"ksi_density_per_km2":7.03,"rank_by_raw_count":95,"rank_by_density":134,"pedestrian_collision_count":11,"cyclist_collision_count":2},{"area_name":"South Eglinton-Davisville","area_id":2502366,"ksi_collision_count":35,"fatal_collision_count":3,"fatal_share_pct":8.57,"area_km2":0.945,"ksi_density_per_km2":37.05,"rank_by_raw_count":95,"rank_by_density":15,"pedestrian_collision_count":19,"cyclist_collision_count":4},{"area_name":"Thistletown-Beaumond Heights","area_id":2502215,"ksi_collision_count":35,"fatal_collision_count":5,"fatal_share_pct":14.29,"area_km2":3.341,"ksi_density_per_km2":10.48,"rank_by_raw_count":95,"rank_by_density":93,"pedestrian_collision_count":16,"cyclist_collision_count":3},{"area_name":"Oakridge","area_id":2502299,"ksi_collision_count":35,"fatal_collision_count":4,"fatal_share_pct":11.43,"area_km2":1.879,"ksi_density_per_km2":18.63,"rank_by_raw_count":95,"rank_by_density":45,"pedestrian_collision_count":13,"cyclist_collision_count":6},{"area_name":"Woodbine Corridor","area_id":2502275,"ksi_collision_count":34,"fatal_collision_count":1,"fatal_share_pct":2.94,"area_km2":1.596,"ksi_density_per_km2":21.3,"rank_by_raw_count":99,"rank_by_density":35,"pedestrian_collision_count":18,"cyclist_collision_count":9},{"area_name":"Scarborough Village","area_id":2502343,"ksi_collision_count":33,"fatal_collision_count":7,"fatal_share_pct":21.21,"area_km2":3.152,"ksi_density_per_km2":10.47,"rank_by_raw_count":100,"rank_by_density":94,"pedestrian_collision_count":14,"cyclist_collision_count":1},{"area_name":"Church-Wellesley","area_id":2502328,"ksi_collision_count":33,"fatal_collision_count":1,"fatal_share_pct":3.03,"area_km2":0.556,"ksi_density_per_km2":59.31,"rank_by_raw_count":100,"rank_by_density":7,"pedestrian_collision_count":20,"cyclist_collision_count":5},{"area_name":"St.Andrew-Windfields","area_id":2502254,"ksi_collision_count":33,"fatal_collision_count":3,"fatal_share_pct":9.09,"area_km2":7.348,"ksi_density_per_km2":4.49,"rank_by_raw_count":100,"rank_by_density":152,"pedestrian_collision_count":10,"cyclist_collision_count":6},{"area_name":"Centennial Scarborough","area_id":2502338,"ksi_collision_count":33,"fatal_collision_count":6,"fatal_share_pct":18.18,"area_km2":5.47,"ksi_density_per_km2":6.03,"rank_by_raw_count":100,"rank_by_density":137,"pedestrian_collision_count":6,"cyclist_collision_count":3},{"area_name":"Caledonia-Fairbank","area_id":2502317,"ksi_collision_count":32,"fatal_collision_count":4,"fatal_share_pct":12.5,"area_km2":1.545,"ksi_density_per_km2":20.71,"rank_by_raw_count":104,"rank_by_density":37,"pedestrian_collision_count":21,"cyclist_collision_count":3},{"area_name":"Mount Dennis","area_id":2502294,"ksi_collision_count":32,"fatal_collision_count":2,"fatal_share_pct":6.25,"area_km2":2.13,"ksi_density_per_km2":15.02,"rank_by_raw_count":104,"rank_by_density":59,"pedestrian_collision_count":15,"cyclist_collision_count":1},{"area_name":"Bay-Cloverhill","area_id":2502361,"ksi_collision_count":32,"fatal_collision_count":2,"fatal_share_pct":6.25,"area_km2":0.691,"ksi_density_per_km2":46.32,"rank_by_raw_count":104,"rank_by_density":11,"pedestrian_collision_count":12,"cyclist_collision_count":9},{"area_name":"Briar Hill-Belgravia","area_id":2502316,"ksi_collision_count":31,"fatal_collision_count":5,"fatal_share_pct":16.13,"area_km2":1.828,"ksi_density_per_km2":16.95,"rank_by_raw_count":107,"rank_by_density":50,"pedestrian_collision_count":18,"cyclist_collision_count":2},{"area_name":"Dovercourt Village","area_id":2502364,"ksi_collision_count":31,"fatal_collision_count":5,"fatal_share_pct":16.13,"area_km2":1.504,"ksi_density_per_km2":20.62,"rank_by_raw_count":107,"rank_by_density":38,"pedestrian_collision_count":13,"cyclist_collision_count":4},{"area_name":"Rexdale-Kipling","area_id":2502216,"ksi_collision_count":31,"fatal_collision_count":4,"fatal_share_pct":12.9,"area_km2":2.507,"ksi_density_per_km2":12.37,"rank_by_raw_count":107,"rank_by_density":76,"pedestrian_collision_count":13,"cyclist_collision_count":3},{"area_name":"Beechborough-Greenbrook","area_id":2502291,"ksi_collision_count":30,"fatal_collision_count":1,"fatal_share_pct":3.33,"area_km2":1.834,"ksi_density_per_km2":16.35,"rank_by_raw_count":110,"rank_by_density":53,"pedestrian_collision_count":8,"cyclist_collision_count":2},{"area_name":"Regent Park","area_id":2502283,"ksi_collision_count":30,"fatal_collision_count":4,"fatal_share_pct":13.33,"area_km2":0.651,"ksi_density_per_km2":46.12,"rank_by_raw_count":110,"rank_by_density":12,"pedestrian_collision_count":14,"cyclist_collision_count":9},{"area_name":"Henry Farm","area_id":2502235,"ksi_collision_count":29,"fatal_collision_count":4,"fatal_share_pct":13.79,"area_km2":2.595,"ksi_density_per_km2":11.18,"rank_by_raw_count":112,"rank_by_density":85,"pedestrian_collision_count":14,"cyclist_collision_count":2},{"area_name":"Lawrence Park South","area_id":2502312,"ksi_collision_count":29,"fatal_collision_count":7,"fatal_share_pct":24.14,"area_km2":3.244,"ksi_density_per_km2":8.94,"rank_by_raw_count":112,"rank_by_density":111,"pedestrian_collision_count":13,"cyclist_collision_count":5},{"area_name":"Morningside","area_id":2502340,"ksi_collision_count":28,"fatal_collision_count":9,"fatal_share_pct":32.14,"area_km2":5.742,"ksi_density_per_km2":4.88,"rank_by_raw_count":114,"rank_by_density":147,"pedestrian_collision_count":9,"cyclist_collision_count":0},{"area_name":"Hillcrest Village","area_id":2502231,"ksi_collision_count":28,"fatal_collision_count":2,"fatal_share_pct":7.14,"area_km2":5.398,"ksi_density_per_km2":5.19,"rank_by_raw_count":114,"rank_by_density":142,"pedestrian_collision_count":15,"cyclist_collision_count":1},{"area_name":"Yonge-Eglinton","area_id":2502309,"ksi_collision_count":27,"fatal_collision_count":3,"fatal_share_pct":11.11,"area_km2":1.651,"ksi_density_per_km2":16.35,"rank_by_raw_count":116,"rank_by_density":54,"pedestrian_collision_count":13,"cyclist_collision_count":1},{"area_name":"Humber Heights-Westmount","area_id":2502220,"ksi_collision_count":27,"fatal_collision_count":6,"fatal_share_pct":22.22,"area_km2":2.804,"ksi_density_per_km2":9.63,"rank_by_raw_count":116,"rank_by_density":105,"pedestrian_collision_count":9,"cyclist_collision_count":2},{"area_name":"Thorncliffe Park","area_id":2502237,"ksi_collision_count":27,"fatal_collision_count":1,"fatal_share_pct":3.7,"area_km2":3.127,"ksi_density_per_km2":8.63,"rank_by_raw_count":116,"rank_by_density":113,"pedestrian_collision_count":13,"cyclist_collision_count":4},{"area_name":"Princess-Rosethorn","area_id":2502222,"ksi_collision_count":27,"fatal_collision_count":2,"fatal_share_pct":7.41,"area_km2":5.174,"ksi_density_per_km2":5.22,"rank_by_raw_count":116,"rank_by_density":141,"pedestrian_collision_count":5,"cyclist_collision_count":2},{"area_name":"Humber Bay Shores","area_id":2502322,"ksi_collision_count":27,"fatal_collision_count":5,"fatal_share_pct":18.52,"area_km2":1.579,"ksi_density_per_km2":17.1,"rank_by_raw_count":116,"rank_by_density":48,"pedestrian_collision_count":11,"cyclist_collision_count":3},{"area_name":"East Willowdale","area_id":2502356,"ksi_collision_count":27,"fatal_collision_count":3,"fatal_share_pct":11.11,"area_km2":3.515,"ksi_density_per_km2":7.68,"rank_by_raw_count":116,"rank_by_density":123,"pedestrian_collision_count":16,"cyclist_collision_count":2},{"area_name":"Englemount-Lawrence","area_id":2502246,"ksi_collision_count":26,"fatal_collision_count":5,"fatal_share_pct":19.23,"area_km2":3.48,"ksi_density_per_km2":7.47,"rank_by_raw_count":122,"rank_by_density":126,"pedestrian_collision_count":14,"cyclist_collision_count":1},{"area_name":"Forest Hill North","area_id":2502311,"ksi_collision_count":26,"fatal_collision_count":3,"fatal_share_pct":11.54,"area_km2":1.572,"ksi_density_per_km2":16.54,"rank_by_raw_count":122,"rank_by_density":52,"pedestrian_collision_count":15,"cyclist_collision_count":0},{"area_name":"Yonge-Doris","area_id":2502355,"ksi_collision_count":26,"fatal_collision_count":6,"fatal_share_pct":23.08,"area_km2":0.472,"ksi_density_per_km2":55.1,"rank_by_raw_count":122,"rank_by_density":8,"pedestrian_collision_count":16,"cyclist_collision_count":2},{"area_name":"Willowdale West","area_id":2502251,"ksi_collision_count":25,"fatal_collision_count":3,"fatal_share_pct":12.0,"area_km2":2.885,"ksi_density_per_km2":8.67,"rank_by_raw_count":125,"rank_by_density":112,"pedestrian_collision_count":14,"cyclist_collision_count":2},{"area_name":"Danforth East York","area_id":2502270,"ksi_collision_count":25,"fatal_collision_count":4,"fatal_share_pct":16.0,"area_km2":2.189,"ksi_density_per_km2":11.42,"rank_by_raw_count":125,"rank_by_density":81,"pedestrian_collision_count":17,"cyclist_collision_count":3},{"area_name":"Bayview Woods-Steeles","area_id":2502232,"ksi_collision_count":24,"fatal_collision_count":6,"fatal_share_pct":25.0,"area_km2":4.091,"ksi_density_per_km2":5.87,"rank_by_raw_count":127,"rank_by_density":139,"pedestrian_collision_count":12,"cyclist_collision_count":2},{"area_name":"O'Connor-Parkview","area_id":2502236,"ksi_collision_count":24,"fatal_collision_count":3,"fatal_share_pct":12.5,"area_km2":4.878,"ksi_density_per_km2":4.92,"rank_by_raw_count":127,"rank_by_density":146,"pedestrian_collision_count":11,"cyclist_collision_count":2},{"area_name":"Long Branch","area_id":2502229,"ksi_collision_count":24,"fatal_collision_count":5,"fatal_share_pct":20.83,"area_km2":2.263,"ksi_density_per_km2":10.61,"rank_by_raw_count":127,"rank_by_density":90,"pedestrian_collision_count":8,"cyclist_collision_count":3},{"area_name":"High Park North","area_id":2502267,"ksi_collision_count":24,"fatal_collision_count":4,"fatal_share_pct":16.67,"area_km2":1.883,"ksi_density_per_km2":12.75,"rank_by_raw_count":127,"rank_by_density":74,"pedestrian_collision_count":17,"cyclist_collision_count":4},{"area_name":"Blake-Jones","area_id":2502280,"ksi_collision_count":23,"fatal_collision_count":0,"fatal_share_pct":0.0,"area_km2":0.942,"ksi_density_per_km2":24.43,"rank_by_raw_count":131,"rank_by_density":30,"pedestrian_collision_count":9,"cyclist_collision_count":9},{"area_name":"Forest Hill South","area_id":2502310,"ksi_collision_count":23,"fatal_collision_count":3,"fatal_share_pct":13.04,"area_km2":2.481,"ksi_density_per_km2":9.27,"rank_by_raw_count":131,"rank_by_density":107,"pedestrian_collision_count":15,"cyclist_collision_count":0},{"area_name":"Yonge-St.Clair","area_id":2502306,"ksi_collision_count":23,"fatal_collision_count":3,"fatal_share_pct":13.04,"area_km2":1.162,"ksi_density_per_km2":19.8,"rank_by_raw_count":131,"rank_by_density":41,"pedestrian_collision_count":9,"cyclist_collision_count":6},{"area_name":"Runnymede-Bloor West Village","area_id":2502268,"ksi_collision_count":22,"fatal_collision_count":2,"fatal_share_pct":9.09,"area_km2":1.594,"ksi_density_per_km2":13.8,"rank_by_raw_count":134,"rank_by_density":63,"pedestrian_collision_count":15,"cyclist_collision_count":2},{"area_name":"Bridle Path-Sunnybrook-York Mills","area_id":2502255,"ksi_collision_count":22,"fatal_collision_count":4,"fatal_share_pct":18.18,"area_km2":8.843,"ksi_density_per_km2":2.49,"rank_by_raw_count":134,"rank_by_density":158,"pedestrian_collision_count":6,"cyclist_collision_count":4},{"area_name":"Humewood-Cedarvale","area_id":2502314,"ksi_collision_count":21,"fatal_collision_count":3,"fatal_share_pct":14.29,"area_km2":1.872,"ksi_density_per_km2":11.22,"rank_by_raw_count":136,"rank_by_density":84,"pedestrian_collision_count":13,"cyclist_collision_count":2},{"area_name":"Etobicoke West Mall","area_id":2502225,"ksi_collision_count":21,"fatal_collision_count":1,"fatal_share_pct":4.76,"area_km2":1.797,"ksi_density_per_km2":11.68,"rank_by_raw_count":136,"rank_by_density":79,"pedestrian_collision_count":10,"cyclist_collision_count":1},{"area_name":"Markland Wood","area_id":2502224,"ksi_collision_count":19,"fatal_collision_count":4,"fatal_share_pct":21.05,"area_km2":2.955,"ksi_density_per_km2":6.43,"rank_by_raw_count":138,"rank_by_density":136,"pedestrian_collision_count":8,"cyclist_collision_count":0},{"area_name":"Kingsway South","area_id":2502226,"ksi_collision_count":19,"fatal_collision_count":4,"fatal_share_pct":21.05,"area_km2":2.639,"ksi_density_per_km2":7.2,"rank_by_raw_count":138,"rank_by_density":131,"pedestrian_collision_count":5,"cyclist_collision_count":1},{"area_name":"Westminster-Branson","area_id":2502249,"ksi_collision_count":19,"fatal_collision_count":5,"fatal_share_pct":26.32,"area_km2":3.669,"ksi_density_per_km2":5.18,"rank_by_raw_count":138,"rank_by_density":143,"pedestrian_collision_count":10,"cyclist_collision_count":1},{"area_name":"Parkwoods-O'Connor Hills","area_id":2502353,"ksi_collision_count":19,"fatal_collision_count":2,"fatal_share_pct":10.53,"area_km2":4.148,"ksi_density_per_km2":4.58,"rank_by_raw_count":138,"rank_by_density":151,"pedestrian_collision_count":7,"cyclist_collision_count":2},{"area_name":"Taylor-Massey","area_id":2502272,"ksi_collision_count":18,"fatal_collision_count":3,"fatal_share_pct":16.67,"area_km2":1.063,"ksi_density_per_km2":16.93,"rank_by_raw_count":142,"rank_by_density":51,"pedestrian_collision_count":11,"cyclist_collision_count":2},{"area_name":"Highland Creek","area_id":2502339,"ksi_collision_count":17,"fatal_collision_count":1,"fatal_share_pct":5.88,"area_km2":5.25,"ksi_density_per_km2":3.24,"rank_by_raw_count":143,"rank_by_density":155,"pedestrian_collision_count":7,"cyclist_collision_count":1},{"area_name":"Fenside-Parkwoods","area_id":2502354,"ksi_collision_count":16,"fatal_collision_count":0,"fatal_share_pct":0.0,"area_km2":3.317,"ksi_density_per_km2":4.82,"rank_by_raw_count":144,"rank_by_density":148,"pedestrian_collision_count":5,"cyclist_collision_count":3},{"area_name":"Ionview","area_id":2502333,"ksi_collision_count":16,"fatal_collision_count":4,"fatal_share_pct":25.0,"area_km2":1.954,"ksi_density_per_km2":8.19,"rank_by_raw_count":144,"rank_by_density":119,"pedestrian_collision_count":8,"cyclist_collision_count":2},{"area_name":"Avondale","area_id":2502357,"ksi_collision_count":16,"fatal_collision_count":2,"fatal_share_pct":12.5,"area_km2":1.032,"ksi_density_per_km2":15.5,"rank_by_raw_count":144,"rank_by_density":56,"pedestrian_collision_count":11,"cyclist_collision_count":1},{"area_name":"Woodbine-Lumsden","area_id":2502271,"ksi_collision_count":16,"fatal_collision_count":2,"fatal_share_pct":12.5,"area_km2":1.197,"ksi_density_per_km2":13.37,"rank_by_raw_count":144,"rank_by_density":67,"pedestrian_collision_count":8,"cyclist_collision_count":4},{"area_name":"Rustic","area_id":2502242,"ksi_collision_count":15,"fatal_collision_count":1,"fatal_share_pct":6.67,"area_km2":2.097,"ksi_density_per_km2":7.15,"rank_by_raw_count":148,"rank_by_density":132,"pedestrian_collision_count":6,"cyclist_collision_count":1},{"area_name":"North St.James Town","area_id":2502285,"ksi_collision_count":14,"fatal_collision_count":3,"fatal_share_pct":21.43,"area_km2":0.424,"ksi_density_per_km2":33.01,"rank_by_raw_count":149,"rank_by_density":20,"pedestrian_collision_count":7,"cyclist_collision_count":4},{"area_name":"Elms-Old Rexdale","area_id":2502217,"ksi_collision_count":14,"fatal_collision_count":4,"fatal_share_pct":28.57,"area_km2":2.932,"ksi_density_per_km2":4.77,"rank_by_raw_count":149,"rank_by_density":149,"pedestrian_collision_count":7,"cyclist_collision_count":0},{"area_name":"Pleasant View","area_id":2502259,"ksi_collision_count":14,"fatal_collision_count":1,"fatal_share_pct":7.14,"area_km2":2.969,"ksi_density_per_km2":4.72,"rank_by_raw_count":149,"rank_by_density":150,"pedestrian_collision_count":8,"cyclist_collision_count":1},{"area_name":"Lawrence Park North","area_id":2502313,"ksi_collision_count":13,"fatal_collision_count":3,"fatal_share_pct":23.08,"area_km2":2.291,"ksi_density_per_km2":5.67,"rank_by_raw_count":152,"rank_by_density":140,"pedestrian_collision_count":11,"cyclist_collision_count":0},{"area_name":"Guildwood","area_id":2502344,"ksi_collision_count":12,"fatal_collision_count":3,"fatal_share_pct":25.0,"area_km2":3.807,"ksi_density_per_km2":3.15,"rank_by_raw_count":153,"rank_by_density":156,"pedestrian_collision_count":4,"cyclist_collision_count":0},{"area_name":"North Toronto","area_id":2502365,"ksi_collision_count":11,"fatal_collision_count":1,"fatal_share_pct":9.09,"area_km2":0.402,"ksi_density_per_km2":27.35,"rank_by_raw_count":154,"rank_by_density":23,"pedestrian_collision_count":9,"cyclist_collision_count":0},{"area_name":"Maple Leaf","area_id":2502243,"ksi_collision_count":11,"fatal_collision_count":2,"fatal_share_pct":18.18,"area_km2":2.528,"ksi_density_per_km2":4.35,"rank_by_raw_count":154,"rank_by_density":154,"pedestrian_collision_count":5,"cyclist_collision_count":1},{"area_name":"Danforth","area_id":2502277,"ksi_collision_count":11,"fatal_collision_count":0,"fatal_share_pct":0.0,"area_km2":1.12,"ksi_density_per_km2":9.82,"rank_by_raw_count":154,"rank_by_density":103,"pedestrian_collision_count":4,"cyclist_collision_count":2},{"area_name":"Playter Estates-Danforth","area_id":2502278,"ksi_collision_count":10,"fatal_collision_count":1,"fatal_share_pct":10.0,"area_km2":0.888,"ksi_density_per_km2":11.26,"rank_by_raw_count":157,"rank_by_density":83,"pedestrian_collision_count":6,"cyclist_collision_count":2},{"area_name":"Lambton Baby Point","area_id":2502293,"ksi_collision_count":9,"fatal_collision_count":1,"fatal_share_pct":11.11,"area_km2":1.783,"ksi_density_per_km2":5.05,"rank_by_raw_count":158,"rank_by_density":144,"pedestrian_collision_count":3,"cyclist_collision_count":1}],"v_intersection_risk":[{"px":434,"main_street":"DIXON RD","side1_street":"ISLINGTON AVE","side2_street":"None","matched_ksi_collision_count":11,"fatal_collision_count":4,"pedestrian_involved_count":5,"cyclist_involved_count":0,"rank_by_observed_count":1,"latitude":43.69704900243251,"longitude":-79.54673100311987},{"px":462,"main_street":"EGLINTON AVE E","side1_street":"BRIMLEY RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":6,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.73669599829755,"longitude":-79.24808399910624},{"px":1583,"main_street":"STEELES AVE E","side1_street":"MARKHAM RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.836597996806184,"longitude":-79.25118900373292},{"px":431,"main_street":"WESTON RD","side1_street":"LAWRENCE AVE W","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":6,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.700157998233685,"longitude":-79.51620099961744},{"px":216,"main_street":"LAKE SHORE BLVD W","side1_street":"BATHURST ST","side2_street":"FLEET ST","matched_ksi_collision_count":10,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.63648400358273,"longitude":-79.39964900154354},{"px":699,"main_street":"MCCOWAN RD","side1_street":"ELLESMERE RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":0,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.77214199662148,"longitude":-79.25149799520325},{"px":210,"main_street":"LAKE SHORE BLVD E","side1_street":"LOWER JARVIS ST","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":4,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.64563100390511,"longitude":-79.36985500053747},{"px":786,"main_street":"EGLINTON AVE W","side1_street":"MARTIN GROVE RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.674477002843155,"longitude":-79.56317600349855},{"px":437,"main_street":"DIXON RD","side1_street":"MARTIN GROVE RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":2,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.6915920028019,"longitude":-79.57083799820853},{"px":327,"main_street":"DUNDAS ST W","side1_street":"BLOOR ST W","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":8,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.65632099830551,"longitude":-79.45245299441933},{"px":1363,"main_street":"STEELES AVE E","side1_street":"BIRCHMOUNT RD","side2_street":"None","matched_ksi_collision_count":9,"fatal_collision_count":3,"pedestrian_involved_count":3,"cyclist_involved_count":2,"rank_by_observed_count":11,"latitude":43.82139200399463,"longitude":-79.31692499624721},{"px":80,"main_street":"UNIVERSITY AVE","side1_street":"QUEEN ST W","side2_street":"None","matched_ksi_collision_count":9,"fatal_collision_count":0,"pedestrian_involved_count":6,"cyclist_involved_count":1,"rank_by_observed_count":11,"latitude":43.65085199922532,"longitude":-79.38662800465785},{"px":428,"main_street":"KEELE ST","side1_street":"LAWRENCE AVE W","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":1,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":13,"latitude":43.70865899824042,"longitude":-79.47806199808873},{"px":602,"main_street":"STEELES AVE W","side1_street":"KEELE ST","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":2,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":13,"latitude":43.78157900293024,"longitude":-79.4945059992452},{"px":207,"main_street":"LAKE SHORE BLVD E","side1_street":"CARLAW AVE","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":0,"pedestrian_involved_count":1,"cyclist_involved_count":1,"rank_by_observed_count":13,"latitude":43.65500414065956,"longitude":-79.33743140366384},{"px":784,"main_street":"EGLINTON AVE W","side1_street":"SCARLETT RD","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":2,"rank_by_observed_count":13,"latitude":43.68396200125346,"longitude":-79.51145700434533},{"px":488,"main_street":"DUFFERIN ST","side1_street":"ST CLAIR AVE W","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":2,"pedestrian_involved_count":5,"cyclist_involved_count":1,"rank_by_observed_count":13,"latitude":43.67796100116059,"longitude":-79.44308099757724},{"px":380,"main_street":"LAWRENCE AVE E","side1_street":"MCCOWAN RD","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":2,"pedestrian_involved_count":5,"cyclist_involved_count":0,"rank_by_observed_count":13,"latitude":43.755547995699345,"longitude":-79.2454219966729},{"px":435,"main_street":"DIXON RD","side1_street":"KIPLING AVE","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":13,"latitude":43.69424900448849,"longitude":-79.55864900592441},{"px":258,"main_street":"DUNDAS ST E","side1_street":"SHERBOURNE ST","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":3,"pedestrian_involved_count":6,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.65829399860894,"longitude":-79.37103199969748},{"px":131,"main_street":"YONGE ST","side1_street":"STEELES AVE","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":1,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.79799899781678,"longitude":-79.42008399836311},{"px":1176,"main_street":"FINCH AVE E","side1_street":"MCCOWAN RD","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":1,"pedestrian_involved_count":5,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.80802599930859,"longitude":-79.26650600469341},{"px":451,"main_street":"EGLINTON AVE E","side1_street":"VICTORIA PARK AVE","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":1,"pedestrian_involved_count":3,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.724722998449764,"longitude":-79.3026450060334},{"px":351,"main_street":"DANFORTH AVE","side1_street":"WOODBINE AVE","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":0,"pedestrian_involved_count":2,"cyclist_involved_count":3,"rank_by_observed_count":20,"latitude":43.68568400122813,"longitude":-79.31277800560775},{"px":461,"main_street":"EGLINTON AVE E","side1_street":"MIDLAND AVE","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":2,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.73453000383619,"longitude":-79.25810399996482},{"px":1001,"main_street":"ALBION RD","side1_street":"FINCH AVE W","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":1,"pedestrian_involved_count":3,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.74109300182129,"longitude":-79.58923199673978},{"px":124,"main_street":"YONGE ST","side1_street":"YORK MILLS RD","side2_street":"WILSON AVE","matched_ksi_collision_count":7,"fatal_collision_count":1,"pedestrian_involved_count":2,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.74414899893843,"longitude":-79.40672499987775},{"px":1257,"main_street":"FINCH AVE E","side1_street":"MARKHAM RD","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":1,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.812971000654784,"longitude":-79.24307599982318},{"px":300,"main_street":"COLLEGE ST","side1_street":"BATHURST ST","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":0,"pedestrian_involved_count":4,"cyclist_involved_count":2,"rank_by_observed_count":20,"latitude":43.65648099580472,"longitude":-79.40772199836314},{"px":672,"main_street":"BATHURST ST","side1_street":"SHEPPARD AVE W","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":20,"latitude":43.75545800289678,"longitude":-79.43848100443685},{"px":1356,"main_street":"MCCOWAN RD","side1_street":"BUSHBY DR","side2_street":"TOWN CENTRE CRT","matched_ksi_collision_count":7,"fatal_collision_count":0,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.774574000372176,"longitude":-79.25223899380944},{"px":678,"main_street":"STEELES AVE W","side1_street":"BATHURST ST","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":2,"pedestrian_involved_count":5,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.79240699855058,"longitude":-79.44575499406803},{"px":905,"main_street":"EGLINTON AVE W","side1_street":"JANE ST","side2_street":"None","matched_ksi_collision_count":7,"fatal_collision_count":0,"pedestrian_involved_count":2,"cyclist_involved_count":0,"rank_by_observed_count":20,"latitude":43.684476003946784,"longitude":-79.49882300054006},{"px":392,"main_street":"ST CLAIR AVE E","side1_street":"DANFORTH RD","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":2,"pedestrian_involved_count":2,"cyclist_involved_count":1,"rank_by_observed_count":34,"latitude":43.71684600275387,"longitude":-79.25992000470927},{"px":257,"main_street":"QUEEN ST E","side1_street":"SHERBOURNE ST","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":0,"pedestrian_involved_count":4,"cyclist_involved_count":2,"rank_by_observed_count":34,"latitude":43.654525003875,"longitude":-79.36945900049861},{"px":750,"main_street":"SHEPPARD AVE E","side1_street":"WARDEN AVE","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":3,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.778730996964256,"longitude":-79.30790500278177},{"px":696,"main_street":"KENNEDY RD","side1_street":"ELLESMERE RD","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":2,"pedestrian_involved_count":2,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.7658020018831,"longitude":-79.28107799453086},{"px":1503,"main_street":"STEELES AVE E","side1_street":"KELVIN GROVE AVE","side2_street":"PUTNAM GT","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":6,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.82247399727633,"longitude":-79.31226400342155},{"px":875,"main_street":"BURNHAMTHORPE RD","side1_street":"THE WEST MALL","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":3,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.64455199734119,"longitude":-79.56724999977669},{"px":30,"main_street":"YONGE ST","side1_street":"WELLINGTON ST","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":0,"pedestrian_involved_count":4,"cyclist_involved_count":1,"rank_by_observed_count":34,"latitude":43.64783203632949,"longitude":-79.37733652993137},{"px":8,"main_street":"JARVIS ST","side1_street":"DUNDAS ST E","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":0,"pedestrian_involved_count":6,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.65706699657535,"longitude":-79.37456600093638},{"px":394,"main_street":"ROGERS RD","side1_street":"KEELE ST","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":0,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.682136002712916,"longitude":-79.47159799794886},{"px":100,"main_street":"BATHURST ST","side1_street":"EGLINTON AVE W","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":2,"cyclist_involved_count":2,"rank_by_observed_count":34,"latitude":43.700992001276816,"longitude":-79.42556100259776},{"px":589,"main_street":"WESTON RD","side1_street":"FINCH AVE W","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":2,"pedestrian_involved_count":5,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.752089002307194,"longitude":-79.5423800036705},{"px":452,"main_street":"EGLINTON AVE E","side1_street":"PHARMACY AVE","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":1,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.725651000960575,"longitude":-79.29751499746733},{"px":533,"main_street":"SHEPPARD AVE W","side1_street":"JANE ST","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":0,"cyclist_involved_count":0,"rank_by_observed_count":34,"latitude":43.73938899564581,"longitude":-79.5132209984919},{"px":11,"main_street":"JARVIS ST","side1_street":"WELLESLEY ST E","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":5,"cyclist_involved_count":1,"rank_by_observed_count":34,"latitude":43.66628500101939,"longitude":-79.37834700615069},{"px":717,"main_street":"ISLINGTON AVE","side1_street":"ALBION RD","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":1,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":34,"latitude":43.73723599656295,"longitude":-79.56530499456332},{"px":420,"main_street":"LAWRENCE AVE E","side1_street":"MARKHAM RD","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":0,"pedestrian_involved_count":2,"cyclist_involved_count":1,"rank_by_observed_count":34,"latitude":43.759821997457564,"longitude":-79.22532400081766},{"px":196,"main_street":"DUNDAS ST W","side1_street":"BATHURST ST","side2_street":"None","matched_ksi_collision_count":6,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":2,"rank_by_observed_count":34,"latitude":43.65231100265459,"longitude":-79.40602200566519}],"v_intersection_exposure":[{"px":2007,"main_street":"THE WESTWAY","side1_street":"WINCOTT DR","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2015-12-09","count_recency_years":10,"total_movements":8219,"collisions_per_10k_movements":2.433,"recency_reliable":true},{"px":1670,"main_street":"KINGSTON RD","side1_street":"ELLESMERE RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":4466,"collisions_per_10k_movements":2.239,"recency_reliable":true},{"px":1668,"main_street":"REXDALE BLVD","side1_street":"QUEENS PLATE DR","matched_ksi_collisions_2021_2025":3,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":13664,"collisions_per_10k_movements":2.196,"recency_reliable":true},{"px":579,"main_street":"WESTON RD","side1_street":"RAY AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2019-06-25","count_recency_years":7,"total_movements":9174,"collisions_per_10k_movements":2.18,"recency_reliable":true},{"px":2009,"main_street":"HUMBER COLLEGE BLVD","side1_street":"HUMBERLINE DR","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2020-10-29","count_recency_years":5,"total_movements":4735,"collisions_per_10k_movements":2.112,"recency_reliable":true},{"px":796,"main_street":"CALEDONIA RD","side1_street":"KITCHENER AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2018-03-08","count_recency_years":8,"total_movements":10225,"collisions_per_10k_movements":1.956,"recency_reliable":true},{"px":367,"main_street":"COXWELL AVE","side1_street":"FAIRFORD AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2023-11-18","count_recency_years":2,"total_movements":10747,"collisions_per_10k_movements":1.861,"recency_reliable":true},{"px":224,"main_street":"LAKE SHORE BLVD W","side1_street":"JAMESON AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2017-10-03","count_recency_years":8,"total_movements":10875,"collisions_per_10k_movements":1.839,"recency_reliable":true},{"px":813,"main_street":"WILSON AVE","side1_street":"CLAYSON RD","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":11889,"collisions_per_10k_movements":1.682,"recency_reliable":true},{"px":2610,"main_street":"BROADVIEW AVE","side1_street":"MILLBROOK CRES","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-11-05","count_recency_years":3,"total_movements":5994,"collisions_per_10k_movements":1.668,"recency_reliable":true},{"px":1173,"main_street":"KEELE ST","side1_street":"TORO RD","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2021-12-15","count_recency_years":4,"total_movements":13554,"collisions_per_10k_movements":1.476,"recency_reliable":true},{"px":2509,"main_street":"DUPONT ST","side1_street":"HURON ST","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2023-11-23","count_recency_years":2,"total_movements":14122,"collisions_per_10k_movements":1.416,"recency_reliable":true},{"px":2468,"main_street":"JONES AVE","side1_street":"BOULTBEE AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2017-02-23","count_recency_years":9,"total_movements":7070,"collisions_per_10k_movements":1.414,"recency_reliable":true},{"px":2611,"main_street":"TRETHEWEY DR","side1_street":"PAULSON RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2023-02-28","count_recency_years":3,"total_movements":7706,"collisions_per_10k_movements":1.298,"recency_reliable":true},{"px":1215,"main_street":"KEELE ST","side1_street":"ST REGIS CRES","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2021-12-15","count_recency_years":4,"total_movements":15789,"collisions_per_10k_movements":1.267,"recency_reliable":true},{"px":1127,"main_street":"JANE ST","side1_street":"CLAIR RD","matched_ksi_collisions_2021_2025":3,"traffic_count_date":"2025-10-28","count_recency_years":0,"total_movements":23716,"collisions_per_10k_movements":1.265,"recency_reliable":true},{"px":1352,"main_street":"PROGRESS AVE","side1_street":"CONSILIUM PL","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-02-23","count_recency_years":4,"total_movements":8004,"collisions_per_10k_movements":1.249,"recency_reliable":true},{"px":2420,"main_street":"LANSDOWNE AVE","side1_street":"LAPPIN AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2025-10-28","count_recency_years":0,"total_movements":16187,"collisions_per_10k_movements":1.236,"recency_reliable":true},{"px":1594,"main_street":"BATHURST ST","side1_street":"ULSTER ST","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2026-07-25","count_recency_years":0,"total_movements":16646,"collisions_per_10k_movements":1.201,"recency_reliable":true},{"px":824,"main_street":"WOODBINE AVE","side1_street":"EASTWOOD RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-02-09","count_recency_years":4,"total_movements":8447,"collisions_per_10k_movements":1.184,"recency_reliable":true},{"px":231,"main_street":"LAKE SHORE BLVD W","side1_street":"SUPERIOR AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2025-11-05","count_recency_years":0,"total_movements":17162,"collisions_per_10k_movements":1.165,"recency_reliable":true},{"px":2533,"main_street":"WILLOWDALE AVE","side1_street":"CHURCH AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2018-02-15","count_recency_years":8,"total_movements":8660,"collisions_per_10k_movements":1.155,"recency_reliable":true},{"px":1838,"main_street":"LAWRENCE AVE E","side1_street":"EAST AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2025-05-21","count_recency_years":1,"total_movements":8669,"collisions_per_10k_movements":1.154,"recency_reliable":true},{"px":1503,"main_street":"STEELES AVE E","side1_street":"KELVIN GROVE AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2023-01-31","count_recency_years":3,"total_movements":17767,"collisions_per_10k_movements":1.126,"recency_reliable":true},{"px":2480,"main_street":"WALSH AVE","side1_street":"MATHEWS GT","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":8939,"collisions_per_10k_movements":1.119,"recency_reliable":true},{"px":1725,"main_street":"COLLEGE ST","side1_street":"HURON ST","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2017-01-17","count_recency_years":9,"total_movements":18001,"collisions_per_10k_movements":1.111,"recency_reliable":true},{"px":546,"main_street":"QUEEN ST E","side1_street":"JONES AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-06-25","count_recency_years":4,"total_movements":9130,"collisions_per_10k_movements":1.095,"recency_reliable":true},{"px":2605,"main_street":"EASTERN AVE","side1_street":"WOODFIELD RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2020-09-01","count_recency_years":5,"total_movements":9165,"collisions_per_10k_movements":1.091,"recency_reliable":true},{"px":991,"main_street":"WILSON AVE","side1_street":"YONGE BLVD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":9226,"collisions_per_10k_movements":1.084,"recency_reliable":true},{"px":8,"main_street":"JARVIS ST","side1_street":"DUNDAS ST E","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2022-12-03","count_recency_years":3,"total_movements":18482,"collisions_per_10k_movements":1.082,"recency_reliable":true},{"px":2120,"main_street":"KIPLING AVE","side1_street":"HENLEY CRES","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-02-08","count_recency_years":4,"total_movements":9321,"collisions_per_10k_movements":1.073,"recency_reliable":true},{"px":218,"main_street":"LAKE SHORE BLVD W","side1_street":"BURLINGTON ST","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2021-12-15","count_recency_years":4,"total_movements":9338,"collisions_per_10k_movements":1.071,"recency_reliable":true},{"px":2207,"main_street":"DUNDAS ST W","side1_street":"HIGH PARK AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-07-02","count_recency_years":4,"total_movements":9390,"collisions_per_10k_movements":1.065,"recency_reliable":true},{"px":1233,"main_street":"LESLIE ST","side1_street":"RAVEL RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-01-25","count_recency_years":4,"total_movements":9650,"collisions_per_10k_movements":1.036,"recency_reliable":true},{"px":290,"main_street":"DUNDAS ST E","side1_street":"LOGAN AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-03-05","count_recency_years":4,"total_movements":9672,"collisions_per_10k_movements":1.034,"recency_reliable":true},{"px":764,"main_street":"KIPLING AVE","side1_street":"HORNER AVE","matched_ksi_collisions_2021_2025":3,"traffic_count_date":"2025-03-18","count_recency_years":1,"total_movements":29376,"collisions_per_10k_movements":1.021,"recency_reliable":true},{"px":1864,"main_street":"DUNDAS ST W","side1_street":"CHELSEA AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-03-01","count_recency_years":4,"total_movements":9802,"collisions_per_10k_movements":1.02,"recency_reliable":true},{"px":1455,"main_street":"WYNFORD DR","side1_street":"CONCORDE PL","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-04-06","count_recency_years":4,"total_movements":9878,"collisions_per_10k_movements":1.012,"recency_reliable":true},{"px":1176,"main_street":"FINCH AVE E","side1_street":"MCCOWAN RD","matched_ksi_collisions_2021_2025":4,"traffic_count_date":"2024-10-29","count_recency_years":1,"total_movements":39930,"collisions_per_10k_movements":1.002,"recency_reliable":true},{"px":359,"main_street":"DANFORTH AVE","side1_street":"BIRCHMOUNT RD","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2025-11-13","count_recency_years":0,"total_movements":19990,"collisions_per_10k_movements":1.001,"recency_reliable":true},{"px":2025,"main_street":"QUEEN ST E","side1_street":"GLEN MANOR DR","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2018-07-24","count_recency_years":8,"total_movements":10018,"collisions_per_10k_movements":0.998,"recency_reliable":true},{"px":1855,"main_street":"KIPLING AVE","side1_street":"LONGFIELD RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-02-09","count_recency_years":4,"total_movements":10047,"collisions_per_10k_movements":0.995,"recency_reliable":true},{"px":1294,"main_street":"PHARMACY AVE","side1_street":"DENTON AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2025-10-26","count_recency_years":0,"total_movements":10083,"collisions_per_10k_movements":0.992,"recency_reliable":true},{"px":1527,"main_street":"DANFORTH RD","side1_street":"TRUDELLE ST","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2024-11-02","count_recency_years":1,"total_movements":20188,"collisions_per_10k_movements":0.991,"recency_reliable":true},{"px":183,"main_street":"DUNDAS ST W","side1_street":"BROCK AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-03-05","count_recency_years":4,"total_movements":10160,"collisions_per_10k_movements":0.984,"recency_reliable":true},{"px":1324,"main_street":"LAKE SHORE BLVD W","side1_street":"FIFTH ST","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2015-11-12","count_recency_years":10,"total_movements":10228,"collisions_per_10k_movements":0.978,"recency_reliable":true},{"px":1765,"main_street":"ROYAL YORK RD","side1_street":"EDENBRIDGE DR","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2024-01-17","count_recency_years":2,"total_movements":10229,"collisions_per_10k_movements":0.978,"recency_reliable":true},{"px":1787,"main_street":"MORNINGSIDE AVE","side1_street":"OLD FINCH AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2023-12-10","count_recency_years":2,"total_movements":10267,"collisions_per_10k_movements":0.974,"recency_reliable":true},{"px":1402,"main_street":"BLOOR ST W","side1_street":"ABERFOYLE CRES","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2026-05-12","count_recency_years":0,"total_movements":20783,"collisions_per_10k_movements":0.962,"recency_reliable":true},{"px":1797,"main_street":"KIPLING AVE","side1_street":"GENTHORN AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-02-08","count_recency_years":4,"total_movements":10490,"collisions_per_10k_movements":0.953,"recency_reliable":true}],"v_collision_hour_weekday":[{"day_of_week":0,"day_name":"Sunday","hour_of_day":0,"ksi_collision_count":52},{"day_of_week":0,"day_name":"Sunday","hour_of_day":1,"ksi_collision_count":45},{"day_of_week":0,"day_name":"Sunday","hour_of_day":2,"ksi_collision_count":53},{"day_of_week":0,"day_name":"Sunday","hour_of_day":3,"ksi_collision_count":56},{"day_of_week":0,"day_name":"Sunday","hour_of_day":4,"ksi_collision_count":21},{"day_of_week":0,"day_name":"Sunday","hour_of_day":5,"ksi_collision_count":15},{"day_of_week":0,"day_name":"Sunday","hour_of_day":6,"ksi_collision_count":17},{"day_of_week":0,"day_name":"Sunday","hour_of_day":7,"ksi_collision_count":14},{"day_of_week":0,"day_name":"Sunday","hour_of_day":8,"ksi_collision_count":19},{"day_of_week":0,"day_name":"Sunday","hour_of_day":9,"ksi_collision_count":21},{"day_of_week":0,"day_name":"Sunday","hour_of_day":10,"ksi_collision_count":46},{"day_of_week":0,"day_name":"Sunday","hour_of_day":11,"ksi_collision_count":31},{"day_of_week":0,"day_name":"Sunday","hour_of_day":12,"ksi_collision_count":38},{"day_of_week":0,"day_name":"Sunday","hour_of_day":13,"ksi_collision_count":51},{"day_of_week":0,"day_name":"Sunday","hour_of_day":14,"ksi_collision_count":44},{"day_of_week":0,"day_name":"Sunday","hour_of_day":15,"ksi_collision_count":59},{"day_of_week":0,"day_name":"Sunday","hour_of_day":16,"ksi_collision_count":47},{"day_of_week":0,"day_name":"Sunday","hour_of_day":17,"ksi_collision_count":53},{"day_of_week":0,"day_name":"Sunday","hour_of_day":18,"ksi_collision_count":58},{"day_of_week":0,"day_name":"Sunday","hour_of_day":19,"ksi_collision_count":59},{"day_of_week":0,"day_name":"Sunday","hour_of_day":20,"ksi_collision_count":55},{"day_of_week":0,"day_name":"Sunday","hour_of_day":21,"ksi_collision_count":47},{"day_of_week":0,"day_name":"Sunday","hour_of_day":22,"ksi_collision_count":37},{"day_of_week":0,"day_name":"Sunday","hour_of_day":23,"ksi_collision_count":24},{"day_of_week":1,"day_name":"Monday","hour_of_day":0,"ksi_collision_count":30},{"day_of_week":1,"day_name":"Monday","hour_of_day":1,"ksi_collision_count":25},{"day_of_week":1,"day_name":"Monday","hour_of_day":2,"ksi_collision_count":14},{"day_of_week":1,"day_name":"Monday","hour_of_day":3,"ksi_collision_count":12},{"day_of_week":1,"day_name":"Monday","hour_of_day":4,"ksi_collision_count":12},{"day_of_week":1,"day_name":"Monday","hour_of_day":5,"ksi_collision_count":20},{"day_of_week":1,"day_name":"Monday","hour_of_day":6,"ksi_collision_count":40},{"day_of_week":1,"day_name":"Monday","hour_of_day":7,"ksi_collision_count":43},{"day_of_week":1,"day_name":"Monday","hour_of_day":8,"ksi_collision_count":55},{"day_of_week":1,"day_name":"Monday","hour_of_day":9,"ksi_collision_count":38},{"day_of_week":1,"day_name":"Monday","hour_of_day":10,"ksi_collision_count":50},{"day_of_week":1,"day_name":"Monday","hour_of_day":11,"ksi_collision_count":43},{"day_of_week":1,"day_name":"Monday","hour_of_day":12,"ksi_collision_count":47},{"day_of_week":1,"day_name":"Monday","hour_of_day":13,"ksi_collision_count":49},{"day_of_week":1,"day_name":"Monday","hour_of_day":14,"ksi_collision_count":59},{"day_of_week":1,"day_name":"Monday","hour_of_day":15,"ksi_collision_count":54},{"day_of_week":1,"day_name":"Monday","hour_of_day":16,"ksi_collision_count":66},{"day_of_week":1,"day_name":"Monday","hour_of_day":17,"ksi_collision_count":85},{"day_of_week":1,"day_name":"Monday","hour_of_day":18,"ksi_collision_count":69},{"day_of_week":1,"day_name":"Monday","hour_of_day":19,"ksi_collision_count":55},{"day_of_week":1,"day_name":"Monday","hour_of_day":20,"ksi_collision_count":55},{"day_of_week":1,"day_name":"Monday","hour_of_day":21,"ksi_collision_count":42},{"day_of_week":1,"day_name":"Monday","hour_of_day":22,"ksi_collision_count":26},{"day_of_week":1,"day_name":"Monday","hour_of_day":23,"ksi_collision_count":31},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":0,"ksi_collision_count":18},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":1,"ksi_collision_count":15},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":2,"ksi_collision_count":13},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":3,"ksi_collision_count":7},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":4,"ksi_collision_count":7},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":5,"ksi_collision_count":19},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":6,"ksi_collision_count":41},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":7,"ksi_collision_count":53},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":8,"ksi_collision_count":57},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":9,"ksi_collision_count":55},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":10,"ksi_collision_count":52},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":11,"ksi_collision_count":51},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":12,"ksi_collision_count":61},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":13,"ksi_collision_count":47},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":14,"ksi_collision_count":58},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":15,"ksi_collision_count":82},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":16,"ksi_collision_count":73},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":17,"ksi_collision_count":85},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":18,"ksi_collision_count":85},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":19,"ksi_collision_count":66},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":20,"ksi_collision_count":60},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":21,"ksi_collision_count":63},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":22,"ksi_collision_count":37},{"day_of_week":2,"day_name":"Tuesday","hour_of_day":23,"ksi_collision_count":27},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":0,"ksi_collision_count":29},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":1,"ksi_collision_count":12},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":2,"ksi_collision_count":13},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":3,"ksi_collision_count":11},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":4,"ksi_collision_count":5},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":5,"ksi_collision_count":18},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":6,"ksi_collision_count":42},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":7,"ksi_collision_count":35},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":8,"ksi_collision_count":55},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":9,"ksi_collision_count":59},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":10,"ksi_collision_count":44},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":11,"ksi_collision_count":67},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":12,"ksi_collision_count":39},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":13,"ksi_collision_count":52},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":14,"ksi_collision_count":69},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":15,"ksi_collision_count":60},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":16,"ksi_collision_count":73},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":17,"ksi_collision_count":83},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":18,"ksi_collision_count":89},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":19,"ksi_collision_count":66},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":20,"ksi_collision_count":65},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":21,"ksi_collision_count":55},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":22,"ksi_collision_count":41},{"day_of_week":3,"day_name":"Wednesday","hour_of_day":23,"ksi_collision_count":37},{"day_of_week":4,"day_name":"Thursday","hour_of_day":0,"ksi_collision_count":29},{"day_of_week":4,"day_name":"Thursday","hour_of_day":1,"ksi_collision_count":20},{"day_of_week":4,"day_name":"Thursday","hour_of_day":2,"ksi_collision_count":18},{"day_of_week":4,"day_name":"Thursday","hour_of_day":3,"ksi_collision_count":12},{"day_of_week":4,"day_name":"Thursday","hour_of_day":4,"ksi_collision_count":4},{"day_of_week":4,"day_name":"Thursday","hour_of_day":5,"ksi_collision_count":11},{"day_of_week":4,"day_name":"Thursday","hour_of_day":6,"ksi_collision_count":47},{"day_of_week":4,"day_name":"Thursday","hour_of_day":7,"ksi_collision_count":45},{"day_of_week":4,"day_name":"Thursday","hour_of_day":8,"ksi_collision_count":38},{"day_of_week":4,"day_name":"Thursday","hour_of_day":9,"ksi_collision_count":58},{"day_of_week":4,"day_name":"Thursday","hour_of_day":10,"ksi_collision_count":38},{"day_of_week":4,"day_name":"Thursday","hour_of_day":11,"ksi_collision_count":44},{"day_of_week":4,"day_name":"Thursday","hour_of_day":12,"ksi_collision_count":47},{"day_of_week":4,"day_name":"Thursday","hour_of_day":13,"ksi_collision_count":44},{"day_of_week":4,"day_name":"Thursday","hour_of_day":14,"ksi_collision_count":60},{"day_of_week":4,"day_name":"Thursday","hour_of_day":15,"ksi_collision_count":83},{"day_of_week":4,"day_name":"Thursday","hour_of_day":16,"ksi_collision_count":59},{"day_of_week":4,"day_name":"Thursday","hour_of_day":17,"ksi_collision_count":62},{"day_of_week":4,"day_name":"Thursday","hour_of_day":18,"ksi_collision_count":62},{"day_of_week":4,"day_name":"Thursday","hour_of_day":19,"ksi_collision_count":74},{"day_of_week":4,"day_name":"Thursday","hour_of_day":20,"ksi_collision_count":65},{"day_of_week":4,"day_name":"Thursday","hour_of_day":21,"ksi_collision_count":65},{"day_of_week":4,"day_name":"Thursday","hour_of_day":22,"ksi_collision_count":64},{"day_of_week":4,"day_name":"Thursday","hour_of_day":23,"ksi_collision_count":38},{"day_of_week":5,"day_name":"Friday","hour_of_day":0,"ksi_collision_count":21},{"day_of_week":5,"day_name":"Friday","hour_of_day":1,"ksi_collision_count":31},{"day_of_week":5,"day_name":"Friday","hour_of_day":2,"ksi_collision_count":26},{"day_of_week":5,"day_name":"Friday","hour_of_day":3,"ksi_collision_count":16},{"day_of_week":5,"day_name":"Friday","hour_of_day":4,"ksi_collision_count":16},{"day_of_week":5,"day_name":"Friday","hour_of_day":5,"ksi_collision_count":24},{"day_of_week":5,"day_name":"Friday","hour_of_day":6,"ksi_collision_count":47},{"day_of_week":5,"day_name":"Friday","hour_of_day":7,"ksi_collision_count":36},{"day_of_week":5,"day_name":"Friday","hour_of_day":8,"ksi_collision_count":43},{"day_of_week":5,"day_name":"Friday","hour_of_day":9,"ksi_collision_count":43},{"day_of_week":5,"day_name":"Friday","hour_of_day":10,"ksi_collision_count":52},{"day_of_week":5,"day_name":"Friday","hour_of_day":11,"ksi_collision_count":49},{"day_of_week":5,"day_name":"Friday","hour_of_day":12,"ksi_collision_count":56},{"day_of_week":5,"day_name":"Friday","hour_of_day":13,"ksi_collision_count":49},{"day_of_week":5,"day_name":"Friday","hour_of_day":14,"ksi_collision_count":81},{"day_of_week":5,"day_name":"Friday","hour_of_day":15,"ksi_collision_count":66},{"day_of_week":5,"day_name":"Friday","hour_of_day":16,"ksi_collision_count":64},{"day_of_week":5,"day_name":"Friday","hour_of_day":17,"ksi_collision_count":74},{"day_of_week":5,"day_name":"Friday","hour_of_day":18,"ksi_collision_count":100},{"day_of_week":5,"day_name":"Friday","hour_of_day":19,"ksi_collision_count":75},{"day_of_week":5,"day_name":"Friday","hour_of_day":20,"ksi_collision_count":53},{"day_of_week":5,"day_name":"Friday","hour_of_day":21,"ksi_collision_count":66},{"day_of_week":5,"day_name":"Friday","hour_of_day":22,"ksi_collision_count":63},{"day_of_week":5,"day_name":"Friday","hour_of_day":23,"ksi_collision_count":56},{"day_of_week":6,"day_name":"Saturday","hour_of_day":0,"ksi_collision_count":44},{"day_of_week":6,"day_name":"Saturday","hour_of_day":1,"ksi_collision_count":29},{"day_of_week":6,"day_name":"Saturday","hour_of_day":2,"ksi_collision_count":59},{"day_of_week":6,"day_name":"Saturday","hour_of_day":3,"ksi_collision_count":47},{"day_of_week":6,"day_name":"Saturday","hour_of_day":4,"ksi_collision_count":17},{"day_of_week":6,"day_name":"Saturday","hour_of_day":5,"ksi_collision_count":25},{"day_of_week":6,"day_name":"Saturday","hour_of_day":6,"ksi_collision_count":19},{"day_of_week":6,"day_name":"Saturday","hour_of_day":7,"ksi_collision_count":21},{"day_of_week":6,"day_name":"Saturday","hour_of_day":8,"ksi_collision_count":22},{"day_of_week":6,"day_name":"Saturday","hour_of_day":9,"ksi_collision_count":37},{"day_of_week":6,"day_name":"Saturday","hour_of_day":10,"ksi_collision_count":33},{"day_of_week":6,"day_name":"Saturday","hour_of_day":11,"ksi_collision_count":37},{"day_of_week":6,"day_name":"Saturday","hour_of_day":12,"ksi_collision_count":47},{"day_of_week":6,"day_name":"Saturday","hour_of_day":13,"ksi_collision_count":52},{"day_of_week":6,"day_name":"Saturday","hour_of_day":14,"ksi_collision_count":47},{"day_of_week":6,"day_name":"Saturday","hour_of_day":15,"ksi_collision_count":43},{"day_of_week":6,"day_name":"Saturday","hour_of_day":16,"ksi_collision_count":53},{"day_of_week":6,"day_name":"Saturday","hour_of_day":17,"ksi_collision_count":62},{"day_of_week":6,"day_name":"Saturday","hour_of_day":18,"ksi_collision_count":66},{"day_of_week":6,"day_name":"Saturday","hour_of_day":19,"ksi_collision_count":54},{"day_of_week":6,"day_name":"Saturday","hour_of_day":20,"ksi_collision_count":65},{"day_of_week":6,"day_name":"Saturday","hour_of_day":21,"ksi_collision_count":51},{"day_of_week":6,"day_name":"Saturday","hour_of_day":22,"ksi_collision_count":66},{"day_of_week":6,"day_name":"Saturday","hour_of_day":23,"ksi_collision_count":55}],"v_collision_seasonal_pattern":[{"season":"Summer","ksi_collision_count":2238,"fatal_collision_count":306,"fatal_share_pct":13.67,"winter_condition_share_pct":0.0},{"season":"Fall","ksi_collision_count":2005,"fatal_collision_count":289,"fatal_share_pct":14.41,"winter_condition_share_pct":1.45},{"season":"Spring","ksi_collision_count":1862,"fatal_collision_count":245,"fatal_share_pct":13.16,"winter_condition_share_pct":0.38},{"season":"Winter","ksi_collision_count":1473,"fatal_collision_count":221,"fatal_share_pct":15.0,"winter_condition_share_pct":7.6}],"v_collision_monthly_pattern":[{"month":1,"month_name":"January","ksi_collision_count":522,"fatal_collision_count":95,"fatal_share_pct":18.2,"month_year_coverage":21},{"month":2,"month_name":"February","ksi_collision_count":455,"fatal_collision_count":59,"fatal_share_pct":12.97,"month_year_coverage":21},{"month":3,"month_name":"March","ksi_collision_count":505,"fatal_collision_count":67,"fatal_share_pct":13.27,"month_year_coverage":21},{"month":4,"month_name":"April","ksi_collision_count":518,"fatal_collision_count":75,"fatal_share_pct":14.48,"month_year_coverage":21},{"month":5,"month_name":"May","ksi_collision_count":639,"fatal_collision_count":83,"fatal_share_pct":12.99,"month_year_coverage":21},{"month":6,"month_name":"June","ksi_collision_count":773,"fatal_collision_count":84,"fatal_share_pct":10.87,"month_year_coverage":21},{"month":7,"month_name":"July","ksi_collision_count":711,"fatal_collision_count":107,"fatal_share_pct":15.05,"month_year_coverage":21},{"month":8,"month_name":"August","ksi_collision_count":739,"fatal_collision_count":104,"fatal_share_pct":14.07,"month_year_coverage":21},{"month":9,"month_name":"September","ksi_collision_count":759,"fatal_collision_count":105,"fatal_share_pct":13.83,"month_year_coverage":20},{"month":10,"month_name":"October","ksi_collision_count":733,"fatal_collision_count":95,"fatal_share_pct":12.96,"month_year_coverage":20},{"month":11,"month_name":"November","ksi_collision_count":647,"fatal_collision_count":98,"fatal_share_pct":15.15,"month_year_coverage":20},{"month":12,"month_name":"December","ksi_collision_count":577,"fatal_collision_count":89,"fatal_share_pct":15.42,"month_year_coverage":20}],"match_status_summary":[{"match_status":"matched","n":3392},{"match_status":"unmatched_no_candidate","n":1},{"match_status":"unmatched_outside_radius","n":4194}],"severity_by_road_user":[{"category":"Pedestrian","ksi_collision_count":3386,"fatal_collision_count":594,"fatal_share_pct":17.54},{"category":"All KSI collisions (citywide)","ksi_collision_count":7578,"fatal_collision_count":1061,"fatal_share_pct":14.0},{"category":"Motorcyclist","ksi_collision_count":856,"fatal_collision_count":117,"fatal_share_pct":13.67},{"category":"Vehicle occupants only","ksi_collision_count":2474,"fatal_collision_count":297,"fatal_share_pct":12.0},{"category":"Cyclist","ksi_collision_count":921,"fatal_collision_count":54,"fatal_share_pct":5.86}],"ingestion_log":[{"dataset_name":"ksi_collisions","resource_name":"Motor Vehicle Collisions with KSI Data","city_last_refreshed":"2026-08-21T13:06:45.156514+00:00","downloaded_at":"2026-08-23T02:54:12.730333+00:00","row_count_loaded":20691},{"dataset_name":"neighbourhoods","resource_name":"Neighbourhoods","city_last_refreshed":"2026-02-20T19:15:31.440337+00:00","downloaded_at":"2026-08-23T02:54:15.047311+00:00","row_count_loaded":158},{"dataset_name":"tmc_counts","resource_name":"tmc_summary_data","city_last_refreshed":"2026-08-21T22:47:58.847085+00:00","downloaded_at":"2026-08-23T02:54:14.074353+00:00","row_count_loaded":30831},{"dataset_name":"traffic_signals","resource_name":"Traffic Signal","city_last_refreshed":"2026-08-22T00:09:32.103958+00:00","downloaded_at":"2026-08-23T02:54:14.519835+00:00","row_count_loaded":2550}],"kpi_summary":[{"total_ksi":7578,"total_fatal":1061,"fatal_share_pct":14.0,"vru_involvement_pct":56.84,"matched_count":3392,"total_bridge":7587,"matched_pct":44.71}],"neighbourhood_rank_swing":[{"area_name":"Morningside Heights","ksi_collision_count":87,"rank_by_raw_count":16,"ksi_density_per_km2":3.0,"rank_by_density":157,"area_km2":28.963,"rank_swing":141},{"area_name":"North Toronto","ksi_collision_count":11,"rank_by_raw_count":154,"ksi_density_per_km2":27.35,"rank_by_density":23,"area_km2":0.402,"rank_swing":131},{"area_name":"North St.James Town","ksi_collision_count":14,"rank_by_raw_count":149,"ksi_density_per_km2":33.01,"rank_by_density":20,"area_km2":0.424,"rank_swing":129},{"area_name":"West Humber-Clairville","ksi_collision_count":235,"rank_by_raw_count":1,"ksi_density_per_km2":7.79,"rank_by_density":120,"area_km2":30.16,"rank_swing":119},{"area_name":"York University Heights","ksi_collision_count":99,"rank_by_raw_count":12,"ksi_density_per_km2":7.47,"rank_by_density":127,"area_km2":13.252,"rank_swing":115},{"area_name":"Yonge-Doris","ksi_collision_count":26,"rank_by_raw_count":122,"ksi_density_per_km2":55.1,"rank_by_density":8,"area_km2":0.472,"rank_swing":114},{"area_name":"Banbury-Don Mills","ksi_collision_count":74,"rank_by_raw_count":22,"ksi_density_per_km2":7.37,"rank_by_density":129,"area_km2":10.045,"rank_swing":107},{"area_name":"West Hill","ksi_collision_count":73,"rank_by_raw_count":23,"ksi_density_per_km2":7.58,"rank_by_density":125,"area_km2":9.628,"rank_swing":102},{"area_name":"Blake-Jones","ksi_collision_count":23,"rank_by_raw_count":131,"ksi_density_per_km2":24.43,"rank_by_density":30,"area_km2":0.942,"rank_swing":101},{"area_name":"Regent Park","ksi_collision_count":30,"rank_by_raw_count":110,"ksi_density_per_km2":46.12,"rank_by_density":12,"area_km2":0.651,"rank_swing":98}],"v_neighbourhood_ksi_top20":[{"area_name":"West Humber-Clairville","area_id":2502213,"ksi_collision_count":235,"fatal_collision_count":37,"fatal_share_pct":15.74,"area_km2":30.16,"ksi_density_per_km2":7.79,"rank_by_raw_count":1,"rank_by_density":120,"pedestrian_collision_count":82,"cyclist_collision_count":6},{"area_name":"South Riverdale","area_id":2502281,"ksi_collision_count":150,"fatal_collision_count":13,"fatal_share_pct":8.67,"area_km2":11.034,"ksi_density_per_km2":13.59,"rank_by_raw_count":2,"rank_by_density":66,"pedestrian_collision_count":64,"cyclist_collision_count":30},{"area_name":"Yonge-Bay Corridor","area_id":2502362,"ksi_collision_count":136,"fatal_collision_count":9,"fatal_share_pct":6.62,"area_km2":1.119,"ksi_density_per_km2":121.52,"rank_by_raw_count":3,"rank_by_density":1,"pedestrian_collision_count":73,"cyclist_collision_count":35},{"area_name":"Wexford/Maryvale","area_id":2502297,"ksi_collision_count":131,"fatal_collision_count":28,"fatal_share_pct":21.37,"area_km2":10.268,"ksi_density_per_km2":12.76,"rank_by_raw_count":4,"rank_by_density":73,"pedestrian_collision_count":59,"cyclist_collision_count":8},{"area_name":"St Lawrence-East Bayfront-The Islands","area_id":2502327,"ksi_collision_count":120,"fatal_collision_count":15,"fatal_share_pct":12.5,"area_km2":11.318,"ksi_density_per_km2":10.6,"rank_by_raw_count":5,"rank_by_density":91,"pedestrian_collision_count":46,"cyclist_collision_count":16},{"area_name":"Moss Park","area_id":2502284,"ksi_collision_count":117,"fatal_collision_count":14,"fatal_share_pct":11.97,"area_km2":1.397,"ksi_density_per_km2":83.73,"rank_by_raw_count":6,"rank_by_density":4,"pedestrian_collision_count":61,"cyclist_collision_count":19},{"area_name":"South Parkdale","area_id":2502264,"ksi_collision_count":115,"fatal_collision_count":26,"fatal_share_pct":22.61,"area_km2":2.288,"ksi_density_per_km2":50.26,"rank_by_raw_count":7,"rank_by_density":9,"pedestrian_collision_count":46,"cyclist_collision_count":13},{"area_name":"Kensington-Chinatown","area_id":2502286,"ksi_collision_count":112,"fatal_collision_count":14,"fatal_share_pct":12.5,"area_km2":1.535,"ksi_density_per_km2":72.95,"rank_by_raw_count":8,"rank_by_density":5,"pedestrian_collision_count":62,"cyclist_collision_count":31},{"area_name":"Clairlea-Birchmount","area_id":2502298,"ksi_collision_count":106,"fatal_collision_count":21,"fatal_share_pct":19.81,"area_km2":7.4,"ksi_density_per_km2":14.32,"rank_by_raw_count":9,"rank_by_density":61,"pedestrian_collision_count":53,"cyclist_collision_count":10},{"area_name":"Annex","area_id":2502304,"ksi_collision_count":105,"fatal_collision_count":9,"fatal_share_pct":8.57,"area_km2":2.791,"ksi_density_per_km2":37.62,"rank_by_raw_count":10,"rank_by_density":14,"pedestrian_collision_count":52,"cyclist_collision_count":26},{"area_name":"Etobicoke City Centre","area_id":2502320,"ksi_collision_count":100,"fatal_collision_count":17,"fatal_share_pct":17.0,"area_km2":10.139,"ksi_density_per_km2":9.86,"rank_by_raw_count":11,"rank_by_density":102,"pedestrian_collision_count":38,"cyclist_collision_count":7},{"area_name":"York University Heights","area_id":2502241,"ksi_collision_count":99,"fatal_collision_count":15,"fatal_share_pct":15.15,"area_km2":13.252,"ksi_density_per_km2":7.47,"rank_by_raw_count":12,"rank_by_density":127,"pedestrian_collision_count":50,"cyclist_collision_count":7},{"area_name":"Wellington Place","area_id":2502325,"ksi_collision_count":98,"fatal_collision_count":5,"fatal_share_pct":5.1,"area_km2":0.98,"ksi_density_per_km2":100.0,"rank_by_raw_count":13,"rank_by_density":3,"pedestrian_collision_count":50,"cyclist_collision_count":29},{"area_name":"Milliken","area_id":2502337,"ksi_collision_count":97,"fatal_collision_count":15,"fatal_share_pct":15.46,"area_km2":9.481,"ksi_density_per_km2":10.23,"rank_by_raw_count":14,"rank_by_density":98,"pedestrian_collision_count":49,"cyclist_collision_count":15},{"area_name":"Downtown Yonge East","area_id":2502329,"ksi_collision_count":88,"fatal_collision_count":7,"fatal_share_pct":7.95,"area_km2":0.809,"ksi_density_per_km2":108.8,"rank_by_raw_count":15,"rank_by_density":2,"pedestrian_collision_count":50,"cyclist_collision_count":18},{"area_name":"Morningside Heights","area_id":2502348,"ksi_collision_count":87,"fatal_collision_count":13,"fatal_share_pct":14.94,"area_km2":28.963,"ksi_density_per_km2":3.0,"rank_by_raw_count":16,"rank_by_density":157,"pedestrian_collision_count":20,"cyclist_collision_count":1},{"area_name":"Tam O'Shanter-Sullivan","area_id":2502296,"ksi_collision_count":86,"fatal_collision_count":17,"fatal_share_pct":19.77,"area_km2":5.424,"ksi_density_per_km2":15.86,"rank_by_raw_count":17,"rank_by_density":55,"pedestrian_collision_count":42,"cyclist_collision_count":10},{"area_name":"Mimico-Queensway","area_id":2502321,"ksi_collision_count":85,"fatal_collision_count":11,"fatal_share_pct":12.94,"area_km2":5.483,"ksi_density_per_km2":15.5,"rank_by_raw_count":18,"rank_by_density":57,"pedestrian_collision_count":22,"cyclist_collision_count":10},{"area_name":"Woburn North","area_id":2502346,"ksi_collision_count":81,"fatal_collision_count":6,"fatal_share_pct":7.41,"area_km2":6.301,"ksi_density_per_km2":12.85,"rank_by_raw_count":19,"rank_by_density":72,"pedestrian_collision_count":31,"cyclist_collision_count":5},{"area_name":"Harbourfront-CityPlace","area_id":2502326,"ksi_collision_count":78,"fatal_collision_count":3,"fatal_share_pct":3.85,"area_km2":1.139,"ksi_density_per_km2":68.49,"rank_by_raw_count":20,"rank_by_density":6,"pedestrian_collision_count":34,"cyclist_collision_count":15}],"v_intersection_risk_top15":[{"px":434,"main_street":"DIXON RD","side1_street":"ISLINGTON AVE","side2_street":"None","matched_ksi_collision_count":11,"fatal_collision_count":4,"pedestrian_involved_count":5,"cyclist_involved_count":0,"rank_by_observed_count":1,"latitude":43.69704900243251,"longitude":-79.54673100311987},{"px":462,"main_street":"EGLINTON AVE E","side1_street":"BRIMLEY RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":6,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.73669599829755,"longitude":-79.24808399910624},{"px":1583,"main_street":"STEELES AVE E","side1_street":"MARKHAM RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.836597996806184,"longitude":-79.25118900373292},{"px":431,"main_street":"WESTON RD","side1_street":"LAWRENCE AVE W","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":6,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.700157998233685,"longitude":-79.51620099961744},{"px":216,"main_street":"LAKE SHORE BLVD W","side1_street":"BATHURST ST","side2_street":"FLEET ST","matched_ksi_collision_count":10,"fatal_collision_count":0,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.63648400358273,"longitude":-79.39964900154354},{"px":699,"main_street":"MCCOWAN RD","side1_street":"ELLESMERE RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":0,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.77214199662148,"longitude":-79.25149799520325},{"px":210,"main_street":"LAKE SHORE BLVD E","side1_street":"LOWER JARVIS ST","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":4,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.64563100390511,"longitude":-79.36985500053747},{"px":786,"main_street":"EGLINTON AVE W","side1_street":"MARTIN GROVE RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":2,"latitude":43.674477002843155,"longitude":-79.56317600349855},{"px":437,"main_street":"DIXON RD","side1_street":"MARTIN GROVE RD","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":2,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.6915920028019,"longitude":-79.57083799820853},{"px":327,"main_street":"DUNDAS ST W","side1_street":"BLOOR ST W","side2_street":"None","matched_ksi_collision_count":10,"fatal_collision_count":1,"pedestrian_involved_count":8,"cyclist_involved_count":0,"rank_by_observed_count":2,"latitude":43.65632099830551,"longitude":-79.45245299441933},{"px":1363,"main_street":"STEELES AVE E","side1_street":"BIRCHMOUNT RD","side2_street":"None","matched_ksi_collision_count":9,"fatal_collision_count":3,"pedestrian_involved_count":3,"cyclist_involved_count":2,"rank_by_observed_count":11,"latitude":43.82139200399463,"longitude":-79.31692499624721},{"px":80,"main_street":"UNIVERSITY AVE","side1_street":"QUEEN ST W","side2_street":"None","matched_ksi_collision_count":9,"fatal_collision_count":0,"pedestrian_involved_count":6,"cyclist_involved_count":1,"rank_by_observed_count":11,"latitude":43.65085199922532,"longitude":-79.38662800465785},{"px":428,"main_street":"KEELE ST","side1_street":"LAWRENCE AVE W","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":1,"pedestrian_involved_count":4,"cyclist_involved_count":0,"rank_by_observed_count":13,"latitude":43.70865899824042,"longitude":-79.47806199808873},{"px":602,"main_street":"STEELES AVE W","side1_street":"KEELE ST","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":2,"pedestrian_involved_count":3,"cyclist_involved_count":1,"rank_by_observed_count":13,"latitude":43.78157900293024,"longitude":-79.4945059992452},{"px":207,"main_street":"LAKE SHORE BLVD E","side1_street":"CARLAW AVE","side2_street":"None","matched_ksi_collision_count":8,"fatal_collision_count":0,"pedestrian_involved_count":1,"cyclist_involved_count":1,"rank_by_observed_count":13,"latitude":43.65500414065956,"longitude":-79.33743140366384}],"v_intersection_exposure_top15":[{"px":2007,"main_street":"THE WESTWAY","side1_street":"WINCOTT DR","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2015-12-09","count_recency_years":10,"total_movements":8219,"collisions_per_10k_movements":2.433,"recency_reliable":true},{"px":1670,"main_street":"KINGSTON RD","side1_street":"ELLESMERE RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":4466,"collisions_per_10k_movements":2.239,"recency_reliable":true},{"px":1668,"main_street":"REXDALE BLVD","side1_street":"QUEENS PLATE DR","matched_ksi_collisions_2021_2025":3,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":13664,"collisions_per_10k_movements":2.196,"recency_reliable":true},{"px":579,"main_street":"WESTON RD","side1_street":"RAY AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2019-06-25","count_recency_years":7,"total_movements":9174,"collisions_per_10k_movements":2.18,"recency_reliable":true},{"px":2009,"main_street":"HUMBER COLLEGE BLVD","side1_street":"HUMBERLINE DR","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2020-10-29","count_recency_years":5,"total_movements":4735,"collisions_per_10k_movements":2.112,"recency_reliable":true},{"px":796,"main_street":"CALEDONIA RD","side1_street":"KITCHENER AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2018-03-08","count_recency_years":8,"total_movements":10225,"collisions_per_10k_movements":1.956,"recency_reliable":true},{"px":367,"main_street":"COXWELL AVE","side1_street":"FAIRFORD AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2023-11-18","count_recency_years":2,"total_movements":10747,"collisions_per_10k_movements":1.861,"recency_reliable":true},{"px":224,"main_street":"LAKE SHORE BLVD W","side1_street":"JAMESON AVE","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2017-10-03","count_recency_years":8,"total_movements":10875,"collisions_per_10k_movements":1.839,"recency_reliable":true},{"px":813,"main_street":"WILSON AVE","side1_street":"CLAYSON RD","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2022-12-17","count_recency_years":3,"total_movements":11889,"collisions_per_10k_movements":1.682,"recency_reliable":true},{"px":2610,"main_street":"BROADVIEW AVE","side1_street":"MILLBROOK CRES","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2022-11-05","count_recency_years":3,"total_movements":5994,"collisions_per_10k_movements":1.668,"recency_reliable":true},{"px":1173,"main_street":"KEELE ST","side1_street":"TORO RD","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2021-12-15","count_recency_years":4,"total_movements":13554,"collisions_per_10k_movements":1.476,"recency_reliable":true},{"px":2509,"main_street":"DUPONT ST","side1_street":"HURON ST","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2023-11-23","count_recency_years":2,"total_movements":14122,"collisions_per_10k_movements":1.416,"recency_reliable":true},{"px":2468,"main_street":"JONES AVE","side1_street":"BOULTBEE AVE","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2017-02-23","count_recency_years":9,"total_movements":7070,"collisions_per_10k_movements":1.414,"recency_reliable":true},{"px":2611,"main_street":"TRETHEWEY DR","side1_street":"PAULSON RD","matched_ksi_collisions_2021_2025":1,"traffic_count_date":"2023-02-28","count_recency_years":3,"total_movements":7706,"collisions_per_10k_movements":1.298,"recency_reliable":true},{"px":1215,"main_street":"KEELE ST","side1_street":"ST REGIS CRES","matched_ksi_collisions_2021_2025":2,"traffic_count_date":"2021-12-15","count_recency_years":4,"total_movements":15789,"collisions_per_10k_movements":1.267,"recency_reliable":true}],"v_neighbourhood_vru_top15":[{"area_name":"Yonge-Bay Corridor","area_id":2502362,"ksi_collision_count":136,"fatal_collision_count":9,"fatal_share_pct":6.62,"area_km2":1.119,"ksi_density_per_km2":121.52,"rank_by_raw_count":3,"rank_by_density":1,"pedestrian_collision_count":73,"cyclist_collision_count":35},{"area_name":"South Riverdale","area_id":2502281,"ksi_collision_count":150,"fatal_collision_count":13,"fatal_share_pct":8.67,"area_km2":11.034,"ksi_density_per_km2":13.59,"rank_by_raw_count":2,"rank_by_density":66,"pedestrian_collision_count":64,"cyclist_collision_count":30},{"area_name":"Kensington-Chinatown","area_id":2502286,"ksi_collision_count":112,"fatal_collision_count":14,"fatal_share_pct":12.5,"area_km2":1.535,"ksi_density_per_km2":72.95,"rank_by_raw_count":8,"rank_by_density":5,"pedestrian_collision_count":62,"cyclist_collision_count":31},{"area_name":"West Humber-Clairville","area_id":2502213,"ksi_collision_count":235,"fatal_collision_count":37,"fatal_share_pct":15.74,"area_km2":30.16,"ksi_density_per_km2":7.79,"rank_by_raw_count":1,"rank_by_density":120,"pedestrian_collision_count":82,"cyclist_collision_count":6},{"area_name":"Moss Park","area_id":2502284,"ksi_collision_count":117,"fatal_collision_count":14,"fatal_share_pct":11.97,"area_km2":1.397,"ksi_density_per_km2":83.73,"rank_by_raw_count":6,"rank_by_density":4,"pedestrian_collision_count":61,"cyclist_collision_count":19},{"area_name":"Wellington Place","area_id":2502325,"ksi_collision_count":98,"fatal_collision_count":5,"fatal_share_pct":5.1,"area_km2":0.98,"ksi_density_per_km2":100.0,"rank_by_raw_count":13,"rank_by_density":3,"pedestrian_collision_count":50,"cyclist_collision_count":29},{"area_name":"Annex","area_id":2502304,"ksi_collision_count":105,"fatal_collision_count":9,"fatal_share_pct":8.57,"area_km2":2.791,"ksi_density_per_km2":37.62,"rank_by_raw_count":10,"rank_by_density":14,"pedestrian_collision_count":52,"cyclist_collision_count":26},{"area_name":"Downtown Yonge East","area_id":2502329,"ksi_collision_count":88,"fatal_collision_count":7,"fatal_share_pct":7.95,"area_km2":0.809,"ksi_density_per_km2":108.8,"rank_by_raw_count":15,"rank_by_density":2,"pedestrian_collision_count":50,"cyclist_collision_count":18},{"area_name":"Wexford/Maryvale","area_id":2502297,"ksi_collision_count":131,"fatal_collision_count":28,"fatal_share_pct":21.37,"area_km2":10.268,"ksi_density_per_km2":12.76,"rank_by_raw_count":4,"rank_by_density":73,"pedestrian_collision_count":59,"cyclist_collision_count":8},{"area_name":"Milliken","area_id":2502337,"ksi_collision_count":97,"fatal_collision_count":15,"fatal_share_pct":15.46,"area_km2":9.481,"ksi_density_per_km2":10.23,"rank_by_raw_count":14,"rank_by_density":98,"pedestrian_collision_count":49,"cyclist_collision_count":15},{"area_name":"Clairlea-Birchmount","area_id":2502298,"ksi_collision_count":106,"fatal_collision_count":21,"fatal_share_pct":19.81,"area_km2":7.4,"ksi_density_per_km2":14.32,"rank_by_raw_count":9,"rank_by_density":61,"pedestrian_collision_count":53,"cyclist_collision_count":10},{"area_name":"St Lawrence-East Bayfront-The Islands","area_id":2502327,"ksi_collision_count":120,"fatal_collision_count":15,"fatal_share_pct":12.5,"area_km2":11.318,"ksi_density_per_km2":10.6,"rank_by_raw_count":5,"rank_by_density":91,"pedestrian_collision_count":46,"cyclist_collision_count":16},{"area_name":"South Parkdale","area_id":2502264,"ksi_collision_count":115,"fatal_collision_count":26,"fatal_share_pct":22.61,"area_km2":2.288,"ksi_density_per_km2":50.26,"rank_by_raw_count":7,"rank_by_density":9,"pedestrian_collision_count":46,"cyclist_collision_count":13},{"area_name":"York University Heights","area_id":2502241,"ksi_collision_count":99,"fatal_collision_count":15,"fatal_share_pct":15.15,"area_km2":13.252,"ksi_density_per_km2":7.47,"rank_by_raw_count":12,"rank_by_density":127,"pedestrian_collision_count":50,"cyclist_collision_count":7},{"area_name":"Tam O'Shanter-Sullivan","area_id":2502296,"ksi_collision_count":86,"fatal_collision_count":17,"fatal_share_pct":19.77,"area_km2":5.424,"ksi_density_per_km2":15.86,"rank_by_raw_count":17,"rank_by_density":55,"pedestrian_collision_count":42,"cyclist_collision_count":10}]}</script>
+<script>
+(function(){
+  "use strict";
+  const DATA = JSON.parse(document.getElementById("dashboard-data").textContent);
+  const tooltipEl = document.getElementById("tooltip");
+  const fmtInt = n => n.toLocaleString("en-CA");
+  const fmtPct = n => n.toFixed(1) + "%";
+  const svgNS = "http://www.w3.org/2000/svg";
+
+  function el(tag, attrs, children) {
+    const e = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      if (k === "class") e.className = attrs[k];
+      else if (k === "html") e.innerHTML = attrs[k];
+      else if (k === "text") e.textContent = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    (children || []).forEach(c => e.appendChild(c));
+    return e;
+  }
+  function svgEl(tag, attrs) {
+    const e = document.createElementNS(svgNS, tag);
+    if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function showTooltip(evt, html) {
+    tooltipEl.innerHTML = html;
+    tooltipEl.classList.add("show");
+    moveTooltip(evt);
+  }
+  function moveTooltip(evt) {
+    const pad = 14;
+    let x = evt.clientX + pad, y = evt.clientY + pad;
+    if (x + 240 > window.innerWidth) x = evt.clientX - 240 - pad;
+    if (y + 60 > window.innerHeight) y = evt.clientY - 60 - pad;
+    tooltipEl.style.left = x + "px";
+    tooltipEl.style.top = y + "px";
+  }
+  function hideTooltip() { tooltipEl.classList.remove("show"); }
+
+  // ---------- KPI card ----------
+  function kpiCard(label, value, note, critical) {
+    return el("div", {class: "kpi-card"}, [
+      el("div", {class: "kpi-label", text: label}),
+      el("div", {class: "kpi-value" + (critical ? " critical" : ""), text: value}),
+      note ? el("div", {class: "kpi-note", text: note}) : null,
+    ].filter(Boolean));
+  }
+
+  // ---------- Sortable data table ----------
+  function dataTable(columns, rows, opts) {
+    opts = opts || {};
+    let sortKey = opts.defaultSort || columns[0].key;
+    let sortDir = opts.defaultDir || "desc";
+    const wrap = el("div", {class: "table-wrap"});
+    function render() {
+      wrap.innerHTML = "";
+      const sorted = rows.slice().sort((a, b) => {
+        const va = a[sortKey], vb = b[sortKey];
+        const cmp = (typeof va === "string") ? va.localeCompare(vb) : (va - vb);
+        return sortDir === "asc" ? cmp : -cmp;
+      });
+      const table = el("table", {class: "data-table"});
+      const thead = el("thead");
+      const trh = el("tr");
+      columns.forEach(col => {
+        const th = el("th", {class: col.num ? "num" : ""});
+        th.textContent = col.label + (col.key === sortKey ? (sortDir === "asc" ? " ▲" : " ▼") : "");
+        th.addEventListener("click", () => {
+          if (sortKey === col.key) sortDir = sortDir === "asc" ? "desc" : "asc";
+          else { sortKey = col.key; sortDir = col.num ? "desc" : "asc"; }
+          render();
+        });
+        trh.appendChild(th);
+      });
+      thead.appendChild(trh);
+      table.appendChild(thead);
+      const tbody = el("tbody");
+      const limit = opts.limit || sorted.length;
+      sorted.slice(0, limit).forEach((row, i) => {
+        const tr = el("tr");
+        columns.forEach(col => {
+          const td = el("td", {class: col.num ? "num" : ""});
+          let v = row[col.key];
+          if (col.fmt) v = col.fmt(v, row);
+          td.textContent = v === null || v === undefined ? "—" : v;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      wrap.appendChild(table);
+    }
+    render();
+    return wrap;
+  }
+
+  // ---------- Line chart (multi-series) ----------
+  function lineChart(opts) {
+    // opts: {data, xKey, series: [{key,label,color}], width, height, dashLastIf}
+    const W = 640, H = 260, padL = 46, padR = 16, padT = 14, padB = 30;
+    const data = opts.data;
+    const xs = data.map(d => d[opts.xKey]);
+    const allY = [];
+    opts.series.forEach(s => data.forEach(d => allY.push(d[s.key] || 0)));
+    const yMax = Math.max(...allY) * 1.12;
+    const yMin = Math.min(0, Math.min(...allY));
+    const xScale = i => padL + (i / (xs.length - 1)) * (W - padL - padR);
+    const yScale = v => H - padB - ((v - yMin) / (yMax - yMin)) * (H - padT - padB);
+
+    const svg = svgEl("svg", {class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": opts.ariaLabel || ""});
+
+    // gridlines
+    const ticks = 4;
+    for (let t = 0; t <= ticks; t++) {
+      const v = yMin + (t / ticks) * (yMax - yMin);
+      const y = yScale(v);
+      svg.appendChild(svgEl("line", {x1: padL, x2: W - padR, y1: y, y2: y, class: "grid-line"}));
+      const lbl = svgEl("text", {x: padL - 8, y: y + 3, class: "axis-label", "text-anchor": "end"});
+      lbl.textContent = Math.round(v).toLocaleString("en-CA");
+      svg.appendChild(lbl);
+    }
+    // x labels (sparse)
+    const step = Math.ceil(xs.length / 11);
+    xs.forEach((x, i) => {
+      if (i % step !== 0 && i !== xs.length - 1) return;
+      const lbl = svgEl("text", {x: xScale(i), y: H - padB + 16, class: "axis-label", "text-anchor": "middle"});
+      lbl.textContent = x;
+      svg.appendChild(lbl);
+    });
+    svg.appendChild(svgEl("line", {x1: padL, x2: W - padR, y1: H - padB, y2: H - padB, class: "baseline"}));
+
+    opts.series.forEach(s => {
+      let d = "";
+      data.forEach((row, i) => {
+        const x = xScale(i), y = yScale(row[s.key] || 0);
+        d += (i === 0 ? "M" : "L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+      });
+      const path = svgEl("path", {d: d.trim(), fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round"});
+      if (opts.dashLastSegment) {
+        // split last segment as dashed to flag partial period
+        const n = data.length;
+        const x1 = xScale(n - 2), y1 = yScale(data[n - 2][s.key] || 0);
+        const x2 = xScale(n - 1), y2 = yScale(data[n - 1][s.key] || 0);
+        const lastSeg = svgEl("line", {x1, y1, x2, y2, stroke: s.color, "stroke-width": 2, "stroke-dasharray": "4,3"});
+        svg.appendChild(path);
+        svg.appendChild(lastSeg);
+      } else {
+        svg.appendChild(path);
+      }
+      data.forEach((row, i) => {
+        const x = xScale(i), y = yScale(row[s.key] || 0);
+        const c = svgEl("circle", {cx: x, cy: y, r: 3, fill: s.color, class: "heatmap-cell"});
+        c.addEventListener("mousemove", (evt) => {
+          showTooltip(evt, `<b>${row[opts.xKey]}</b><br>${s.label}: ${fmtInt(row[s.key] || 0)}`);
+        });
+        c.addEventListener("mouseleave", hideTooltip);
+        svg.appendChild(c);
+      });
+    });
+    return svg;
+  }
+
+  // ---------- Bar chart (vertical or horizontal) ----------
+  function barChart(opts) {
+    // opts: {data, labelKey, series:[{key,label,color}], horizontal, width, height, fmt}
+    const horizontal = !!opts.horizontal;
+    const W = 640, H = opts.height || (horizontal ? Math.max(220, opts.data.length * 26) : 260);
+    const padL = horizontal ? 150 : 46, padR = 16, padT = 10, padB = horizontal ? 10 : 34;
+    const data = opts.data;
+    const series = opts.series;
+    const maxV = Math.max(1, ...data.map(d => Math.max(...series.map(s => d[s.key] || 0))));
+    const svg = svgEl("svg", {class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": opts.ariaLabel || ""});
+
+    if (horizontal) {
+      const bandH = (H - padT - padB) / data.length;
+      const groupH = bandH * 0.7 / series.length;
+      const xScale = v => padL + (v / maxV) * (W - padL - padR);
+      // gridlines vertical
+      for (let t = 0; t <= 4; t++) {
+        const v = (t / 4) * maxV;
+        const x = xScale(v);
+        svg.appendChild(svgEl("line", {x1: x, x2: x, y1: padT, y2: H - padB, class: "grid-line"}));
+      }
+      data.forEach((row, i) => {
+        const yBand = padT + i * bandH;
+        const lbl = svgEl("text", {x: padL - 8, y: yBand + bandH / 2 + 3, class: "axis-label", "text-anchor": "end"});
+        let label = row[opts.labelKey];
+        if (label && label.length > 22) label = label.slice(0, 21) + "…";
+        lbl.textContent = label;
+        svg.appendChild(lbl);
+        series.forEach((s, si) => {
+          const v = row[s.key] || 0;
+          const y = yBand + bandH * 0.15 + si * groupH;
+          const barW = Math.max(0, xScale(v) - padL);
+          const rect = svgEl("rect", {x: padL, y, width: barW, height: groupH * 0.82, rx: 2, fill: s.color});
+          rect.addEventListener("mousemove", (evt) => showTooltip(evt, `<b>${row[opts.labelKey]}</b><br>${s.label}: ${opts.fmt ? opts.fmt(v) : fmtInt(v)}`));
+          rect.addEventListener("mouseleave", hideTooltip);
+          svg.appendChild(rect);
+        });
+      });
+    } else {
+      const bandW = (W - padL - padR) / data.length;
+      const groupW = bandW * 0.66 / series.length;
+      const yScale = v => (H - padB) - (v / maxV) * (H - padT - padB);
+      for (let t = 0; t <= 4; t++) {
+        const v = (t / 4) * maxV;
+        const y = yScale(v);
+        svg.appendChild(svgEl("line", {x1: padL, x2: W - padR, y1: y, y2: y, class: "grid-line"}));
+      }
+      svg.appendChild(svgEl("line", {x1: padL, x2: W - padR, y1: H - padB, y2: H - padB, class: "baseline"}));
+      data.forEach((row, i) => {
+        const xBand = padL + i * bandW;
+        const lbl = svgEl("text", {x: xBand + bandW / 2, y: H - padB + 16, class: "axis-label", "text-anchor": "middle"});
+        lbl.textContent = row[opts.labelKey];
+        svg.appendChild(lbl);
+        series.forEach((s, si) => {
+          const v = row[s.key] || 0;
+          const x = xBand + bandW * 0.17 + si * groupW;
+          const barH = (H - padB) - yScale(v);
+          const rect = svgEl("rect", {x, y: yScale(v), width: groupW * 0.82, height: barH, rx: 2, fill: s.color});
+          rect.addEventListener("mousemove", (evt) => showTooltip(evt, `<b>${row[opts.labelKey]}</b><br>${s.label}: ${opts.fmt ? opts.fmt(v) : fmtInt(v)}`));
+          rect.addEventListener("mouseleave", hideTooltip);
+          svg.appendChild(rect);
+        });
+      });
+    }
+    return svg;
+  }
+
+  function legend(items) {
+    return el("div", {class: "legend"}, items.map(it =>
+      el("span", {class: "legend-item"}, [
+        el("span", {class: "legend-swatch", style: `background:${it.color}`}),
+        el("span", {text: it.label}),
+      ])
+    ));
+  }
+
+  // ---------- Heatmap (hour x weekday) ----------
+  function heatmap(data) {
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const W = 900, H = 230, padL = 76, padT = 10;
+    const cellW = (W - padL - 10) / 24, cellH = (H - padT - 10) / 7;
+    const max = Math.max(...data.map(d => d.ksi_collision_count));
+    const seqRamp = ["#cde2fb","#9ec5f4","#6da7ec","#3987e5","#256abf","#184f95","#0d366b"];
+    function colorFor(v) {
+      const t = v / max;
+      const idx = Math.min(seqRamp.length - 1, Math.floor(t * seqRamp.length));
+      return seqRamp[idx];
+    }
+    const svg = svgEl("svg", {class: "chart", viewBox: `0 0 ${W} ${H + 10}`, role: "img", "aria-label": "Hour by weekday collision heatmap"});
+    days.forEach((d, di) => {
+      const y = padT + di * cellH;
+      const lbl = svgEl("text", {x: padL - 8, y: y + cellH / 2 + 3, class: "heatmap-row-label", "text-anchor": "end"});
+      lbl.textContent = d;
+      svg.appendChild(lbl);
+    });
+    for (let h = 0; h < 24; h += 3) {
+      const x = padL + h * cellW;
+      const lbl = svgEl("text", {x: x, y: padT + 7 * cellH + 14, class: "heatmap-col-label", "text-anchor": "middle"});
+      lbl.textContent = (h < 10 ? "0" : "") + h + ":00";
+      svg.appendChild(lbl);
+    }
+    data.forEach(d => {
+      const x = padL + d.hour_of_day * cellW;
+      const y = padT + d.day_of_week * cellH;
+      const rect = svgEl("rect", {
+        x: x + 1, y: y + 1, width: cellW - 2, height: cellH - 2, rx: 2,
+        fill: colorFor(d.ksi_collision_count), class: "heatmap-cell",
+      });
+      rect.addEventListener("mousemove", (evt) => {
+        showTooltip(evt, `<b>${d.day_name} ${d.hour_of_day}:00</b><br>${fmtInt(d.ksi_collision_count)} KSI collisions`);
+      });
+      rect.addEventListener("mouseleave", hideTooltip);
+      svg.appendChild(rect);
+    });
+    const wrap = el("div");
+    wrap.appendChild(svg);
+    const scaleRow = el("div", {style: "display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:var(--ink-muted)"});
+    scaleRow.appendChild(el("span", {text: "Fewer"}));
+    seqRamp.forEach(c => scaleRow.appendChild(el("span", {style: `width:16px;height:10px;border-radius:2px;background:${c};display:inline-block`})));
+    scaleRow.appendChild(el("span", {text: "More"}));
+    wrap.appendChild(scaleRow);
+    return wrap;
+  }
+
+  document.addEventListener("mousemove", (evt) => {
+    if (tooltipEl.classList.contains("show")) moveTooltip(evt);
+  });
+
+  // ============================================================= PAGE 1
+  function buildPage1() {
+    const page = document.getElementById("page1");
+    const kpi = DATA.kpi_summary[0];
+    page.appendChild(el("p", {class: "page-lede", html:
+      "<strong>What is happening across Toronto?</strong> Citywide totals and the two trends that matter most — the full spatial-matching and exposure caveats live on the Methodology page, not buried in a footnote."}));
+
+    const kpiRow = el("div", {class: "kpi-row"});
+    kpiRow.appendChild(kpiCard("Total KSI Collisions", fmtInt(kpi.total_ksi), "2006–2026"));
+    kpiRow.appendChild(kpiCard("Fatal Collisions", fmtInt(kpi.total_fatal), null, true));
+    kpiRow.appendChild(kpiCard("Fatal Share", fmtPct(kpi.fatal_share_pct)));
+    kpiRow.appendChild(kpiCard("Pedestrian or Cyclist Involvement", fmtPct(kpi.vru_involvement_pct), "collisions involving, not people"));
+    kpiRow.appendChild(kpiCard("Spatially Matched", fmtPct(kpi.matched_pct), `${fmtInt(kpi.matched_count)} of ${fmtInt(kpi.total_bridge)} collisions`));
+    page.appendChild(kpiRow);
+
+    const grid = el("div", {class: "grid-2"});
+    const p1 = el("div", {class: "panel"});
+    p1.appendChild(el("div", {class: "panel-title", text: "Annual KSI & Fatal Collision Trend"}));
+    p1.appendChild(el("div", {class: "panel-caption", text: "2026 is a partial year (through early August) — shown dashed, not a real decline."}));
+    p1.appendChild(legend([{color: cssvar("--accent"), label:"KSI collisions"},{color: cssvar("--critical"), label:"Fatal collisions"}]));
+    p1.appendChild(lineChart({
+      data: DATA.v_annual_ksi, xKey: "year", dashLastSegment: true,
+      series: [
+        {key:"ksi_collision_count", label:"KSI collisions", color: cssvar("--accent")},
+        {key:"fatal_collision_count", label:"Fatal collisions", color: cssvar("--critical")},
+      ],
+    }));
+    grid.appendChild(p1);
+
+    const p2 = el("div", {class: "panel"});
+    p2.appendChild(el("div", {class: "panel-title", text: "Road-User Involvement Trend"}));
+    p2.appendChild(el("div", {class: "panel-caption", text: "Collisions involving each road-user type (collision-level flag) — not a count of people. See Methodology §8."}));
+    p2.appendChild(legend([
+      {color: cssvar("--accent"), label:"Pedestrian"},
+      {color: cssvar("--series-2"), label:"Cyclist"},
+      {color: cssvar("--series-3"), label:"Motorcyclist"},
+    ]));
+    p2.appendChild(lineChart({
+      data: DATA.v_road_user_involvement, xKey: "year",
+      series: [
+        {key:"ped_collision_count", label:"Pedestrian", color: cssvar("--accent")},
+        {key:"cyclist_collision_count", label:"Cyclist", color: cssvar("--series-2")},
+        {key:"motorcyclist_collision_count", label:"Motorcyclist", color: cssvar("--series-3")},
+      ],
+    }));
+    grid.appendChild(p2);
+    page.appendChild(grid);
+
+    const p3 = el("div", {class: "panel"});
+    p3.appendChild(el("div", {class: "panel-title", text: "Neighbourhood Overview — Raw KSI Count"}));
+    p3.appendChild(el("div", {class: "panel-caption", text: "Raw counts only. Land-area-normalized density (and why raw count alone is misleading) is on Page 2 — see West Humber-Clairville."}));
+    p3.appendChild(dataTable(
+      [
+        {key:"area_name", label:"Neighbourhood"},
+        {key:"ksi_collision_count", label:"KSI Collisions", num:true},
+        {key:"fatal_collision_count", label:"Fatal", num:true},
+        {key:"fatal_share_pct", label:"Fatal Share", num:true, fmt: fmtPct},
+      ],
+      DATA.v_neighbourhood_ksi_top20,
+      {defaultSort:"ksi_collision_count", limit: 12}
+    ));
+    page.appendChild(p3);
+  }
+  function cssvar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  // ============================================================= PAGE 2
+  function buildPage2() {
+    const page = document.getElementById("page2");
+    page.appendChild(el("p", {class: "page-lede", html:
+      "<strong>Where is it happening?</strong> Raw count and land-area-normalized density give different answers — both are shown, deliberately, side by side. Neither is presented as “risk.”"}));
+
+    const grid = el("div", {class: "grid-2"});
+    const p1 = el("div", {class: "panel"});
+    p1.appendChild(el("div", {class: "panel-title", text: "Neighbourhood KSI Density (per km²)"}));
+    p1.appendChild(el("div", {class: "panel-caption", text: "Top 15 by density. Land-area normalized, NOT per-capita — see Methodology §7."}));
+    p1.appendChild(barChart({
+      data: DATA.v_neighbourhood_ksi.slice().sort((a,b)=>b.ksi_density_per_km2-a.ksi_density_per_km2).slice(0,15),
+      labelKey: "area_name", horizontal: true,
+      series: [{key:"ksi_density_per_km2", label:"Collisions / km²", color: cssvar("--accent")}],
+      fmt: v => v.toFixed(1),
+    }));
+    grid.appendChild(p1);
+
+    const p2 = el("div", {class: "panel"});
+    p2.appendChild(el("div", {class: "panel-title", text: "Raw Count vs. Density Ranking"}));
+    p2.appendChild(el("div", {class: "panel-caption", text: "Sort by any column. West Humber-Clairville: #1 by raw count, #120 by density — a 30 km² neighbourhood, not an outlier risk."}));
+    p2.appendChild(dataTable(
+      [
+        {key:"area_name", label:"Neighbourhood"},
+        {key:"ksi_collision_count", label:"Count", num:true},
+        {key:"rank_by_raw_count", label:"Rank (count)", num:true, fmt: v => "#"+v},
+        {key:"ksi_density_per_km2", label:"Density /km²", num:true, fmt: v=>v.toFixed(1)},
+        {key:"rank_by_density", label:"Rank (density)", num:true, fmt: v => "#"+v},
+      ],
+      DATA.v_neighbourhood_ksi,
+      {defaultSort:"ksi_collision_count", limit: 12}
+    ));
+    grid.appendChild(p2);
+    page.appendChild(grid);
+
+    const grid2 = el("div", {class: "grid-2"});
+    const p3 = el("div", {class: "panel"});
+    p3.appendChild(el("div", {class: "panel-title", text: "Intersection Hotspots — Highest Observed Count"}));
+    p3.appendChild(el("div", {class: "panel-caption", text: "Matched collisions only (~44.7% of citywide KSI, within the 20m radius). “Observed count,” never “dangerous.”"}));
+    p3.appendChild(dataTable(
+      [
+        {key:"main_street", label:"Main St"},
+        {key:"side1_street", label:"Cross St"},
+        {key:"matched_ksi_collision_count", label:"Matched", num:true},
+        {key:"fatal_collision_count", label:"Fatal", num:true},
+        {key:"pedestrian_involved_count", label:"Ped.", num:true},
+      ],
+      DATA.v_intersection_risk_top15,
+      {defaultSort:"matched_ksi_collision_count", limit: 10}
+    ));
+    grid2.appendChild(p3);
+
+    const p4 = el("div", {class: "panel"});
+    p4.appendChild(el("div", {class: "panel-title", text: "Pedestrian / Cyclist Concentration by Neighbourhood"}));
+    p4.appendChild(el("div", {class: "panel-caption", text: "Top 15 by combined pedestrian + cyclist involvement. Collisions involving that type, not person counts."}));
+    p4.appendChild(legend([{color: cssvar("--accent"), label:"Pedestrian"},{color: cssvar("--series-2"), label:"Cyclist"}]));
+    p4.appendChild(barChart({
+      data: DATA.v_neighbourhood_vru_top15.slice(0,10), labelKey: "area_name", horizontal: true, height: 260,
+      series: [
+        {key:"pedestrian_collision_count", label:"Pedestrian", color: cssvar("--accent")},
+        {key:"cyclist_collision_count", label:"Cyclist", color: cssvar("--series-2")},
+      ],
+    }));
+    grid2.appendChild(p4);
+    page.appendChild(grid2);
+
+    const p5 = el("div", {class: "panel"});
+    p5.appendChild(el("div", {class: "panel-title", text: "Relative Exposure — Collisions per 10,000 Movements"}));
+    p5.appendChild(el("div", {class: "panel-caption warn", html:
+      "⚠ <span>CROSS-SECTIONAL SNAPSHOT, not a historical trend. Numerator spans 2021–2025; denominator is a single day's traffic count. Never read as “the 2023 rate.” Recency-reliable intersections only (count within 10 years).</span>"}));
+    p5.appendChild(dataTable(
+      [
+        {key:"main_street", label:"Main St"},
+        {key:"side1_street", label:"Cross St"},
+        {key:"matched_ksi_collisions_2021_2025", label:"Collisions '21–'25", num:true},
+        {key:"traffic_count_date", label:"Count Date"},
+        {key:"count_recency_years", label:"Recency (yrs)", num:true},
+        {key:"total_movements", label:"Total Movements", num:true},
+        {key:"collisions_per_10k_movements", label:"Per 10k Movements", num:true, fmt: v=>v.toFixed(2)},
+      ],
+      DATA.v_intersection_exposure_top15,
+      {defaultSort:"collisions_per_10k_movements", limit: 10}
+    ));
+    page.appendChild(p5);
+  }
+
+  // ============================================================= PAGE 3
+  function buildPage3() {
+    const page = document.getElementById("page3");
+    page.appendChild(el("p", {class: "page-lede", html:
+      "<strong>When is it happening, and who is involved?</strong> Vision Zero treats these as one question — vulnerable road users' timing and severity are read together."}));
+
+    const kpiRow = el("div", {class: "kpi-row"});
+    const peak = DATA.v_collision_hour_weekday.slice().sort((a,b)=>b.ksi_collision_count-a.ksi_collision_count)[0];
+    const season = DATA.v_collision_seasonal_pattern.slice().sort((a,b)=>b.fatal_share_pct-a.fatal_share_pct)[0];
+    const vruYears = DATA.v_road_user_involvement.map(r => (r.ped_collision_count + r.cyclist_collision_count) / r.ksi_collision_count * 100);
+    kpiRow.appendChild(kpiCard("Peak Hour × Day", `${peak.day_name} ${peak.hour_of_day}:00`, `${fmtInt(peak.ksi_collision_count)} KSI collisions`));
+    kpiRow.appendChild(kpiCard("Highest Fatal-Share Season", season.season, fmtPct(season.fatal_share_pct) + " fatal share"));
+    kpiRow.appendChild(kpiCard("VRU Share of KSI (2006–2026)", `${Math.min(...vruYears).toFixed(1)}–${Math.max(...vruYears).toFixed(1)}%`, "range, not a single average — no sustained trend"));
+    page.appendChild(kpiRow);
+
+    const p1 = el("div", {class: "panel"});
+    p1.appendChild(el("div", {class: "panel-title", text: "Hour × Weekday KSI Collision Count"}));
+    p1.appendChild(el("div", {class: "panel-caption", text: "All years combined, full 168-cell grid. Hover any cell for its count."}));
+    p1.appendChild(heatmap(DATA.v_collision_hour_weekday));
+    page.appendChild(p1);
+
+    const grid = el("div", {class: "grid-2"});
+    const p2 = el("div", {class: "panel"});
+    p2.appendChild(el("div", {class: "panel-title", text: "Monthly Pattern"}));
+    p2.appendChild(el("div", {class: "panel-caption", text: "All years combined. September–December reflect 20 years of data (2026 is partial); other months reflect 21."}));
+    p2.appendChild(barChart({
+      data: DATA.v_collision_monthly_pattern, labelKey: "month_name",
+      series: [{key:"ksi_collision_count", label:"KSI collisions", color: cssvar("--accent")}],
+    }));
+    grid.appendChild(p2);
+
+    const p3 = el("div", {class: "panel"});
+    p3.appendChild(el("div", {class: "panel-title", text: "Severity Mix by Road-User Type (all-time)"}));
+    p3.appendChild(el("div", {class: "panel-caption", text: "Categories are not mutually exclusive — a collision can involve more than one type."}));
+    p3.appendChild(barChart({
+      data: DATA.severity_by_road_user, labelKey: "category", horizontal: true, height: 200,
+      series: [{key:"fatal_share_pct", label:"Fatal share", color: cssvar("--critical")}],
+      fmt: fmtPct,
+    }));
+    grid.appendChild(p3);
+    page.appendChild(grid);
+
+    const p4 = el("div", {class: "panel"});
+    p4.appendChild(el("div", {class: "panel-title", text: "Road-User Severity Trend"}));
+    p4.appendChild(el("div", {class: "panel-caption", text: "Fatal share within each road-user type's own involvement, by year. Small annual counts make single-year swings noisy — read the multi-year pattern."}));
+    p4.appendChild(legend([
+      {color: cssvar("--accent"), label:"Pedestrian"},
+      {color: cssvar("--series-2"), label:"Cyclist"},
+      {color: cssvar("--series-3"), label:"Motorcyclist"},
+    ]));
+    const trendData = DATA.v_road_user_involvement.map(r => ({
+      year: r.year,
+      ped_fs: r.ped_collision_count ? (r.ped_fatal_collision_count / r.ped_collision_count * 100) : 0,
+      cyc_fs: r.cyclist_collision_count ? (r.cyclist_fatal_collision_count / r.cyclist_collision_count * 100) : 0,
+      moto_fs: r.motorcyclist_collision_count ? (r.motorcyclist_fatal_collision_count / r.motorcyclist_collision_count * 100) : 0,
+    }));
+    p4.appendChild(lineChart({
+      data: trendData, xKey: "year",
+      series: [
+        {key:"ped_fs", label:"Pedestrian fatal share %", color: cssvar("--accent")},
+        {key:"cyc_fs", label:"Cyclist fatal share %", color: cssvar("--series-2")},
+        {key:"moto_fs", label:"Motorcyclist fatal share %", color: cssvar("--series-3")},
+      ],
+    }));
+    page.appendChild(p4);
+  }
+
+  // ============================================================= PAGE 4
+  const METH_SECTIONS = [
+    ["Data Sources", "Four official City of Toronto Open Data datasets: Motor Vehicle Collisions (KSI), Traffic Volumes – Multimodal TMC, Traffic Signals Tabular, and Neighbourhoods — chosen from 13 datasets evaluated. See <code>docs/DATASET_RESEARCH.md</code>."],
+    ["KSI Definition", "“KSI” = Killed or Seriously Injured. This dataset is <b>severity-filtered</b> — it contains only collisions where at least one person was killed or seriously injured, not all collisions. Every finding here describes the KSI subset only."],
+    ["Database Architecture", "Power BI → PostgreSQL <code>analytics</code> schema views → <code>clean</code> schema → <code>staging</code> schema → Toronto Open Data (CKAN API). Power BI never connects to raw CSV files or the staging/clean schemas directly."],
+    ["Spatial Matching Methodology", "Collisions are matched to the nearest signalized intersection within a <b>20-meter radius</b> — derived empirically from the real distance distribution between 7,586 geocoded collisions and 2,550 signals, not an arbitrary choice. About 44.7% of KSI collisions match; the rest are legitimately midblock or unsignalized."],
+    ["Traffic Exposure Methodology", "The relative-exposure metric (Page 2) is a <b>cross-sectional snapshot</b>: recent collisions (2021–2025) divided by a single day's most recent traffic count. It is explicitly not a historical rate — TMC traffic counts are not temporally aligned with collision history, so a same-year volume denominator does not exist for most intersection-years."],
+    ["Data Quality Considerations", "<code>road_class</code> completeness dropped from under 3% NULL (2013–2023) to 28–62% NULL (2024–2026) — likely reflecting KSI's documented verification lag (fatalities 1–2 weeks, serious injuries 2–3 months), not yet confirmed against a later re-ingestion."],
+    ["Analytical Limitations", "KSI is severity-filtered. Spatial matching covers ~44.7% of collisions. Neighbourhood density is land-area-normalized, not per-capita. Infrastructure-vs-collision comparisons are not built, due to reverse-causation risk. Road-user flags are collision-level, not person-level."],
+    ["Important Interpretation Warnings", "See the warning box below — these three points are the ones most likely to be misread if skipped."],
+  ];
+  function buildPage4() {
+    const page = document.getElementById("page4");
+    page.appendChild(el("p", {class: "page-lede", html: "<strong>How this analysis was produced, and what it cannot claim.</strong>"}));
+    METH_SECTIONS.forEach(([title, body], i) => {
+      const sec = el("div", {class: "meth-section"});
+      sec.appendChild(el("div", {class: "meth-heading"}, [
+        el("span", {class: "meth-num", text: String(i+1)}),
+        el("span", {text: title}),
+      ]));
+      sec.appendChild(el("p", {class: "meth-body", html: body}));
+      page.appendChild(sec);
+    });
+    const warnBox = el("div", {class: "meth-warning-box"});
+    warnBox.appendChild(el("div", {class: "meth-heading", text: "⚠ Never read the dashboard this way"}));
+    const ul = el("ul");
+    [
+      "Never describe the relative-exposure metric (Page 2) as a historical or annual rate.",
+      "Never describe pedestrian/cyclist collision counts as a count of people — they count collisions involving that road-user type.",
+      "Never describe raw neighbourhood collision counts as “risk” without the density-normalized figure alongside it.",
+    ].forEach(t => ul.appendChild(el("li", {text: t})));
+    warnBox.appendChild(ul);
+    page.appendChild(warnBox);
+
+    const p = el("div", {class: "panel"});
+    p.appendChild(el("div", {class: "panel-title", text: "Data As Of — Most Recent Load per Dataset"}));
+    p.appendChild(dataTable(
+      [
+        {key:"dataset_name", label:"Dataset"},
+        {key:"resource_name", label:"Resource"},
+        {key:"city_last_refreshed", label:"City Last Refreshed", fmt: v => v ? v.slice(0,16).replace("T"," ") : "—"},
+        {key:"downloaded_at", label:"Downloaded", fmt: v => v.slice(0,16).replace("T"," ")},
+        {key:"row_count_loaded", label:"Rows", num:true},
+      ],
+      DATA.ingestion_log,
+      {defaultSort:"downloaded_at"}
+    ));
+    page.appendChild(p);
+  }
+
+  // ---------- Tab wiring ----------
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", "false"));
+      tab.setAttribute("aria-selected", "true");
+      document.querySelectorAll(".page").forEach(p => p.hidden = true);
+      document.getElementById(tab.dataset.page).hidden = false;
+    });
+  });
+
+  buildPage1();
+  buildPage2();
+  buildPage3();
+  buildPage4();
+})();
+</script>

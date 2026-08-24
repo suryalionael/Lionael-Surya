@@ -1,0 +1,106 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "c5bc6dcc-b29b-4e92-afb0-f5334b9d1b29",
+  "position": {
+    "x": 650,
+    "y": 375,
+    "z": 0,
+    "width": 610,
+    "height": 300,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "area_name"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.area_name",
+              "nativeQueryRef": "area_name"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "pedestrian_collision_count"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.pedestrian_collision_count",
+              "nativeQueryRef": "pedestrian_collision_count"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "cyclist_collision_count"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.cyclist_collision_count",
+              "nativeQueryRef": "cyclist_collision_count"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Pedestrian / Cyclist Concentration by Neighbourhood (top 15, collisions involving each type)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

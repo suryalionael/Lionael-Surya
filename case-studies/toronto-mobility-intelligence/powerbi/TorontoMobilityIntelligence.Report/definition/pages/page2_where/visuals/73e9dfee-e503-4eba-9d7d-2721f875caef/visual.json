@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "73e9dfee-e503-4eba-9d7d-2721f875caef",
+  "position": {
+    "x": 20,
+    "y": 60,
+    "z": 0,
+    "width": 610,
+    "height": 300,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "area_name"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.area_name",
+              "nativeQueryRef": "area_name"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_neighbourhood_ksi"
+                    }
+                  },
+                  "Property": "ksi_density_per_km2"
+                }
+              },
+              "queryRef": "v_neighbourhood_ksi.ksi_density_per_km2",
+              "nativeQueryRef": "ksi_density_per_km2"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "vcObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Neighbourhood KSI Density (collisions per km^2, top 15)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

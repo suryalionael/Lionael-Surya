@@ -1,0 +1,46 @@
+/// One row per dataset per load: what was downloaded, when, and the City's own last-refreshed timestamp. Powers the Page 4 'data as of' panel (docs/POWER_BI_SPEC.md S8). Grain: one row per ingestion run per dataset.
+table ingestion_log
+	lineageTag: 6c9a7f0d-e6ea-421b-ad54-3b90e0f08e93
+
+	column dataset_name
+		dataType: string
+		sourceColumn: dataset_name
+		summarizeBy: none
+		lineageTag: 7e86a24a-e17d-4992-bd2d-f7473b48ae8b
+
+	column resource_name
+		dataType: string
+		sourceColumn: resource_name
+		summarizeBy: none
+		lineageTag: 8e854c26-7d9d-4c8d-89c2-21c5e4340b1f
+
+	column city_last_refreshed
+		dataType: dateTime
+		formatString: General Date
+		sourceColumn: city_last_refreshed
+		summarizeBy: none
+		lineageTag: 2141ef61-e1ed-428f-b552-4dc1e97e5465
+
+	column downloaded_at
+		dataType: dateTime
+		formatString: General Date
+		sourceColumn: downloaded_at
+		summarizeBy: none
+		lineageTag: c8f362d8-42d6-49d5-bd1c-760568a88a92
+
+	column row_count_loaded
+		dataType: int64
+		sourceColumn: row_count_loaded
+		summarizeBy: none
+		lineageTag: 18000a22-a4b1-4041-8d2d-c17abd9cfc6f
+
+	partition ingestion_log = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="staging",Item="ingestion_log"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

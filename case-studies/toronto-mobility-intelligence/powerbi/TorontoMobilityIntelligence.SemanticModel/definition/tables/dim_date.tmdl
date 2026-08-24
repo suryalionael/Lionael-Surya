@@ -1,0 +1,88 @@
+/// Standard calendar date dimension, 2006-01-01 through the latest collision date. Marked as the model's official Date table.
+table dim_date
+	lineageTag: 469df132-75e4-4aa7-bc4a-c89193ff2c25
+
+	column date_key
+		isKey
+		dataType: dateTime
+		formatString: General Date
+		sourceColumn: date_key
+		summarizeBy: none
+		lineageTag: b48de829-8ed6-42c6-b3b4-7943ab002342
+
+	column year
+		dataType: int64
+		formatString: 0
+		sourceColumn: year
+		summarizeBy: none
+		lineageTag: d45c3674-51e7-496d-b0f2-75dd1fba47ca
+
+	column month
+		dataType: int64
+		formatString: 0
+		sourceColumn: month
+		summarizeBy: none
+		lineageTag: ea5a04bd-eb50-4e70-9772-987b6ea71280
+
+	column month_name
+		dataType: string
+		sourceColumn: month_name
+		summarizeBy: none
+		lineageTag: cb0f1569-3689-4f6d-9bdd-7dd5533d4945
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		sourceColumn: quarter
+		summarizeBy: none
+		lineageTag: 31179330-a813-4c4f-a2fb-0635d2a2fddf
+
+	column week
+		dataType: int64
+		formatString: 0
+		sourceColumn: week
+		summarizeBy: none
+		lineageTag: 78f5264b-5098-4488-94f6-df739146e2ef
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		sourceColumn: day_of_month
+		summarizeBy: none
+		lineageTag: f1986a43-245d-4065-a5af-2d13c3b34841
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		sourceColumn: day_of_week
+		summarizeBy: none
+		lineageTag: 840fb548-03d3-49b9-b510-e9aafaf8d126
+
+	column day_name
+		dataType: string
+		sourceColumn: day_name
+		summarizeBy: none
+		lineageTag: e3e40ce1-efda-40e9-9f18-90331ead445b
+
+	column is_weekend
+		dataType: boolean
+		sourceColumn: is_weekend
+		summarizeBy: none
+		lineageTag: 3d69a2a5-261b-4b84-904d-c00abb85070e
+
+	column season
+		dataType: string
+		sourceColumn: season
+		summarizeBy: none
+		lineageTag: 6e4bfd03-9476-4816-813f-edb0c74da89f
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PGServer, PGDatabase),
+				    nav = Source{[Schema="analytics",Item="dim_date"]}[Data]
+				in
+				    nav
+
+	annotation PBI_ResultType = Table

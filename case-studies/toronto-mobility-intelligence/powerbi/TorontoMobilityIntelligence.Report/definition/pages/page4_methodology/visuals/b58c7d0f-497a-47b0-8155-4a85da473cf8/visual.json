@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "b58c7d0f-497a-47b0-8155-4a85da473cf8",
+  "position": {
+    "x": 20,
+    "y": 1020,
+    "z": 0,
+    "width": 1240,
+    "height": 140,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "7. Analytical Limitations",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "13pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "(1) KSI is severity-filtered. (2) Spatial matching covers ~44.7% of collisions. (3) Neighbourhood density is land-area-normalized, NOT per-capita -- no population data is in scope. (4) Infrastructure-vs-collision comparisons are not built, due to reverse-causation risk. (5) Road-user flags are collision-level, not person-level -- see warning #2 below.",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "10pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

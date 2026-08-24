@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.4.0/schema.json",
+  "name": "page2_where",
+  "displayName": "2. Where",
+  "width": 1280,
+  "height": 1010,
+  "displayOption": "FitToPage"
+}
