@@ -9,6 +9,7 @@ Cross-discipline, narrative-driven analyses. Where the other folders show depth 
 | [Nutrition Priority Index — Indonesia](nutrition-analytics-indonesia/) ([live demo](https://nutrition-analytics-indonesia.streamlit.app)) | ✅ Built | Which of 38 Indonesian provinces should be prioritized for child-nutrition interventions, using only real government data | Python, BPS/Kemenkes/BIG APIs, scikit-learn, PySAL/esda (spatial stats), Streamlit |
 | [Toronto Mobility Intelligence](toronto-mobility-intelligence/) | ✅ Built | Where is Toronto's collision-safety risk actually concentrated, once raw counts are normalized and spatially matched to intersections | PostgreSQL, PostGIS, SQL, Python, Docker, Power BI, pytest |
 | [Flood Risk Prediction — Dicoding Datathon 2026](flood-risk-datathon-2026/) | ✅ Built | Neighborhood-level flood early warning for Jakarta | Python, XGBoost, SHAP, Leaflet.js, Azure Functions |
+| [Beyond GDP](beyond-gdp/) | ✅ Built | Does GDP per capita actually predict national happiness once health, employment, connectivity, and inflation are controlled for | R, tidyverse, ggplot2, car, sandwich, testthat, renv |
 | [End-to-End Retail Data Platform](end-to-end-retail-data-platform/) | 🔜 Planned (capstone) | Unify pipeline → warehouse → ML → BI into one platform | Full stack, integrated |
 
 ## Why This Matters for Recruiters
