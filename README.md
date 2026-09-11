@@ -21,6 +21,7 @@ Building production-style data systems — from raw pipelines to deployed ML/AI 
 ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonaws&logoColor=white)
 ![PowerBI](https://img.shields.io/badge/Power%20BI-F2C811?style=flat-square&logo=powerbi&logoColor=black)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005591?style=flat-square&logo=fastapi&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white)
 
 </div>
@@ -115,6 +116,7 @@ Lionael-Surya/
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
 | 📈 [IDX Stock Signal Scanner](machine-learning/idx-stock-signal-scanner/) | Machine Learning | Systematic technical screening of IDX-listed stocks (source private) | ✅ Shipped |
+| 🔍 [FraudLens — Transaction Risk Intelligence](machine-learning/fraudlens/) ([source](https://github.com/suryalionael/fraudlens)) | Machine Learning | Real-time fraud risk scoring with explainable ML, leakage-safe features, production AWS deployment — done and working | ✅ Done |
 
 ---
 
@@ -269,7 +271,7 @@ gantt
 
 - **Data Engineering:** Change Data Capture (CDC) pipeline with Debezium + Kafka; dbt + Airflow orchestrated lakehouse on Databricks.
 - **Analytics Engineering:** Marketing attribution model in dbt; semantic layer with dbt Metrics/MetricFlow.
-- **Machine Learning:** Fraud detection with imbalanced-class techniques; A/B test analysis & causal inference case study.
+- **Machine Learning:** ~~Fraud detection with imbalanced-class techniques~~ ✅ shipped as [FraudLens](machine-learning/fraudlens/); A/B test analysis & causal inference case study.
 - **AI Engineering:** Multi-agent research assistant with tool use; fine-tuned small model for domain-specific classification.
 - **Cloud/DevOps:** Multi-environment Terraform setup (dev/staging/prod) for a data platform; Kubernetes-based pipeline orchestration.
 - **Case Studies:** Indonesian SME digitalization case study (bridging personal bookkeeping work into a formal data project); public transit ridership analysis for a Canadian city.
