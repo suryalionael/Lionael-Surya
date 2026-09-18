@@ -73,7 +73,7 @@ Lionael-Surya/
 | [`analytics-engineering/`](analytics-engineering/) | dbt transformation layers, dimensional models | dbt, SQL, Snowflake/BigQuery, Power BI |
 | [`machine-learning/`](machine-learning/) | Supervised learning, forecasting, deployment | Python, scikit-learn, XGBoost, SHAP, FastAPI |
 | [`ai-engineering/`](ai-engineering/) | RAG pipelines, LLM orchestration, AI agents | LangChain, OpenAI/Claude API, vector DBs |
-| [`software-products/`](software-products/) | Complete, usable applications | Google Apps Script, JavaScript, Python |
+| [`software-products/`](software-products/) | Complete, usable applications | TypeScript, Next.js, PostgreSQL, Google Apps Script |
 | [`cloud-devops/`](cloud-devops/) | CI/CD, infrastructure as code, serverless | GitHub Actions, Terraform, AWS |
 | [`case-studies/`](case-studies/) | End-to-end, narrative-driven business analyses | All of the above, combined |
 
@@ -114,6 +114,7 @@ Lionael-Surya/
 | 🏎️ [Real-Time F1 Analytics Platform](data-engineering/f1-analytics-platform/) ([source](https://github.com/lionaelsurya/f1-analytics-platform)) | Data Engineering | Live F1 race data streaming through medallion architecture (Kafka → Spark → Delta → DuckDB → FastAPI → React) with AI race summaries | ✅ Shipped |
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) ([source](https://github.com/suryalionael/Customer-Churn-Prediction)) | Machine Learning | Predicting telecom churn to target retention spend with calibrated probabilities, SHAP explanations, ROI thresholding, FastAPI, Streamlit, and drift monitoring | ✅ Shipped |
 | 🤖 [RAG Financial Report Q&A](ai-engineering/rag-financial-report-qa/) | AI Engineering | LLM-powered Q&A over financial filings | 🔜 Planned |
+| 💼 [Sakti 21 — PPh 21 Payroll Tax Calculator](software-products/sakti21/) | Software Product | Multi-tenant Indonesian payroll tax automation serving 64 companies in production | ✅ Shipped |
 | 📄 [CV Generator (GAS)](software-products/cv-generator-gas/) | Software Product | Automated CV generation for HR at PT Magna Solusi Indonesia | ✅ Shipped |
 | 📈 [IDX Stock Signal Scanner](machine-learning/idx-stock-signal-scanner/) | Machine Learning | Systematic technical screening of IDX-listed stocks (source private) | ✅ Shipped |
 | 🔍 [FraudLens — Transaction Risk Intelligence](machine-learning/fraudlens/) ([source](https://github.com/suryalionael/fraudlens)) | Machine Learning | Real-time fraud risk scoring with explainable ML, leakage-safe features, production AWS deployment — done and working | ✅ Done |
@@ -185,7 +186,8 @@ flowchart LR
 
 Built and reviewed in this order — each project is designed to be demoable on its own within 2–3 minutes:
 
-1. **[CV Generator (GAS)](software-products/cv-generator-gas/)** — already shipped; proves I can ship a real, used tool end-to-end.
+1. **[Sakti 21 — PPh 21 Payroll Tax Calculator](software-products/sakti21/)** — production SaaS serving 64 companies; multi-tenant architecture, complex domain logic (Indonesian tax law), full-stack TypeScript/Next.js/PostgreSQL.
+2. **[CV Generator (GAS)](software-products/cv-generator-gas/)** — already shipped; proves I can ship a real, used tool end-to-end.
 2. **[Nutrition Priority Index — Indonesia](case-studies/nutrition-analytics-indonesia/)** — flagship case study; real government data only, an empirically-validated scoring methodology (a simpler model replaced a more complex one after losing a head-to-head test — shown, not hidden), spatial statistics, and a 6-page Streamlit dashboard with 67 passing tests.
 3. **[Flood Risk Datathon Case Study](case-studies/flood-risk-datathon-2026/)** — proves I can work with real, messy data under competition constraints.
 4. **[Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/)** — the highest-signal project for Data Engineer/Analyst roles; demonstrates pipeline thinking.
@@ -198,7 +200,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 11. **[Toronto Mobility Intelligence](case-studies/toronto-mobility-intelligence/)** — full PostgreSQL + PostGIS data platform on real government collision data; reproducible ETL, empirically-derived spatial matching, 91 passing tests, and a Power BI dashboard consuming a governed SQL analytics layer end-to-end.
 12. **[End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/)** — capstone; ties every discipline above into one platform, built last on purpose.
 
-**Why this order:** Data Engineering / Analytics Engineering roles get the most co-op postings, so projects 1–7 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped. ML and AI projects (8, 10) differentiate me from other applicants. The capstone (12) is saved for last because it's only convincing once the individual pieces already exist.
+**Why this order:** Sakti 21 is a production SaaS with real revenue/users — the strongest portfolio signal possible. Data Engineering / Analytics Engineering roles get the most co-op postings, so projects 1–7 maximize the number of roles I can credibly apply to early. The Nutrition Priority Index is placed second deliberately — it's the most complete demonstration of full-stack thinking (data engineering → statistics → spatial analysis → dashboard) currently shipped. ML and AI projects (8, 10) differentiate me from other applicants. The capstone (12) is saved for last because it's only convincing once the individual pieces already exist.
 
 ---
 
@@ -217,6 +219,7 @@ Built and reviewed in this order — each project is designed to be demoable on 
 | Retail Demand Forecasting | Python, Prophet, XGBoost, pandas, backtesting framework |
 | RAG Financial Report Q&A | Python, LangChain, OpenAI/Claude API, ChromaDB, FastAPI, Streamlit |
 | AI Customer Support Agent | LangChain/LlamaIndex, Claude/OpenAI API, FastAPI, tool-calling |
+| Sakti 21 — PPh 21 Payroll Tax Calculator | TypeScript, Next.js, PostgreSQL, Prisma, NextAuth, Playwright *(private source; access on request)* |
 | CV Generator (GAS) | Google Apps Script, Google Docs/Sheets API, JavaScript |
 | Expense Tracker Automation | Google Apps Script, Google Sheets API, JavaScript |
 | CI/CD for Data Pipelines | GitHub Actions, Docker, AWS ECR/ECS, Terraform |

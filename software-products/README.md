@@ -12,11 +12,12 @@ Complete, shipped tools — not proofs of concept. These are things a real user 
 
 | Project | Status | Problem | Stack |
 |---|---|---|---|
+| [Sakti 21 — PPh 21 Payroll Tax Calculator](sakti21/) | ✅ Shipped | Multi-tenant Indonesian payroll tax automation (64 companies) | TypeScript, Next.js, PostgreSQL, Prisma |
 | [CV Generator (GAS)](cv-generator-gas/) | ✅ Shipped | Automated CV generation for HR | Google Apps Script |
 | [Expense Tracker Automation](expense-tracker-automation/) | 🔜 Planned | Automated expense reporting from bank exports | Google Apps Script, Sheets API |
 
 ## Why This Matters for Recruiters
 
-Anyone can describe a project; not everyone has shipped one that a real person other than themselves relies on. The CV Generator was built for actual HR use at PT Magna Solusi Indonesia — proof of finishing, not just starting.
+Anyone can describe a project; not everyone has shipped one that a real person other than themselves relies on. Sakti 21 serves 64 companies in production; the CV Generator was built for actual HR use at PT Magna Solusi Indonesia — proof of finishing, not just starting.
 
 Back to [main portfolio](../README.md).
