@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lionael Surya — Selected Projects 2026</title>
+<meta name="author" content="Lionael Surya">
+<meta name="description" content="Selected software, data and systems projects by Lionael Surya, 2026.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- ═════════════════════════════ COVER ═════════════════════════════ -->
+<section class="page cover">
+  <div class="cover-top">
+    <span class="mono">Selected Projects</span>
+    <span class="mono">Edition 2026 · Canada</span>
+  </div>
+  <div class="cover-main">
+    <h1 class="cover-name">Lionael<br>Surya</h1>
+    <div class="cover-rule"></div>
+    <p class="cover-title"><em>Selected Projects</em></p>
+    <p class="cover-sub">Software · Data · Systems</p>
+  </div>
+  <div class="cover-foot">
+    <ol class="cover-list mono">
+      <li><span>01</span>Sakti 21</li>
+      <li><span>02</span>FraudLens</li>
+      <li><span>03</span>Nutrition Priority Index</li>
+      <li><span>04</span>Dejabooth</li>
+      <li><span>05</span>IDX Signal Scanner</li>
+      <li><span>06</span>ElderCare</li>
+    </ol>
+    <span class="cover-year">2026</span>
+  </div>
+</section>
+
+<!-- ═════════════════════════════ OPENING ═════════════════════════════ -->
+<section class="page">
+  <header class="run"><span>Foreword</span><span></span></header>
+  <div class="opening">
+    <p class="kicker mono">On the work in this book</p>
+    <h2 class="display-l">I like the stretch between <em>a problem someone describes</em> and software they can actually use.</h2>
+    <div class="opening-body cols-2">
+      <p>Most of the projects here started with a concrete, slightly awkward question. How does a payroll team calculate Indonesian income tax for many client companies without a spreadsheet of hand-copied rates? Which provinces should a nutrition budget reach first, in a way an official can defend? What would a phone look like if it were designed around one grandmother instead of the average user?</p>
+      <p>I try to answer those questions with something that runs. That usually means modelling the domain carefully first, writing the rules down where they can be checked, testing the parts that would be expensive to get wrong, and then being plain about what still isn't done.</p>
+      <p>Each project in this book is written up the same way: what problem it addresses, what I built, the evidence that it works, the engineering decisions that mattered, and its honest status today. Several are finished; some are release candidates or alphas. I have said which is which.</p>
+      <p>The screenshots are taken from the software itself, running locally against each repository's own demo or fixture data, unless a caption says otherwise. Test results quoted were re-run while preparing this edition. Where something could not be reproduced, the caption says so.</p>
+    </div>
+  </div>
+  <div class="opening-facts">
+    <dl class="facts">
+      <div><dt>Studying</dt><dd>Data Science, Seneca Polytechnic, Canada</dd></div>
+      <div><dt>Works across</dt><dd>Full-stack TypeScript · Python data systems · Applied ML · Android</dd></div>
+      <div><dt>Code</dt><dd><a href="https://github.com/suryalionael">github.com/suryalionael</a></dd></div>
+      <div><dt>Web</dt><dd><a href="https://lionael-portfolio.vercel.app/">lionael-portfolio.vercel.app</a></dd></div>
+    </dl>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>02</span></footer>
+</section>
+
+<!-- ═════════════════════════════ INDEX ═════════════════════════════ -->
+<section class="page">
+  <header class="run"><span>Contents</span><span></span></header>
+  <h2 class="display-m index-title">Contents</h2>
+  <table class="toc">
+    <thead><tr><th>No.</th><th>Project</th><th>Discipline</th><th>Status</th><th class="r">Page</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">01</td><td><a href="#p-sakti"><span class="toc-name">Sakti 21</span></a><span class="toc-desc">Multi-tenant PPh 21 payroll tax system</span></td><td>Full-stack software</td><td>Release candidate</td><td class="r mono">04</td></tr>
+      <tr><td class="mono">02</td><td><a href="#p-fraud"><span class="toc-name">FraudLens</span></a><span class="toc-desc">Explainable transaction risk scoring</span></td><td>ML systems · Data engineering</td><td>Complete</td><td class="r mono">07</td></tr>
+      <tr><td class="mono">03</td><td><a href="#p-npi"><span class="toc-name">Nutrition Priority Index</span></a><span class="toc-desc">Province prioritisation for child nutrition, Indonesia</span></td><td>Policy analytics · Geospatial</td><td>Live</td><td class="r mono">09</td></tr>
+      <tr><td class="mono">04</td><td><a href="#p-deja"><span class="toc-name">Dejabooth</span></a><span class="toc-desc">Browser photobooth with client-side rendering</span></td><td>Frontend · Media</td><td>Pre-release</td><td class="r mono">11</td></tr>
+      <tr><td class="mono">05</td><td><a href="#p-idx"><span class="toc-name">IDX Signal Scanner</span></a><span class="toc-desc">Rules → ML → LLM screener for Indonesian equities</span></td><td>Applied ML · Automation</td><td>In daily use</td><td class="r mono">13</td></tr>
+      <tr><td class="mono">06</td><td><a href="#p-elder"><span class="toc-name">ElderCare</span></a><span class="toc-desc">Accessibility-first Android companion app</span></td><td>Android · Accessibility</td><td>Alpha</td><td class="r mono">14</td></tr>
+      <tr class="toc-sub"><td class="mono">—</td><td><a href="#p-also"><span class="toc-name">Also built</span></a><span class="toc-desc">Pipelines, analytics and smaller products</span></td><td></td><td></td><td class="r mono">15</td></tr>
+    </tbody>
+  </table>
+  <div class="index-note">
+    <p class="mono label">Reading the status column</p>
+    <p><b>Complete</b> — the planned scope is built and tested. <b>Release candidate</b> — passed its own release audit; not yet deployed for real users. <b>Live</b> — publicly deployed. <b>Pre-release</b> and <b>Alpha</b> — working builds with documented gaps.</p>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>03</span></footer>
+</section>
+
+<!-- ═════════════════════════════ 01 SAKTI 21 ═════════════════════════════ -->
+<section class="page" id="p-sakti">
+  <header class="run"><span>01 — Sakti 21</span><span>Full-stack software</span></header>
+  <div class="chapter-head">
+    <div class="ch-num">01</div>
+    <div>
+      <h2 class="ch-title">Sakti 21</h2>
+      <p class="ch-lede">A multi-tenant payroll system that calculates Indonesian employee income tax (PPh 21) for many client companies from one application.</p>
+    </div>
+  </div>
+  <dl class="meta">
+    <div><dt>Status</dt><dd>Release candidate (rebuild). Original version in use across 64 companies.</dd></div>
+    <div><dt>Role</dt><dd>Sole developer — specification, tax research, implementation, QA</dd></div>
+    <div><dt>Stack</dt><dd>TypeScript · Next.js · PostgreSQL · Prisma · NextAuth · decimal.js · react-pdf · Vitest</dd></div>
+    <div><dt>Source</dt><dd>Private repository — access on request</dd></div>
+  </dl>
+  <div class="grid-12 mt-l">
+    <div class="span-5 prose">
+      <h3 class="sec">The problem</h3>
+      <p>Sakti 21 began as a no-code Glide app that a payroll team used for 64 client companies. It worked, but every company shared one password, tax rates were hard-coded into formulas, and a 164-column calculation sheet was the only description of how a payslip figure came to be.</p>
+      <p>The rebuild had two jobs: keep every number the original produced correct, and make the system defensible — real per-user accounts, tenant isolation enforced in code, and tax rules that are versioned data instead of constants.</p>
+      <h3 class="sec">The build</h3>
+      <p>I started by reverse-engineering the original app into a written specification: its data model, every tax formula, every screen and automation. That document became the reference the rest of the code is tested against.</p>
+    </div>
+    <div class="span-7">
+      <figure class="fig">
+        <img src="assets/img/sakti-calc.jpg" alt="Sakti 21 calculation result for a December annual reconciliation">
+        <figcaption><span class="mono">Fig. 1.1</span> A December row resolves to the annual Pasal 17 method and reconciles against the tax already withheld January–November. Synthetic UAT employee.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="diagram wide mt-l">
+    <svg viewBox="0 0 560 150" role="img" aria-label="PPh 21 calculation pipeline">
+      <g class="dg">
+        <rect x="0" y="10" width="104" height="44"/><text x="52" y="29">Employee</text><text class="s" x="52" y="44">PTKP status</text>
+        <rect x="128" y="10" width="104" height="44"/><text x="180" y="29">TER category</text><text class="s" x="180" y="44">A · B · C</text>
+        <rect x="256" y="10" width="104" height="44"/><text x="308" y="29">Monthly bruto</text><text class="s" x="308" y="44">Gross or Gross Up</text>
+        <line x1="104" y1="32" x2="128" y2="32"/><line x1="232" y1="32" x2="256" y2="32"/>
+        <line x1="360" y1="32" x2="384" y2="32"/><line x1="384" y1="32" x2="384" y2="112"/>
+        <line x1="384" y1="32" x2="408" y2="32"/><line x1="384" y1="112" x2="408" y2="112"/>
+        <rect x="408" y="10" width="152" height="44"/><text x="484" y="29">Jan–Nov: TER rate</text><text class="s" x="484" y="44">bruto × monthly rate</text>
+        <rect class="dark" x="408" y="90" width="152" height="44"/><text class="inv" x="484" y="109">Dec / termination</text><text class="s inv" x="484" y="124">Pasal 17 brackets + reconcile</text>
+        <text class="s l" x="0" y="112">Every result is stored with the</text>
+        <text class="s l" x="0" y="126">tax-rule set version that produced it.</text>
+      </g>
+    </svg>
+    <p class="cap"><span class="mono">Fig. 1.2</span> Calculation pipeline, from the engine specification (docs/tax/tax-engine-overview.md).</p>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>04</span></footer>
+</section>
+
+<section class="page">
+  <header class="run"><span>01 — Sakti 21</span><span>The evidence</span></header>
+  <figure class="fig wide-top">
+    <img src="assets/img/sakti-period.jpg" alt="Sakti 21 payroll period screen for January 2026">
+    <figcaption><span class="mono">Fig. 1.3</span> A payroll period: summary counts, a flag for one input that changed after it was calculated, CSV import and export, and an editable grid for monthly inputs. Running locally on the repository’s UAT fixture.</figcaption>
+  </figure>
+  <div class="grid-12 mt-m">
+    <div class="span-4 prose">
+      <h3 class="sec">What the operator does</h3>
+      <p>For each client company, staff manage employees (with CSV import), open a monthly payroll period, load salary data by CSV or by hand, and calculate. The app produces monthly and annual reports, CSV exports, and a payslip on screen or as a server-generated PDF.</p>
+    </div>
+    <div class="span-4 prose">
+      <h3 class="sec">Correctness, made visible</h3>
+      <p>Calculations are never silently rewritten. If an input changes after it was calculated — or a December reconciliation depends on a month that changed — the row is marked stale and the period summary says so (“Perlu dihitung ulang: 1”).</p>
+    </div>
+    <div class="span-4 prose">
+      <h3 class="sec">A deliberate trade-off</h3>
+      <p>An automatic cascade recompute would quietly change figures that may already have been paid out. Visible staleness is the safer failure — one of 14 architecture decision records, each with the alternatives it rejected.</p>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>05</span></footer>
+</section>
+
+<section class="page">
+  <header class="run"><span>01 — Sakti 21</span><span>The engineering</span></header>
+  <div class="grid-12">
+    <div class="span-5">
+      <figure class="fig">
+        <img src="assets/img/sakti-payslip-pdf.png" alt="Server-generated payslip PDF">
+        <figcaption><span class="mono">Fig. 1.4</span> Payslip PDF downloaded from the running app. Rp8,000,000 × the 1.5% TER A rate = Rp120,000 withheld.</figcaption>
+      </figure>
+    </div>
+    <div class="span-7 prose">
+      <h3 class="sec">Three decisions that mattered</h3>
+      <ol class="decisions">
+        <li><b>Money is never a float.</b> Amounts are <code>numeric(18,2)</code> in Postgres and <code>Decimal</code> in TypeScript end to end. Rounding rules from the regulation — such as flooring taxable income to the nearest Rp1,000 — live in one small module with their own tests.</li>
+        <li><b>Tax rules are data, with versions.</b> PTKP allowances, the 125 TER rate rows and the five Pasal 17 brackets are seeded as a <code>TaxRuleSet</code>. Every calculation records which rule set produced it, so a future rate change cannot alter a historical payslip.</li>
+        <li><b>The tax engine is pure.</b> No database, no clock, no framework imports — rule set and inputs in, result out. Gross Up is solved algebraically and re-checked iteratively in case the grossed-up salary crosses into another TER bracket.</li>
+      </ol>
+      <h3 class="sec">Outcome</h3>
+      <p>All planned phases are implemented, and the project closed with a release-candidate audit: every one of 42 API routes enumerated, a hostile-ID sweep across tenants over real HTTP, and a feature-parity matrix against the original app. The remaining gaps — two unsourced e-Bupot export fields, payslip layout fidelity, historical data migration — are documented rather than guessed.</p>
+    </div>
+  </div>
+  <div class="grid-12 mt-l">
+    <div class="span-7">
+      <figure class="fig">
+        <img src="assets/img/sakti-reports.jpg" alt="Annual payroll report">
+        <figcaption><span class="mono">Fig. 1.5</span> Annual report. Negative months are over-withholding returned in a termination reconciliation — shown as such, not hidden.</figcaption>
+      </figure>
+    </div>
+    <div class="span-5">
+      <div class="stat-block">
+        <div><p class="stat">201</p><p class="stat-l">tax-engine and rule-table tests — all passing on a fresh re-run for this edition</p></div>
+        <div><p class="stat">709</p><p class="stat-l">tests in the full Vitest suite, including tenant-isolation tests against a real database</p></div>
+      </div>
+      <p class="note">On a fresh database with the UAT fixture, one independent-audit assertion (a termination case, UAT-NIK-0008) currently fails. It is being investigated, not hidden.</p>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>06</span></footer>
+</section>
+
+<!-- ═════════════════════════════ 02 FRAUDLENS ═════════════════════════════ -->
+<section class="page" id="p-fraud">
+  <header class="run"><span>02 — FraudLens</span><span>ML systems · Data engineering</span></header>
+  <div class="chapter-head">
+    <div class="ch-num">02</div>
+    <div>
+      <h2 class="ch-title">FraudLens</h2>
+      <p class="ch-lede">A real-time transaction scoring service that tells a fraud analyst which transactions to look at first, and why.</p>
+    </div>
+  </div>
+  <dl class="meta">
+    <div><dt>Status</dt><dd>Complete — 139/139 tests passing</dd></div>
+    <div><dt>Role</dt><dd>Sole developer</dd></div>
+    <div><dt>Stack</dt><dd>Python · FastAPI · PostgreSQL · dbt · scikit-learn · XGBoost · SHAP · Streamlit · Docker · Terraform (AWS ECS, RDS, S3)</dd></div>
+    <div><dt>Source</dt><dd><a href="https://github.com/suryalionael/fraudlens">github.com/suryalionael/fraudlens</a></dd></div>
+  </dl>
+  <div class="grid-12 mt-l">
+    <div class="span-6 prose">
+      <h3 class="sec">The problem</h3>
+      <p>Fraud teams cannot review every transaction, so the useful question is not “is this fraud?” but “which ones first?”. The answer has to be fast, explainable to an analyst, and computed only from information that existed at the moment the transaction happened.</p>
+    </div>
+    <div class="span-6 prose">
+      <h3 class="sec">The build</h3>
+      <p>A transaction arrives at a FastAPI endpoint carrying only raw fields. The server builds behavioural features from history in PostgreSQL, scores with a trained model, explains the score with SHAP, blends it with deterministic rules, and persists the result before responding.</p>
+    </div>
+  </div>
+  <div class="diagram wide mt-l">
+        <svg viewBox="0 0 600 330" role="img" aria-label="FraudLens real-time scoring path">
+          <g class="dg">
+            <rect x="0" y="0" width="170" height="46"/><text x="85" y="20">POST /score-transaction</text><text class="s" x="85" y="35">raw fields only · extra="forbid"</text>
+            <line x1="85" y1="46" x2="85" y2="70"/>
+            <rect x="0" y="70" width="170" height="46"/><text x="85" y="90">Historical context</text><text class="s" x="85" y="105">PostgreSQL · timestamp &lt; T</text>
+            <line x1="85" y1="116" x2="85" y2="140"/>
+            <rect x="0" y="140" width="170" height="46"/><text x="85" y="160">Feature preparation</text><text class="s" x="85" y="175">shared MODEL_FEATURES contract</text>
+            <line x1="170" y1="163" x2="214" y2="163"/>
+            <rect x="214" y="140" width="150" height="46"/><text x="289" y="160">Random Forest</text><text class="s" x="289" y="175">fraud probability</text>
+            <line x1="289" y1="140" x2="289" y2="116"/>
+            <rect x="214" y="70" width="150" height="46"/><text x="289" y="90">SHAP TreeExplainer</text><text class="s" x="289" y="105">feature contributions</text>
+            <line x1="364" y1="163" x2="408" y2="163"/>
+            <rect class="dark" x="408" y="140" width="192" height="46"/><text class="inv" x="504" y="160">Risk engine</text><text class="s inv" x="504" y="175">0.7 × ML + 0.3 × rules → 0–100</text>
+            <line x1="504" y1="186" x2="504" y2="210"/>
+            <rect x="408" y="210" width="192" height="46"/><text x="504" y="230">risk.transaction_scores</text><text class="s" x="504" y="245">upsert · persisted before reply</text>
+            <line x1="504" y1="256" x2="504" y2="280"/>
+            <rect x="408" y="280" width="192" height="46"/><text x="504" y="300">Response + queue</text><text class="s" x="504" y="315">allow · monitor · review · urgent</text>
+            <rect class="ghost" x="0" y="230" width="364" height="96"/>
+            <text class="s l" x="12" y="252">Duplicate transaction_id → returns the stored result,</text>
+            <text class="s l" x="12" y="267">no second investigation record.</text>
+            <text class="s l" x="12" y="290">Database write fails → HTTP 500.</text>
+            <text class="s l" x="12" y="305">The API never reports a score it did not save.</text>
+          </g>
+        </svg>
+        <p class="cap"><span class="mono">Fig. 2.1</span> Scoring path as implemented in <code>src/fraudlens/api/app.py</code> and <code>risk/</code>. Thresholds: review at 60, urgent review at 80.</p>
+      </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>07</span></footer>
+</section>
+
+<section class="page">
+  <header class="run"><span>02 — FraudLens</span><span>The engineering</span></header>
+  <div class="grid-12">
+    <div class="span-12">
+      <p class="kicker mono">The finding that shaped the project</p>
+      <h3 class="display-s">The dataset’s most predictive column was the answer key.</h3>
+    </div>
+  </div>
+  <div class="grid-12 mt-m">
+    <div class="span-6 prose">
+      <p>FraudLens trains on a public, synthetic set of five million Nigerian financial transactions (3.59% fraud). Before modelling, I profiled every column against the label. One precomputed field, <code>new_device_transaction</code>, was true for every single fraud case. A model would have scored near-perfectly — and learned nothing.</p>
+      <p>The other “behavioural” columns that came with the data were no better: one had 41% negative time gaps, two were uniformly random with identical fraud rates in every bin. All five are now rejected at the API boundary. Features are rebuilt server-side from raw history, so training and live scoring use exactly the same definitions.</p>
+    </div>
+    <div class="span-6">
+      <div class="chart">
+        <p class="chart-t">Fraud rate by <span class="mono">new_device_transaction</span></p>
+        <svg viewBox="0 0 300 120" role="img" aria-label="Fraud rate is 0% when new_device_transaction is false and 4.38% when true">
+          <g class="ch">
+            <text class="lab" x="0" y="34">False</text><text class="sub" x="0" y="47">896,464 rows</text>
+            <rect class="bar" x="80" y="26" width="2" height="18"/><text class="val" x="90" y="40">0.00%</text>
+            <text class="lab" x="0" y="84">True</text><text class="sub" x="0" y="97">4,103,536 rows</text>
+            <rect class="bar" x="80" y="76" width="175" height="18" rx="0"/><text class="val" x="262" y="90">4.38%</text>
+            <line class="base" x1="80" y1="14" x2="80" y2="106"/>
+          </g>
+        </svg>
+        <p class="cap">Figures from the project’s dataset profiling (<code>docs/dataset-selection.md</code>). 100% of the 179,553 fraud cases sit in the “True” row.</p>
+      </div>
+      <table class="mini mt-m">
+        <thead><tr><th>Precomputed field</th><th>What profiling showed</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">new_device_transaction</td><td>Target leakage</td></tr>
+          <tr><td class="mono">time_since_last_transaction</td><td>Broken — 41% negative values</td></tr>
+          <tr><td class="mono">velocity_score</td><td>No signal — uniform 1–20</td></tr>
+          <tr><td class="mono">geo_anomaly_score</td><td>No signal — uniform 0–1</td></tr>
+          <tr><td class="mono">spending_deviation_score</td><td>Negligible signal</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="grid-12 mt-l">
+    <div class="span-7">
+      <pre class="code"><span class="c"># risk/historical.py — every context query is cut off at the</span>
+<span class="c"># transaction's own timestamp, so no future data leaks in.</span>
+SELECT
+  COUNT(CASE WHEN timestamp &gt;= %s - interval '10 minutes'
+             AND timestamp &lt; %s THEN 1 END) AS last_10m,
+  COUNT(CASE WHEN timestamp &gt;= %s - interval '1 hour'
+             AND timestamp &lt; %s THEN 1 END) AS last_1h,
+  COUNT(CASE WHEN timestamp &gt;= %s - interval '24 hours'
+             AND timestamp &lt; %s THEN 1 END) AS last_24h
+FROM raw.transactions
+WHERE sender_account = %s</pre>
+    </div>
+    <div class="span-5 prose">
+      <h3 class="sec">Outcome</h3>
+      <p>A working service with ingestion (schema validation and checksums), a dbt layer, temporal train/test splits evaluated on PR-AUC and precision-at-K, a five-page Streamlit investigation dashboard, and Terraform for AWS. All 139 tests — unit, API, temporal-leakage and idempotency — pass against a real PostgreSQL.</p>
+      <p class="note">Limits, as the README states them: synthetic data, no drift monitoring, no API authentication, latency not load-tested. The 5M-row dataset could not be downloaded in the environment used for this edition, so no dashboard screenshots are shown.</p>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>08</span></footer>
+</section>
+
+<!-- ═════════════════════════════ 03 NUTRITION ═════════════════════════════ -->
+<section class="page" id="p-npi">
+  <header class="run"><span>03 — Nutrition Priority Index</span><span>Policy analytics · Geospatial</span></header>
+  <div class="chapter-head">
+    <div class="ch-num">03</div>
+    <div>
+      <h2 class="ch-title">Nutrition Priority Index</h2>
+      <p class="ch-lede">A transparent ranking of Indonesia’s 38 provinces for child-nutrition intervention, built only from government data and validated before it was published.</p>
+    </div>
+  </div>
+  <dl class="meta">
+    <div><dt>Status</dt><dd>Live public dashboard · 67/67 tests passing</dd></div>
+    <div><dt>Role</dt><dd>Sole analyst and developer</dd></div>
+    <div><dt>Stack</dt><dd>Python · pandas · scikit-learn · GeoPandas · PySAL / esda · Streamlit · pytest · GitHub Actions</dd></div>
+    <div><dt>Links</dt><dd><a href="https://nutrition-analytics-indonesia.streamlit.app">Live dashboard</a> · <a href="https://github.com/suryalionael/nutrition-analytics-indonesia">Source</a></dd></div>
+  </dl>
+  <figure class="fig bleed-map mt-m">
+    <img src="assets/img/npi-map-grey.png" alt="Nutrition Priority Index by province, darker means higher priority">
+    <figcaption><span class="mono">Fig. 3.1</span> Priority score by province, 0 (light) to 1 (black). The five darkest provinces are all in the Papua region. Re-rendered in greyscale for this edition from the project’s <code>npi_spatial.geojson</code>.</figcaption>
+  </figure>
+  <div class="grid-12 mt-m">
+    <div class="span-6 prose">
+      <h3 class="sec">The problem</h3>
+      <p>National programmes such as free school meals (<i>Makan Bergizi Gratis</i>) have finite budgets and 38 provinces with very different needs. A ranking an official can’t audit is a ranking they can’t defend — so every source, transformation and modelling choice had to be traceable.</p>
+    </div>
+    <div class="span-6 prose">
+      <h3 class="sec">The build</h3>
+      <p>Seven datasets from Statistics Indonesia’s WebAPI, the health ministry and official boundaries, ingested with generated provenance (URLs, dates, checksums). The index combines socioeconomic vulnerability and education access; stunting is kept out of the inputs and used only to validate the result.</p>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>09</span></footer>
+</section>
+
+<section class="page">
+  <header class="run"><span>03 — Nutrition Priority Index</span><span>The evidence</span></header>
+  <div class="grid-12">
+    <div class="span-12">
+      <p class="kicker mono">The decision I’m proudest of</p>
+      <h3 class="display-s">The more sophisticated method lost, so it was demoted.</h3>
+    </div>
+  </div>
+  <div class="grid-12 mt-m">
+    <div class="span-5 prose">
+      <p>The textbook approach was a PCA composite of three correlated indicators. I tested it head-to-head against a single one — household expenditure per capita. The simple indicator predicted real stunting outcomes slightly better, needs no fitted parameters and explains itself in a sentence. It became the primary input; PCA stays in the project as a documented benchmark.</p>
+      <p>The robustness work is equally candid. Ranks barely move when the weights shift ±20%, but the Jenks tier labels do — so the dashboard tells users to trust ranks over tier boundaries.</p>
+    </div>
+    <div class="span-7">
+      <table class="compare">
+        <thead><tr><th></th><th>PCA composite</th><th>Expenditure per capita</th></tr></thead>
+        <tbody>
+          <tr><td>Spearman r with stunting</td><td>0.72</td><td><b>0.74</b></td></tr>
+          <tr><td>Fitted parameters</td><td>Loadings</td><td><b>None</b></td></tr>
+          <tr><td>Decision-matrix score</td><td>13 / 25</td><td><b>23 / 25</b></td></tr>
+        </tbody>
+      </table>
+      <div class="stat-row mt-m">
+        <div><p class="stat">0.622</p><p class="stat-l">Global Moran’s I (p = 0.001): need clusters geographically</p></div>
+        <div><p class="stat">2.5×</p><p class="stat-l">mean priority, Eastern vs. Western Indonesia (ANOVA p = 2.8×10⁻⁸)</p></div>
+        <div><p class="stat">0.67</p><p class="stat-l">correlation once partial-coverage provinces are excluded — also reported</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-12 mt-l">
+    <figure class="fig span-7">
+      <img src="assets/img/npi-home.jpg" alt="Dashboard home page with key findings">
+      <figcaption><span class="mono">Fig. 3.2</span> The dashboard’s overview page, running locally from the repository’s committed data. Six pages in total.</figcaption>
+    </figure>
+    <figure class="fig span-5 bleed-map">
+      <img src="assets/img/npi-lisa-grey.png" alt="LISA spatial clusters">
+      <figcaption><span class="mono">Fig. 3.3</span> Local spatial clusters (LISA, p &lt; 0.05). Black: six high-need provinces clustered around Papua. Hatched: eight low-need provinces in western Java and Sumatra.</figcaption>
+    </figure>
+  </div>
+  <div class="grid-12 mt-m">
+    <figure class="fig span-12 crop-strip">
+      <img src="assets/img/npi-ranking.jpg" alt="Priority ranking explorer">
+      <figcaption><span class="mono">Fig. 3.4</span> Ranking explorer: searchable, filterable by tier, with a data-completeness column so readers can see which provinces rest on partial data.</figcaption>
+    </figure>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>10</span></footer>
+</section>
+
+<!-- ═════════════════════════════ 04 DEJABOOTH ═════════════════════════════ -->
+<section class="page" id="p-deja">
+  <header class="run"><span>04 — Dejabooth</span><span>Frontend · Media</span></header>
+  <div class="grid-12 h-full">
+    <div class="span-7 col-flow">
+      <div class="chapter-head stack">
+        <div class="ch-num">04</div>
+        <div>
+          <h2 class="ch-title">Dejabooth</h2>
+          <p class="ch-lede">A photobooth that runs entirely in the browser: four shots, a printed-feeling strip, and an animated version — no server involved.</p>
+        </div>
+      </div>
+      <dl class="meta narrow">
+        <div><dt>Status</dt><dd>Pre-release. 538/538 unit tests; real-device QA outstanding</dd></div>
+        <div><dt>Role</dt><dd>Sole developer</dd></div>
+        <div><dt>Stack</dt><dd>Next.js · TypeScript · Canvas 2D · WebCodecs · mp4-muxer · IndexedDB · Supabase (optional) · Vitest · Playwright</dd></div>
+        <div><dt>Source</dt><dd>Private repository — access on request</dd></div>
+      </dl>
+      <div class="prose mt-m">
+        <h3 class="sec">The problem</h3>
+        <p>Photobooth web apps tend to be either a camera with a frame on top, or a pile of separate modes. I wanted one calm, linear ritual — step in, four photos, choose a paper, watch it print, collect it — with outputs good enough to keep.</p>
+        <h3 class="sec">The build</h3>
+        <p>Everything is client-side. The app records the session, renders the strip on a canvas, encodes MP4 with WebCodecs and writes real GIF and ZIP files in the browser. Accounts and a cloud gallery exist behind Supabase, but the booth runs fully in guest mode without them.</p>
+      </div>
+      <figure class="fig mt-m">
+        <img src="assets/img/deja-landing.jpg" alt="Dejabooth landing page">
+        <figcaption><span class="mono">Fig. 4.1</span> Landing page, running locally.</figcaption>
+      </figure>
+    </div>
+    <div class="span-5">
+      <figure class="fig strip">
+        <img src="assets/img/deja-photostrip.png" alt="Exported photostrip PNG">
+        <figcaption><span class="mono">Fig. 4.2</span> The actual exported 600×1980 PNG, noir paper. The camera was simulated in Chromium using a still portrait, so the four frames match.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>11</span></footer>
+</section>
+
+<section class="page">
+  <header class="run"><span>04 — Dejabooth</span><span>The evidence</span></header>
+  <p class="kicker mono">One session, start to finish</p>
+  <div class="seq">
+    <figure class="fig"><img src="assets/img/deja-capturing.jpg" alt="Capturing with countdown"><figcaption><span class="mono">a</span> Countdown, photo 2 of 4</figcaption></figure>
+    <figure class="fig"><img src="assets/img/deja-customize-noir.jpg" alt="Customize paper"><figcaption><span class="mono">b</span> Paper colour is the only choice</figcaption></figure>
+    <figure class="fig"><img src="assets/img/deja-printing.jpg" alt="Printing animation"><figcaption><span class="mono">c</span> The strip feeds out in uneven bursts</figcaption></figure>
+    <figure class="fig"><img src="assets/img/deja-collect.jpg" alt="Collect your memories"><figcaption><span class="mono">d</span> Strip, animated strip and GIF to collect</figcaption></figure>
+  </div>
+  <p class="cap seq-cap"><span class="mono">Fig. 4.3</span> Captured with Playwright against a local dev server; Chromium’s fake camera was fed a still portrait. Screens are unedited.</p>
+  <div class="grid-12 mt-l">
+    <div class="span-4 prose">
+      <h3 class="sec">One model for every photo</h3>
+      <p>The domain revolves around a single <i>Photo Set</i>: ordered slots, each filled by camera or upload. Review, retakes, rendering and export never ask where a photo came from — which removed a whole class of “upload mode” bugs.</p>
+    </div>
+    <div class="span-4 prose">
+      <h3 class="sec">MP4 without ffmpeg</h3>
+      <p>Most browsers record WebM. Rather than ship a multi-megabyte ffmpeg.wasm, the app encodes H.264 with the native WebCodecs API and a 155 KB muxer — and shows an honest “unavailable” state where a browser can’t, instead of mislabelling a file.</p>
+    </div>
+    <div class="span-4 prose">
+      <h3 class="sec">One exposure per photo</h3>
+      <p>The warm monochrome treatment measures exposure from each still once, then applies it everywhere — print, preview, every animated frame, the GIF — so the animated strip can’t flicker or drift from the printed one.</p>
+    </div>
+  </div>
+  <div class="grid-12 mt-m">
+    <div class="span-12 prose">
+      <p class="note">Status, as recorded in the project: unit tests, type checks, a production build and end-to-end runs in desktop Chrome and WebKit (iPhone emulation) pass. It has not yet been tested on a physical phone, and it is not deployed.</p>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>12</span></footer>
+</section>
+
+<!-- ═════════════════════════════ 05 IDX (dark) ═════════════════════════════ -->
+<section class="page dark-page" id="p-idx">
+  <header class="run"><span>05 — IDX Signal Scanner</span><span>Applied ML · Automation</span></header>
+  <div class="chapter-head">
+    <div class="ch-num">05</div>
+    <div>
+      <h2 class="ch-title">IDX Signal Scanner</h2>
+      <p class="ch-lede">A daily screener for the Indonesian stock exchange where rules filter, a model ranks, and a language model explains.</p>
+    </div>
+  </div>
+  <dl class="meta">
+    <div><dt>Status</dt><dd>In daily use as a personal research tool. Decision support — explicitly not advice.</dd></div>
+    <div><dt>Role</dt><dd>Sole developer</dd></div>
+    <div><dt>Stack</dt><dd>Python · pandas · Parquet · XGBoost · Claude API · Streamlit · pytest</dd></div>
+    <div><dt>Source</dt><dd><a href="https://github.com/suryalionael/idx-stock-scanner-agent">github.com/suryalionael/idx-stock-scanner-agent</a></dd></div>
+  </dl>
+  <figure class="fig dark mt-m">
+    <img src="assets/img/idx-1.jpg" alt="IDX scanner market dashboard, scalping tab">
+    <figcaption><span class="mono">Fig. 5.1</span> Market dashboard, 12 June 2026 session. Screenshot taken by me at the time; the latest data bundle was not available for a fresh capture.</figcaption>
+  </figure>
+  <div class="grid-12 mt-m">
+    <div class="span-5 prose">
+      <h3 class="sec">Each layer does one job</h3>
+      <p>Deterministic rules reject illiquid or broken tickers first, so every rejection has a stateable reason. An XGBoost ranker then orders the survivors; an LLM writes a short note on why a signal fired. The LLM never picks.</p>
+      <p>An audit found the original rules ranked 248 stocks on one day — including a #1 “breakout” with Rp117M of turnover. A hard liquidity gate and re-weighted penalties cut that to 64.</p>
+    </div>
+    <div class="span-7">
+      <table class="mini on-dark">
+        <thead><tr><th colspan="2">Ranker, out-of-time test · Nov 2025 – May 2026</th></tr></thead>
+        <tbody>
+          <tr><td>AUC-ROC</td><td>0.594</td></tr>
+          <tr><td>Precision when it flags</td><td>0.505 <span class="dim">vs. 0.265 base rate</span></td></tr>
+          <tr><td>Recall</td><td>0.028</td></tr>
+          <tr><td>Rows (train / test)</td><td>204,436 / 51,109</td></tr>
+        </tbody>
+      </table>
+      <p class="cap on-dark">From <code>models/ranker_metrics.yaml</code>. A weak but real signal: right about half the time when confident, almost never confident. That is why it ranks after the rules rather than deciding on its own.</p>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>13</span></footer>
+</section>
+
+<!-- ═════════════════════════════ 06 ELDERCARE ═════════════════════════════ -->
+<section class="page" id="p-elder">
+  <header class="run"><span>06 — ElderCare</span><span>Android · Accessibility</span></header>
+  <div class="chapter-head">
+    <div class="ch-num">06</div>
+    <div>
+      <h2 class="ch-title">ElderCare</h2>
+      <p class="ch-lede">An Android companion app built for one specific person — my grandmother — around a single rule: dignity over surveillance.</p>
+    </div>
+  </div>
+  <dl class="meta">
+    <div><dt>Status</dt><dd>Alpha (v0.3, Sprint 5 in progress). Offline core complete; family dashboard not yet built</dd></div>
+    <div><dt>Role</dt><dd>Sole developer</dd></div>
+    <div><dt>Stack</dt><dd>Kotlin · Jetpack Compose · Room · WorkManager · Android TextToSpeech</dd></div>
+    <div><dt>Source</dt><dd>Private repository — access on request</dd></div>
+  </dl>
+  <div class="grid-12 mt-l">
+    <div class="span-6 prose">
+      <h3 class="sec">The problem</h3>
+      <p>Stock Android assumes small text, steady hands and familiarity with icons. Commercial “senior phones” are tied to hardware or carriers. And most family-monitoring apps quietly watch the user. This one must only do things she can see happening.</p>
+      <h3 class="sec">The build</h3>
+      <p>A home screen with the time, the next reminder and large tiles; local reminders scheduled with WorkManager that arrive as full-screen alerts and are read aloud offline; one-tap calls to family contacts; a settings screen for text size, contacts and reminders. Everything works with no account and no network.</p>
+      <h3 class="sec">Accessibility, as tests</h3>
+      <p>Primary actions are 88 dp — nearly twice Android’s minimum. The palette’s WCAG AA contrast ratios are asserted in unit tests, so a colour change that breaks them fails the build. A UX review at 190% text size found the text-size setting had never actually applied; the fix scales the whole type system from one place.</p>
+    </div>
+    <div class="span-6">
+      <div class="diagram">
+        <svg viewBox="0 0 300 250" role="img" aria-label="Reminder lifecycle">
+          <g class="dg">
+            <rect x="95" y="0" width="110" height="38"/><text x="150" y="23">PENDING</text>
+            <line x1="150" y1="38" x2="150" y2="60"/>
+            <rect x="80" y="60" width="140" height="44"/><text x="150" y="79">Alert + voice</text><text class="s" x="150" y="94">full screen or notification</text>
+            <line x1="80" y1="82" x2="40" y2="82"/><line x1="40" y1="82" x2="40" y2="140"/>
+            <rect class="dark" x="0" y="140" width="80" height="34"/><text class="inv" x="40" y="161">DONE</text>
+            <line x1="150" y1="104" x2="150" y2="126"/>
+            <rect x="95" y="126" width="110" height="44"/><text x="150" y="145">Ignored?</text><text class="s" x="150" y="160">one gentle re-prompt</text>
+            <line x1="150" y1="170" x2="150" y2="192"/>
+            <line x1="150" y1="192" x2="250" y2="192"/><line x1="150" y1="192" x2="150" y2="210"/>
+            <rect x="95" y="210" width="110" height="38"/><text x="150" y="228">MISSED</text><text class="s" x="150" y="241">one-time reminder</text>
+            <rect x="214" y="210" width="86" height="38"/><text x="257" y="228">Next occurrence</text><text class="s" x="257" y="241">recurring</text>
+            <line x1="250" y1="192" x2="250" y2="210"/>
+          </g>
+        </svg>
+        <p class="cap"><span class="mono">Fig. 6.1</span> Reminder lifecycle, from <code>ReminderCompletion.kt</code> and <code>OverdueReminderWorker</code>. An ignored recurring reminder never kills the series.</p>
+      </div>
+      <pre class="code mt-m"><span class="c">// ThemeContrastTest.kt — WCAG 2.2 AA as a unit test</span>
+@Test
+fun emergencyOnWhite_meetsBodyAndLargeAA() {
+    assertContrast(emergency, background, 4.5)
+}
+
+@Test
+fun whiteOnPrimary_meetsLargeAA() {
+    assertContrast(white, primary, 3.0)
+}</pre>
+      <p class="note">The repository holds 121 JVM unit tests and 36 instrumented Compose tests. Device screenshots and test runs need the Android SDK, which was not available for this edition — so this chapter shows code and structure instead.</p>
+    </div>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>14</span></footer>
+</section>
+
+<!-- ═════════════════════════════ ALSO BUILT ═════════════════════════════ -->
+<section class="page" id="p-also">
+  <header class="run"><span>Also built</span><span></span></header>
+  <h2 class="display-m">Also built</h2>
+  <p class="intro">Smaller or earlier projects, described as their repositories describe them. Not re-verified to the same depth as the six chapters.</p>
+  <div class="also">
+    <article><p class="mono label">Data engineering</p><h4>Streaming Clickstream Pipeline</h4><p>Kafka → Spark Structured Streaming → Delta Lake (bronze/silver/gold on MinIO) → DuckDB → Streamlit, with watermarking, a dead-letter queue and a seven-service Docker Compose stack.</p><p class="link"><a href="https://github.com/suryalionael/streaming-clickstream-pipeline">Source</a></p></article>
+    <article><p class="mono label">Data engineering</p><h4>Real-Time F1 Analytics Platform</h4><p>The same medallion pattern applied to Formula 1 race data, served through a FastAPI backend to a React + Recharts dashboard, with LLM-written race summaries.</p><p class="link">Private repository</p></article>
+    <article><p class="mono label">Data engineering</p><h4>Retail Sales ETL Pipeline</h4><p>Batch ETL over the UCI Online Retail data: validation at the boundary, a star-schema warehouse in PostgreSQL, Airflow orchestration and idempotent re-runs.</p><p class="link"><a href="https://github.com/suryalionael/retail-sales-etl-pipeline">Source</a></p></article>
+    <article><p class="mono label">Analytics engineering</p><h4>dbt E-Commerce Analytics Mart</h4><p>Staging → intermediate → marts in dbt on PostgreSQL, with tests and documentation, feeding customer, finance and core models.</p><p class="link"><a href="https://github.com/suryalionael/dbt-ecommerce-analytics-mart">Source</a></p></article>
+    <article><p class="mono label">Machine learning</p><h4>Customer Churn Prediction</h4><p>Telecom churn model with calibrated probabilities, SHAP explanations, ROI-based thresholding, FastAPI and Streamlit serving, and drift monitoring.</p><p class="link">Private repository</p></article>
+    <article><p class="mono label">Machine learning</p><h4>Retail Demand Forecasting</h4><p>Forecasting with a backtesting framework comparing statistical and gradient-boosted models.</p><p class="link"><a href="https://github.com/suryalionael/Retail-Demand-Forecasting">Source</a></p></article>
+    <article><p class="mono label">Full-stack</p><h4>Aspen OS</h4><p>A project operating system for nonprofit and community organisations — tasks, kanban and documentation — on Next.js and Supabase.</p><p class="link"><a href="https://github.com/suryalionael/aspen-os">Source</a></p></article>
+    <article><p class="mono label">Automation</p><h4>Employee CV Generator</h4><p>Google Apps Script tool that generates standardised CVs from Sheets data for an HR team at PT Magna Solusi Indonesia.</p><p class="link">Private repository</p></article>
+    <article><p class="mono label">Cloud · design phase</p><h4>CloudLake</h4><p>Architecture for a serverless AWS retail data platform (Lambda, Glue, Athena, dbt, Terraform). Documentation complete; no resources deployed yet.</p><p class="link"><a href="https://github.com/suryalionael/cloudlake">Source</a></p></article>
+  </div>
+  <footer class="folio"><span>Lionael Surya — Selected Projects</span><span>15</span></footer>
+</section>
+
+<!-- ═════════════════════════════ CLOSING ═════════════════════════════ -->
+<section class="page closing">
+  <div class="closing-main">
+    <p class="mono label">Lionael Surya</p>
+    <p class="closing-line">Thank you for reading.</p>
+    <dl class="closing-links">
+      <div><dt>GitHub</dt><dd><a href="https://github.com/suryalionael">github.com/suryalionael</a></dd></div>
+      <div><dt>Portfolio</dt><dd><a href="https://lionael-portfolio.vercel.app/">lionael-portfolio.vercel.app</a></dd></div>
+      <div><dt>Email</dt><dd><a href="mailto:suryalionael@gmail.com">suryalionael@gmail.com</a></dd></div>
+    </dl>
+  </div>
+  <div class="colophon">
+    <p class="mono label">Colophon</p>
+    <p>Set in Newsreader, Inter and IBM Plex Mono. Typeset in HTML and CSS and printed to PDF with headless Chromium. Screenshots were captured with Playwright from local runs of each application on its own demo or fixture data; figures marked otherwise are noted in their captions. Several projects were developed with AI coding assistants under my direction; the repositories document how.</p>
+    <p class="mono label mt-s">Edition 2026 · October</p>
+  </div>
+</section>
+
+</body>
+</html>
