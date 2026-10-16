@@ -266,3 +266,6 @@ code { font-family: var(--mono); font-size: 0.9em; letter-spacing: -0.01em; }
 .fig.wide-top img { height: 172mm; object-fit: cover; object-position: top; }
 .meta { grid-template-columns: 1.3fr 0.9fr 2fr 1.4fr; }
 .crop-strip img { object-position: 0 60%; }
+.dark-page .note { color: var(--night-ink-2); border-color: var(--night-rule); }
+.toc td { padding: 3.6mm 0; }
+.index-title { margin: 12mm 0 9mm; }
