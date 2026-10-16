@@ -1,6 +1,6 @@
 # Lionael Surya — Selected Projects 2026
 
-An editorial, print-ready project portfolio (A4, 16 pages), written in HTML/CSS and exported to PDF with headless Chromium.
+An editorial, print-ready project portfolio (A4, 17 pages), written in HTML/CSS and exported to PDF with headless Chromium.
 
 | File | What it is |
 |---|---|
@@ -23,7 +23,7 @@ cd portfolio-print
 npm install            # installs Playwright (pinned 1.56.1)
 npx playwright install chromium   # only if no Chromium is available locally
 npm run build          # → Lionael_Surya_Selected_Projects_2026.pdf
-npm run preview        # → preview/page-01.png … page-16.png
+npm run preview        # → preview/page-01.png … page-17.png
 ```
 
 `npm run build` prints a `WARN` line for any image that fails to load or any element that runs past a page's footer. A clean build prints only the "Wrote …" line.
@@ -34,7 +34,7 @@ npm run preview        # → preview/page-01.png … page-16.png
 - **Adding a page**: copy an existing `<section class="page">…</section>` block. Page numbers in the footer (`.folio`) and in the contents table are written by hand — update both.
 - **Layout**: pages use a 12-column grid (`.grid-12` with `.span-4` … `.span-12`). Spacing helpers: `.mt-s`, `.mt-m`, `.mt-l`.
 - **Images**: put the file in `assets/img/` and reference it relatively. Use `.fig` for a framed screenshot, `.bleed-map` for an unframed graphic, `.fig.wide-top` / `.crop-strip` to crop tall captures from the top or middle.
-- **Colours** are CSS variables at the top of `assets/style.css` (`--paper`, `--ink`, `--night`, …). The chapter on page 13 and the closing page use the dark variant (`.dark-page`, `.closing`).
+- **Colours** are CSS variables at the top of `assets/style.css` (`--paper`, `--ink`, `--night`, …). The chapters on pages 13 and 15 and the closing page use the dark variant (`.dark-page`, `.closing`).
 - **Diagrams** are inline SVG inside `index.html`; boxes and labels can be edited as text.
 
 ## Re-capturing screenshots

@@ -1,6 +1,6 @@
 # Research notes — Selected Projects 2026
 
-Prepared 15 October 2026. Records what was investigated, what evidence each claim rests on, and what could not be verified.
+Prepared 15 October 2026; revised 16 October 2026 (Dejabooth removed; Aspen OS and FloodCast Jakarta added). Records what was investigated, what evidence each claim rests on, and what could not be verified.
 
 ## Sources and access
 
@@ -9,21 +9,23 @@ Prepared 15 October 2026. Records what was investigated, what evidence each clai
 | `suryalionael/Lionael-Surya` (profile/portfolio repo) | Cloned | Project index, category READMEs |
 | `lionael-portfolio.vercel.app` | **Blocked** by the environment's network policy | Read the site's source instead (`suryalionael/lionael-portfolio`, `lib/projects.ts`, `public/projects/*`). Note: `lib/site.ts` sets the canonical URL to `lionaelsurya.vercel.app`, not `lionael-portfolio.vercel.app` — worth confirming which is live. |
 | Public repos | Cloned: fraudlens, nutrition-analytics-indonesia, idx-stock-scanner-agent, streaming-clickstream-pipeline, retail-sales-etl-pipeline, dbt-ecommerce-analytics-mart, Retail-Demand-Forecasting, cloudlake, aspen-os, kompas100-quant | |
-| Private repos | Cloned (session access): sakti-21, web-dejabooth, eldercare, f1-analytics-platform | Described as "private — access on request" in the PDF |
-| huggingface.co, dl.google.com, map tile servers | **Blocked** | Affected FraudLens data, the Android SDK, and the live map page (see below) |
+| Private repos | Cloned (session access): sakti-21, eldercare, f1-analytics-platform, jakarta-flood-risk, Datathon-Dicoding2026-FloodRisk (web-dejabooth was cloned for the first edition; removed from the book on request) | Described as "private — access on request" in the PDF |
+| huggingface.co, dl.google.com, map tile servers, unpkg.com | **Blocked** | Affected FraudLens data, the Android SDK, and the map basemaps (see below) |
+| linkedin.com, media.licdn.com | **Blocked** | The LinkedIn projects page (and its images) could not be opened. LinkedIn's details pages also normally require sign-in. No LinkedIn images are used. |
 
 ## Selection
 
-Six chapters were chosen for depth, verifiability and visual evidence:
+Seven chapters (revised edition):
 
 1. **Sakti 21** — strongest domain/engineering story; runnable with seeded demo data.
 2. **FraudLens** — rigorous ML engineering with a genuine, documented data-leakage finding.
 3. **Nutrition Priority Index** — live, public, fully tested; honest methodology choices.
-4. **Dejabooth** (the "web photobooth") — runnable locally; real exported outputs.
-5. **IDX Signal Scanner** — real dashboard screenshots and honest model metrics.
-6. **ElderCare** — thoughtful accessibility engineering; included as a compact chapter because no screenshots could be produced.
+4. **Aspen OS** — added on request; large full-stack product, deployed, runnable locally against a reconstructed Supabase stack.
+5. **FloodCast Jakarta** — added on request; challenge prototype, presented as such (synthetic data).
+6. **ElderCare** — accessibility engineering; compact chapter, no screenshots possible.
+7. **IDX Signal Scanner** — real dashboard screenshots and honest model metrics.
 
-Not featured as chapters: streaming clickstream, F1 platform, retail ETL, dbt mart, churn, demand forecasting, Aspen OS, CV generator, CloudLake — listed on the "Also built" page using their own README descriptions, explicitly marked as not re-verified to the same depth. `kompas100-quant` (no README; competition plan only) was left out.
+**Dejabooth** was removed on request (its assets were deleted from `assets/`). The "Also built" page uses README descriptions only, marked as not re-verified; Aspen OS moved out of it into a chapter and Toronto Mobility Intelligence took its slot.
 
 ## Per-project evidence
 
@@ -46,11 +48,20 @@ Not featured as chapters: streaming clickstream, F1 platform, retail ETL, dbt ma
 - **Maps**: Fig. 3.1 and 3.3 were re-rendered in greyscale from `dashboard/data/npi_spatial.geojson` and `lisa_results.json` (same values as the project's own colour maps in `reports/maps/`). Captions say so.
 - **Verified** against `summary_stats.json`: Moran's I 0.622 (p 0.001); Spearman 0.741 / 0.667; Eastern mean 0.671 vs Western 0.263 (= 2.55×); ANOVA p 2.81e-8; LISA 6 High-High, 8 Low-Low. PCA 0.72 vs 0.74 and 13/25 vs 23/25 from the README decision matrix.
 
-### 04 Dejabooth (`web-dejabooth`, private)
-- **Tests re-run**: **538/538 Vitest pass** (PROJECT_STATUS.md cites 519 — the suite has grown).
-- **Screenshots**: `next dev` locally, Chromium with `--use-fake-device-for-media-stream` and `--use-file-for-fake-video-capture` fed a Y4M made from `lionael-portfolio/public/portrait.jpg` (the owner's own portrait from the portfolio repo), with a slight zoom so motion clips aren't frozen. This is why all four frames look alike — stated in captions. Everything else (grade, strip layout, printing animation) is the app's real output; the photostrip is the actual exported PNG fetched from the download link.
-- **Status** from `PROJECT_STATUS.md`: not deployed; no real-device QA yet.
-- **Verified**: WebCodecs + mp4-muxer decision and ~155 KB size (D19, `docs/DECISIONS.md`); per-photo exposure measurement (`src/rendering/photoExposure.ts`).
+### 04 Aspen OS (`aspen-os`, public)
+- **Run**: Docker was unavailable, so a minimal Supabase stand-in was assembled from official release binaries: PostgreSQL 16 (+ pgvector from apt), Supabase Auth v2.169.0 (runs its own `auth` migrations), PostgREST v12.2.3, and a ~20-line Node gateway mapping `/auth/v1` and `/rest/v1`. A bootstrap SQL file created Supabase's base roles (`anon`, `authenticated`, `service_role`, `authenticator`), default grants, a `supabase_realtime` publication and a table-only `storage` schema stub. All 42 repo migrations then applied without errors. Not running: storage server, realtime, OpenRouter AI, Google Drive. Bootstrap files lived in the scratchpad only; nothing was written to the repo.
+- **Demo content**: sign-up, workspace and project creation and task quick-add done through the UI with Playwright; statuses, priorities, due dates, one comment and one note set through supabase-js as the signed-in user (RLS applies). The organisation "Northside Community Kitchen" and user `maya@northside.example` are fictional.
+- **Tests re-run**: all seven DB scripts (`test:rls`, `workspace`, `project`, `task`, `position`, `move`, `roles`) pass against this stack. The Playwright e2e suite was not run.
+- **Verified**: 42 migrations; RLS enabled on 26/26 public tables (`pg_class.relrowsecurity`); deployed to aspen-os.vercel.app per `docs/sprint-4-report.md`, `docs/sprint-5-7-report.md`, `FINAL_PERFORMANCE_REPORT.md` (the site itself is unreachable from here); performance corrections from `VERIFIED_PERFORMANCE_REPORT.md` (1,200 ms claim → ~83 ms; `getUser()` kept, ~130 ms) and `ARCHITECTURE_OPTIMIZATION_RESULTS.md` (option C reverted, <50 ms); AI fast path in `FAST_PATH_RESULTS.md` / `lib/ai/fast-path.ts`. 131 commits, single author.
+- **Not claimed**: that a specific organisation (e.g. QuickRN, as the portfolio site says) uses it daily — nothing in the repo shows that.
+
+### 05 FloodCast Jakarta (`Datathon-Dicoding2026-FloodRisk`, private; `jakarta-flood-risk` is an earlier copy)
+- **Status**: Dicoding AI Impact Challenge 2026 prototype. Data clients for BMKG and Jakarta floodgates exist but fall back to seeded synthetic generators; both notebooks open with a data-transparency note saying the data is synthetic. The bundled `predictions.json` is labelled `"data_source": "demo"`.
+- **Run**: `train.py --shap` completed end to end on the synthetic fallback (three horizon models, SHAP plots, `validation_metrics.csv` — kept in `assets/raw/` and labelled synthetic). The run itself warned "Horizons failing F1 target: [24]". These metrics describe generated data and are not quoted as performance.
+- **Bug found**: `predict.py --all --save-json …` crashes with `TypeError: Object of type float32 is not JSON serializable`, so the dashboard shows its bundled demo predictions, not this run's output.
+- **Dashboard**: `static-web-app/public` copied to the scratchpad and served with `python -m http.server`; Leaflet 1.9.4 served from the npm package instead of the blocked unpkg CDN (same version). OpenStreetMap tiles are blocked, so the basemap is blank — stated in the caption.
+- **Verified in code**: time split (`config.py`: train to 2023-12-31, validate 2024), 750 cm label threshold with max-pooling across stations (`data/water_level.py`), F1 threshold sweep with `min_recall=0.70` (`evaluation/metrics.py`), audience-specific advisory with template fallback (`azure-function/advisory`). Single author.
+- **Not used**: the EDA charts in `notebooks/outputs/` — they visualise generated data, and showing them as findings would mislead.
 
 ### 05 IDX Signal Scanner (`idx-stock-scanner-agent`, public)
 - **Screenshots**: the four PNGs in `lionael-portfolio/Assets/IDX Stock Scanner/` (owner's own captures, June 2026; Fig. 5.1 shows the 12 June session). A fresh local run started but had no data bundle for the latest session date, so it was not used.
@@ -68,10 +79,12 @@ Not featured as chapters: streaming clickstream, F1 platform, retail ETL, dbt ma
 |---|---|---|
 | `sakti-calc.jpg`, `sakti-period.jpg`, `sakti-reports.jpg`, `sakti-employees.jpg` | Sakti 21 | Local run, UAT fixture — crops of `assets/raw/sakti-*.png` |
 | `sakti-payslip-pdf.png` | Sakti 21 | Page 1 of `assets/raw/sakti-payslip.pdf`, downloaded from the app |
-| `deja-*.jpg`, `deja-photostrip.png` | Dejabooth | Local run, simulated camera (see above); photostrip is the exported file |
+| `aspen-board.jpg`, `aspen-home.jpg`, `aspen-task.jpg`, `aspen-calendar.jpg`, `aspen-activity.jpg`, `aspen-palette.jpg` | Aspen OS | Local run against the reconstructed Supabase stack, fictional workspace |
+| `flood-dashboard.jpg` | FloodCast | Local static server, bundled demo predictions, no basemap tiles |
+| `flood-shap.png` | FloodCast | `reports/shap/shap_summary_6h.png` from a training run on synthetic fallback data |
 | `npi-home.jpg`, `npi-ranking.jpg`, `npi-robust.jpg`, `npi-method.jpg`, `npi-profile.jpg` | Nutrition | Local Streamlit run |
 | `npi-map-grey.png`, `npi-lisa-grey.png` | Nutrition | Re-rendered from the repo's committed GeoJSON/JSON |
-| `npi-choropleth.png`, `npi-lisa.png`, `npi-map-live.jpg` | Nutrition | Copied from the repo (`reports/maps/`, `reports/portfolio_assets/`) — kept for reference, not used in the PDF |
+| `npi-choropleth.png`, `npi-lisa.png`, `npi-map-live.jpg` | Nutrition | Copied from the repo (`reports/maps/`, `reports/portfolio_assets/`) — reference only, not used |
 | `idx-1.jpg` … `idx-4.jpg` | IDX | `lionael-portfolio/Assets/IDX Stock Scanner/` (owner's own captures, June 2026); `idx-1` is used |
 
 Not used: anything from image search or stock libraries.
@@ -82,4 +95,6 @@ Not used: anything from image search or stock libraries.
 - **Sakti 21**: the failing audit assertion above.
 - **FraudLens**: `httpx2` in `requirements.txt`.
 - **Aspen OS**: the portfolio site says it is in daily production use at QuickRN; nothing in the repo confirms that, so the PDF doesn't say it.
+- **FloodCast**: the `float32` JSON bug in `predict.py --save-json`.
+- **LinkedIn images**: to use the pictures attached to your LinkedIn projects, either add `linkedin.com` and `media.licdn.com` to the environment's allowed domains (they likely still need a signed-in session), or download them and add them to the repo.
 - **AI assistance**: several repos contain `AGENTS.md`/`CLAUDE.md` and audit reports authored by AI coding agents (e.g. IDX `REPORT_V2.md`, ElderCare's Dev Office). The colophon says so in one neutral sentence; change it if you prefer different wording.
