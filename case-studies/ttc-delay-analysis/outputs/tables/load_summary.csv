@@ -1,0 +1,9 @@
+table_name,rows
+raw.ttc_delays,1251597
+analytics.stg_delays,1251597
+analytics.v_line_delay,283
+analytics.v_location_delay,1311
+analytics.v_daily_mode,13920
+analytics.v_monthly_mode,459
+analytics.v_hour_weekday,504
+analytics.v_cause_category,15

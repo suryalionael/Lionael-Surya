@@ -33,3 +33,6 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Generated result tables for the TTC case study (small, not raw data)
+!case-studies/ttc-delay-analysis/outputs/tables/*.csv

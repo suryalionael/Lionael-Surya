@@ -1,0 +1,35 @@
+# R and data
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+renv/library/
+renv/local/
+renv/cellar/
+renv/staging/
+renv/python/
+
+# Raw and intermediate data. Re-download with R/01_ingestion.R.
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Rendered report intermediates
+reports/*._files/
+reports/*.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Generated model objects (large, reproducible)
+outputs/models/*.rds

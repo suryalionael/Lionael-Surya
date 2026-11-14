@@ -1,0 +1,8 @@
+step,removed,remaining
+Rows read from source files,0,1257018
+Drop missing/unparseable date,0,1257018
+Drop missing/unparseable time,0,1257018
+Drop missing delay minutes,543,1256475
+Drop negative delay minutes,10,1256465
+"Drop delays over 1,440 minutes",15,1256450
+Drop exact duplicate incidents,4853,1251597

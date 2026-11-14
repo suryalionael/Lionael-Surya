@@ -1,0 +1,2 @@
+null.deviance,df.null,logLik,AIC,BIC,deviance,df.residual,nobs,clustered_se,n_clusters,holdout_year
+1087424.8164596932,972167,-469300.56482857454,938733.1296571491,939511.090395078,938601.1296571491,972102,972168,"HC1, clustered by line_group",20,2024

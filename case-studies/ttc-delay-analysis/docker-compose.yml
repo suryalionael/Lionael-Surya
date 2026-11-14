@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: ttc_delays_pg
+    environment:
+      POSTGRES_DB: ${TTC_DB_NAME:-ttc_delays}
+      POSTGRES_USER: ${TTC_DB_USER:-ttc}
+      POSTGRES_PASSWORD: ${TTC_DB_PASSWORD:-ttc}
+    ports:
+      - "${TTC_DB_PORT:-5434}:5432"
+    volumes:
+      - ttc_pgdata:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TTC_DB_USER:-ttc} -d ${TTC_DB_NAME:-ttc_delays}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ttc_pgdata:

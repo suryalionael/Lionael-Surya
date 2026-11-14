@@ -1,0 +1,9 @@
+check_name,expected,failing_rows
+missing delay date,0,0
+unknown cause category,0,1014
+lines with no usable line value,0,4907
+delay minutes above 24 hours,0,0
+dates outside 2014-2026,0,0
+invalid mode,0,0
+negative delay minutes,0,0
+exact duplicate incidents,0,0

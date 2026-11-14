@@ -1,0 +1,3 @@
+split,rows,major_delays,major_rate_pct
+train 2014-2023,972168,240355,24.72
+holdout 2024,99984,28051,28.06

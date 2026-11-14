@@ -1,0 +1,4 @@
+mode,incidents,delay_minutes,avg_delay_minutes,median_delay_minutes,major_incidents,major_delay_rate_pct
+bus,810438,16240744,20.04,10,279746,34.52
+subway,269979,687375,2.55,0,7143,2.65
+streetcar,171180,2440090,14.25,8,35100,20.5
