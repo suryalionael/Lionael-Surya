@@ -11,7 +11,7 @@ dbt project turning the real [Olist Brazilian E-Commerce dataset](https://www.ka
 | Area | Status |
 | --- | --- |
 | staging / intermediate / marts model layers | Done |
-| Generic + custom dbt tests (108 passing) | Done |
+| Generic + custom dbt tests (208 passing, 1 documented warning) | Done |
 | Docker Compose stack (Postgres + pgAdmin) | Done |
 | GitHub Actions CI (`dbt build` + `dbt docs generate` on every push/PR) | Done |
 | dbt docs site (models, columns, tests, sources, exposures, lineage DAG) | Done |
@@ -64,12 +64,27 @@ Raw CSVs are bulk-loaded with Postgres `COPY`, not `dbt seed` — `dbt seed` ins
 - **`dim_customers`** — customer lifetime value/recency, built on Olist's `customer_unique_id` rather than the raw `customer_id` (which is re-minted per order — aggregating on it directly would make every customer show exactly 1 lifetime order).
 - **`fct_revenue_monthly`** — the official monthly revenue metric layer (`total_revenue`, `total_orders`, `active_customers`).
 
+## Analytics Layer
+
+Six window-function and CASE-driven marts sit on top of the core facts, answering the questions the original marts could not: who is valuable, who is leaving, how concentrated revenue is, and how long customers wait between orders.
+
+| Model | Grain | Logic |
+|---|---|---|
+| `mart_customer_rfm` | customer_unique_id | `NTILE(5)` recency/frequency/monetary scores, CASE segments |
+| `mart_cohort_retention` | cohort month × months since first purchase | `DATE_TRUNC`, cohort joins |
+| `mart_revenue_growth` | calendar month | `LAG`, running `SUM() OVER`, 3-month `AVG() OVER` |
+| `mart_product_rank_by_category` | top-3 product per category | `ROW_NUMBER`, `RANK` |
+| `mart_product_pareto` | product with sales | running `SUM() OVER`, ABC CASE |
+| `mart_order_gaps` | repeat order per customer | `LAG`, `PERCENTILE_CONT` |
+
+The numbers from a full run against the real data are in [`docs/ANALYTICAL_FINDINGS.md`](docs/ANALYTICAL_FINDINGS.md). Headline: 95,420 customers, 2,913 repeat customers (3.1%), 22,767 At Risk customers holding 24.2% of revenue, month-1 retention 0.46%, and 28.1% of products generating 80.0% of revenue.
+
 ## Dataset
 
 - Source: Kaggle, **Olist Brazilian E-Commerce Public Dataset** (real, anonymized orders from a Brazilian marketplace, 2016–2018)
 - URL: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 - Scale: ~99,441 orders, ~112,650 order line items, ~95,420 unique customers
-- Sanity-checked results: ~92,500 one-time customers vs. ~2,700 repeat customers, monthly revenue ~R$1M in mid-2018, top categories (`bed_bath_table`, `garden_tools`, `furniture_decor`) — all consistent with known public analyses of this dataset.
+- Sanity-checked results: 95,420 unique customers, of whom 2,913 (3.1%) place more than one order, monthly revenue around R$1M in mid-2018, and the largest category is `health_beauty` (R$1,441,248.07) — all consistent with known public analyses of this dataset.
 
 ## Folder Structure
 
@@ -82,7 +97,7 @@ Raw CSVs are bulk-loaded with Postgres `COPY`, not `dbt seed` — `dbt seed` ins
 ├── models/
 │   ├── staging/                 # 1:1 cleaned mapping of raw sources
 │   ├── intermediate/            # joins/enrichment, no KPI calculations
-│   └── marts/{core,customer,finance}/
+│   └── marts/{core,customer,finance,analytics}/
 ├── seeds/raw/olist/              # real Olist CSVs (git-tracked)
 ├── tests/                       # singular data-quality tests
 ├── docker-compose.yml

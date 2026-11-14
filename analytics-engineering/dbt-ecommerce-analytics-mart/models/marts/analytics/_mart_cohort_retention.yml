@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: mart_cohort_retention
+    description: >
+      Monthly first-purchase cohorts versus months since acquisition. Grain:
+      one row per (cohort_month, month_index). retention_rate is
+      active_customers / cohort_size. Month 0 is 100% by construction.
+    columns:
+      - name: cohort_month
+        description: Calendar month of the customer's first order.
+        data_tests: [not_null]
+      - name: month_index
+        description: Whole calendar months between activity month and cohort month; 0 = acquisition month.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: cohort_size
+        description: Distinct customers acquired in the cohort month.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: active_customers
+        description: Distinct cohort customers with at least one order in that month.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: retention_rate
+        description: active_customers / cohort_size, rounded to 4 decimal places.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+              inclusive: true
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [cohort_month, month_index]

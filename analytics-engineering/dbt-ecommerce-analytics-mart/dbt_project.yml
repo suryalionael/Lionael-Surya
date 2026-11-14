@@ -61,3 +61,7 @@ models:
         +meta:
           owner: 'finance-analytics'
           domain: 'finance'
+      analytics:
+        +tags: ['analytics']
+        +meta:
+          domain: 'analytics'

@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: mart_revenue_growth
+    description: >
+      Monthly revenue with month-over-month growth (LAG), a running total
+      (SUM OVER), and a trailing 3-month average (AVG OVER). Grain: one row
+      per calendar month.
+    columns:
+      - name: month
+        description: Calendar month.
+        data_tests: [unique, not_null]
+      - name: total_revenue
+        description: Monthly revenue (price + freight_value), from fct_revenue_monthly.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: total_orders
+        description: Distinct orders in the month.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: active_customers
+        description: Distinct customers with at least one order line in the month.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: previous_month_revenue
+        description: Revenue in the immediately preceding calendar month; null for the first month.
+      - name: mom_growth_rate
+        description: Fractional month-over-month change; null when the prior month is missing or zero.
+      - name: running_total_revenue
+        description: Cumulative revenue from the first month through the current month.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: trailing_3m_avg_revenue
+        description: Average monthly revenue over the current and two preceding months.
+        data_tests:
+          - not_null
+          - no_negative_revenue

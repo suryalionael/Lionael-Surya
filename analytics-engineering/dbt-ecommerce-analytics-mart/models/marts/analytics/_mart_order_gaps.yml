@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: mart_order_gaps
+    description: >
+      Days between consecutive orders per customer, with the dataset-wide
+      median and p90 gap repeated on each row. Grain: one row per repeat
+      order (every order after the customer's first).
+    columns:
+      - name: customer_unique_id
+        description: Durable person-level customer key.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: order_id
+        description: Repeat order. Not unique on its own; unique per customer.
+        data_tests: [not_null]
+      - name: order_date
+        description: Calendar date of the order.
+        data_tests: [not_null]
+      - name: previous_order_date
+        description: Calendar date of the customer's preceding order.
+        data_tests: [not_null]
+      - name: gap_days
+        description: Calendar days between the previous order and this order.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: median_gap_days
+        description: Median gap_days across every repeat order in the model.
+        data_tests: [not_null]
+      - name: p90_gap_days
+        description: 90th percentile of gap_days across every repeat order.
+        data_tests: [not_null]
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [customer_unique_id, order_id]

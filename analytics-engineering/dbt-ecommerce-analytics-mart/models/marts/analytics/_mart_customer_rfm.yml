@@ -1,0 +1,80 @@
+version: 2
+
+models:
+  - name: mart_customer_rfm
+    description: >
+      Customer-level RFM scoring. Recency is measured against the last order
+      in the dataset, not today. Scores are NTILE(5) buckets; 5 is best.
+      Segments come from a CASE rule over the three scores. Grain: one row
+      per customer_unique_id.
+    columns:
+      - name: customer_unique_id
+        description: Durable person-level customer key. FK to dim_customers.customer_id.
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: last_order_date
+        description: Date of the customer's most recent order.
+        data_tests: [not_null]
+      - name: as_of_date
+        description: Latest order date anywhere in the dataset; the recency anchor.
+        data_tests: [not_null]
+      - name: recency_days
+        description: Days between last_order_date and as_of_date. Lower is better.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+      - name: frequency
+        description: Distinct orders placed by the customer.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: monetary
+        description: Lifetime revenue (price + freight_value) across all order lines.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: recency_score
+        description: NTILE(5) recency bucket; 5 = most recent.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 5
+              inclusive: true
+      - name: frequency_score
+        description: NTILE(5) frequency bucket; 5 = most orders.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 5
+              inclusive: true
+      - name: monetary_score
+        description: NTILE(5) monetary bucket; 5 = highest lifetime spend.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 5
+              inclusive: true
+      - name: segment
+        description: CASE-based RFM segment label.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - Champions
+                - Loyal
+                - Potential Loyalist
+                - New
+                - At Risk
+                - Lost
+                - Needs Attention

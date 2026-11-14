@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: mart_product_pareto
+    description: >
+      Product revenue concentration with a running cumulative share and an
+      ABC class (A through 80% of revenue, B through 95%, C the rest).
+      Grain: one row per product with sales.
+    columns:
+      - name: product_id
+        description: Product key. FK to dim_products.product_id.
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_id
+      - name: product_revenue
+        description: Total revenue (price + freight_value) for the product.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: units_sold
+        description: Number of order-line rows for the product.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: revenue_rank
+        description: Position by revenue descending, ties broken by product_id.
+        data_tests:
+          - unique
+          - not_null
+      - name: cumulative_revenue
+        description: Running revenue from the highest-revenue product through this row.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: grand_total_revenue
+        description: Revenue across every product with sales.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: product_share
+        description: product_revenue / grand_total_revenue, rounded to 6 dp.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+              inclusive: true
+      - name: cumulative_share
+        description: cumulative_revenue / grand_total_revenue, rounded to 6 dp.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+              inclusive: true
+      - name: abc_class
+        description: A = first 80% of revenue, B = next 15%, C = remainder.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['A', 'B', 'C']

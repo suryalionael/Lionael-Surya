@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: mart_product_rank_by_category
+    description: >
+      Top 3 products per category by revenue, using ROW_NUMBER (deterministic
+      top-3 cut) and RANK (tie-aware display). Grain: one row per top-3
+      product per category.
+    columns:
+      - name: category_name
+        description: English product category from dim_products, or 'unknown'.
+        data_tests: [not_null]
+      - name: product_id
+        description: Product key. FK to dim_products.product_id.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_id
+      - name: product_revenue
+        description: Total revenue (price + freight_value) for the product.
+        data_tests:
+          - not_null
+          - no_negative_revenue
+      - name: units_sold
+        description: Number of order-line rows for the product.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+      - name: revenue_rank_row_number
+        description: ROW_NUMBER within category by revenue descending. Always 1-3 in this model.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 3
+              inclusive: true
+      - name: revenue_rank
+        description: RANK within category by revenue descending; ties share a rank.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [category_name, product_id]

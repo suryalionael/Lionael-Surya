@@ -20,6 +20,12 @@ exposures:
       - ref('dim_products')
       - ref('dim_customers')
       - ref('fct_revenue_monthly')
+      - ref('mart_customer_rfm')
+      - ref('mart_cohort_retention')
+      - ref('mart_revenue_growth')
+      - ref('mart_product_rank_by_category')
+      - ref('mart_product_pareto')
+      - ref('mart_order_gaps')
     owner:
       name: Lionael
       email: suryalionael@gmail.com
