@@ -14,6 +14,7 @@ Building production-style data systems — from raw pipelines to deployed ML/AI 
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=postgresql&logoColor=white)
+![R](https://img.shields.io/badge/R-276DC3?style=flat-square&logo=r&logoColor=white)
 ![dbt](https://img.shields.io/badge/dbt-FF694B?style=flat-square&logo=dbt&logoColor=white)
 ![Airflow](https://img.shields.io/badge/Airflow-017CEE?style=flat-square&logo=apacheairflow&logoColor=white)
 ![Spark](https://img.shields.io/badge/Spark-E25A1C?style=flat-square&logo=apachespark&logoColor=white)
@@ -44,7 +45,7 @@ Data Science student at Seneca Polytechnic seeking **Data Engineering / Analytic
 
 | Role | Why I'm a Fit |
 |---|---|
-| **Data Analyst (Co-op)** | SQL-first thinking, Power BI dashboards, stakeholder-ready insights — see [`case-studies/`](case-studies/) |
+| **Data Analyst (Co-op)** | SQL + R + Power BI across [Toronto Mobility](case-studies/toronto-mobility-intelligence/), [TTC Delay Analysis](case-studies/ttc-delay-analysis/), and [Beyond GDP](case-studies/beyond-gdp/) — see [`case-studies/`](case-studies/) |
 | **Data Engineer (Intern)** | ETL/ELT pipelines, orchestration, data quality — see [`data-engineering/`](data-engineering/) |
 | **Analytics Engineer (Intern)** | dbt modeling, dimensional design, semantic layers — see [`analytics-engineering/`](analytics-engineering/) |
 | **Data Science Intern** | Feature engineering, model evaluation, explainability — see [`machine-learning/`](machine-learning/) |
@@ -83,7 +84,8 @@ Lionael-Surya/
 
 | Domain | Skills | Proficiency |
 |---|---|---|
-| **Programming** | Python, SQL, JavaScript (Apps Script) | ●●●●○ |
+| **Programming** | Python, SQL, R, JavaScript (Apps Script) | ●●●●○ |
+| **Statistics & R** | tidyverse, regression (logistic, negative binomial), diagnostics, Quarto / R Markdown | ●●●○○ |
 | **Data Engineering** | ETL/ELT design, Airflow, Kafka, Spark, data quality testing | ●●●○○ |
 | **Analytics Engineering** | dbt, dimensional modeling (star/snowflake), semantic layers | ●●●○○ |
 | **Data Warehousing** | PostgreSQL, Snowflake, BigQuery, schema design | ●●●○○ |
@@ -108,8 +110,9 @@ Lionael-Surya/
 | 🏆 [End-to-End Retail Data Platform](case-studies/end-to-end-retail-data-platform/) | Case Study | Capstone: raw data → warehouse → ML → BI in one platform | 🔜 Planned |
 | 🌊 [Flood Risk Prediction — Dicoding Datathon 2026](case-studies/flood-risk-datathon-2026/) | Case Study | Predicting flood risk from environmental data for disaster preparedness | ✅ Shipped |
 | 💰 [Beyond GDP](case-studies/beyond-gdp/) | Case Study | Does GDP per capita actually predict national happiness, once health, employment, connectivity, and inflation are controlled for — R regression, diagnostics, and robustness testing | ✅ Shipped |
+| 🚇 [TTC Delay Analysis](case-studies/ttc-delay-analysis/) ([source](https://github.com/suryalionael/ttc-delay-analysis), [report](case-studies/ttc-delay-analysis/reports/ttc_delay_report.html)) | Case Study | Where, when and why TTC delays concentrate — R + PostgreSQL pipeline over 1.25M incidents, with logistic and negative binomial models | ✅ Shipped |
 | 📦 [Retail Sales ETL Pipeline](data-engineering/retail-sales-etl-pipeline/) ([source](https://github.com/suryalionael/retail-sales-etl-pipeline)) | Data Engineering | Automating multi-store sales ingestion into a warehouse | ✅ Shipped |
-| 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) ([source](https://github.com/suryalionael/dbt-ecommerce-analytics-mart)) | Analytics Engineering | Turning raw order data into trusted, tested business metrics | ✅ Shipped |
+| 📊 [dbt E-Commerce Analytics Mart](analytics-engineering/dbt-ecommerce-analytics-mart/) ([source](https://github.com/suryalionael/dbt-ecommerce-analytics-mart)) | Analytics Engineering | Turning raw order data into trusted, tested business metrics, now with window-function marts (RFM, cohort retention, Pareto) | ✅ Shipped |
 | ⚡ [Streaming Clickstream Pipeline](data-engineering/streaming-clickstream-pipeline/) ([source](https://github.com/suryalionael/streaming-clickstream-pipeline)) | Data Engineering | Real-time Kafka → Spark → Delta Lake pipeline with live Streamlit dashboard | ✅ Shipped |
 | 🏎️ [Real-Time F1 Analytics Platform](data-engineering/f1-analytics-platform/) ([source](https://github.com/lionaelsurya/f1-analytics-platform)) | Data Engineering | Live F1 race data streaming through medallion architecture (Kafka → Spark → Delta → DuckDB → FastAPI → React) with AI race summaries | ✅ Shipped |
 | 📉 [Customer Churn Prediction](machine-learning/customer-churn-prediction-telecom/) ([source](https://github.com/suryalionael/Customer-Churn-Prediction)) | Machine Learning | Predicting telecom churn to target retention spend with calibrated probabilities, SHAP explanations, ROI thresholding, FastAPI, Streamlit, and drift monitoring | ✅ Shipped |
@@ -212,7 +215,8 @@ Built and reviewed in this order — each project is designed to be demoable on 
 | Retail Sales ETL Pipeline | Python, Pandas, PostgreSQL, Apache Airflow, Docker, Great Expectations |
 | Streaming Clickstream Pipeline | Apache Kafka, Spark Structured Streaming, Delta Lake, MinIO, DuckDB, Streamlit, Docker, Python |
 | Real-Time F1 Analytics Platform | Apache Kafka, Spark Structured Streaming, Delta Lake, DuckDB, FastAPI, React, TypeScript, Recharts, Docker, OpenAI/Anthropic API |
-| dbt E-Commerce Analytics Mart | dbt-core, PostgreSQL, Docker, SQL, Power BI, GitHub Actions |
+| dbt E-Commerce Analytics Mart | dbt-core, PostgreSQL, Docker, SQL window functions, Power BI, GitHub Actions |
+| TTC Delay Analysis | R, tidyverse, PostgreSQL, SQL, httr2, MASS, pROC, rmarkdown |
 | SaaS Subscription Metrics Model | dbt, SQL, Power BI, cohort-analysis SQL patterns |
 | IDX Stock Signal Scanner | Python, yfinance, pandas, Parquet/SQLite, YAML rule engine *(private source)* |
 | Customer Churn Prediction | Python, scikit-learn, XGBoost, SHAP, FastAPI, Streamlit, Docker |
